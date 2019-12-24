@@ -1,0 +1,33 @@
+﻿@model MyMedia.Models.Series.SerieCreateViewModel
+@using MyMedia.Core.Enums;
+@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+<div class="container">
+
+    <h2>Serie <i class="fas fa-angle-double-right"></i>Create</h2>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form enctype="multipart/form-data" asp-controller="Serie" asp-action="Create" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="@Model.Naam" class="control-label"></label>
+                    <input asp-for="@Model.Naam" class="form-control" />
+                    <span asp-validation-for="@Model.Naam" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.Foto" class="control-label"></label>
+                    <input asp-for="@Model.Foto" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary" type="submit">Add Serie</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+

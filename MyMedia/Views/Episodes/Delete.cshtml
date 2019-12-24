@@ -1,0 +1,9 @@
+﻿@model  MyMedia.Models.Episodes.EpisodeDeleteViewModel
+    <form enctype="multipart/form-data" asp-route-id="@Model.Id" asp-controller="Serie" asp-action="Delete" method="post">
+
+        <b> Weet je zeker dat je <b>@Model.Naam</b> Wilt verwijderen?</b>
+        <button class="btn btn-primary" type="submit">Verwijder Episode</button>
+
+    </form>
+
+

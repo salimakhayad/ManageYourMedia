@@ -1,0 +1,50 @@
+﻿    @model MyMedia.Models.Muziek.MuziekCreateViewModel
+    @using Microsoft.AspNetCore.Identity
+    @inject SignInManager<IdentityUser> SignInManager
+    @inject UserManager<IdentityUser> UserManager
+
+    <div class="container">
+
+        <h2>Muziek <i class="fas fa-angle-double-right"></i>Create</h2>
+        <hr/>
+        <div class="row col-9">
+                <form enctype="multipart/form-data" asp-controller="Muziek" asp-action="Create" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="@Model.ZangersNaam" class="control-label"></label>
+                        <input asp-for="@Model.ZangersNaam" class="form-control" />
+                        <span asp-validation-for="@Model.ZangersNaam" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-group">
+                            <label asp-for="@Model.Foto"></label>
+                            <input class="form-control" asp-for="@Model.Foto" />
+                            <span accept=".jpg,.jpeg,.png" class="text-danger" asp-validation-for="@Model.Foto"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="@Model.Titel" class="control-label"></label>
+                        <input asp-for="@Model.Titel" class="form-control" />
+                        <span asp-validation-for="@Model.Titel" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="@Model.Lied" class="control-label"></label>
+                        <input asp-for="@Model.Lied" class="form-control" />
+                        <span asp-validation-for="@Model.Lied" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-default" />
+                    </div>
+
+                </form>
+        </div>
+    </div>
+<!--<div>
+    <a asp-page="/Index">Back to List</a>
+</div>-->
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

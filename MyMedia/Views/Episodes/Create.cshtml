@@ -1,0 +1,73 @@
+﻿@model MyMedia.Models.Series.Episodes.EpisodeCreateViewModel
+
+@using MyMedia.Core.Enums
+@using MyMedia.Core.MediaClasses
+
+<<div class="container">
+    <h2>Episode <i class="fas fa-angle-double-right"></i>Create</h2>
+    <hr /> @Model.SerieNaam
+    <hr /> <!--Voeg episodes Toe , voorzie playlist pagina waarop alle media zichtbaar is, bekijk portfolio- project pagina ivm zoek en selectie van media-->
+
+    <div class="row">
+        <div class="col-md-4">
+            <form enctype="multipart/form-data" asp-controller="Episodes" asp-action="Create" method="post">
+                <!--Aspaction van AddEpisode naar Create-->
+                @Html.HiddenFor(m => m.SerieNaam)
+                @Html.HiddenFor(x => x.SerieId)
+                <div class="form-group">
+                    <option selected>Kies een seizoen...</option>
+                    <!---dropdown-->
+                    <div class="input-group">
+                        <select asp-for="@Model.SeizoenId"
+                                asp-items="@(new SelectList(Model.MogelijkeSeizoenen,nameof(Seizoen.Id),nameof(Seizoen.SeizoenNr)))">
+                            <option>Nieuw seizoen</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.Foto"></label>
+                    <input class="form-control" asp-for="@Model.Foto" />
+                    <span accept=".jpg,.jpeg,.png" class="text-danger" asp-validation-for="@Model.Foto"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.Titel" class="control-label"></label>
+                    <input asp-for="@Model.Titel" class="form-control" />
+                    <span asp-validation-for="@Model.Titel" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.Beschrijving" class="control-label"></label>
+                    <input asp-for="@Model.Beschrijving" class="form-control" />
+                    <span asp-validation-for="@Model.Beschrijving" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.Duration"></label>
+                    <input asp-for="@Model.Duration" type="time"
+                           min="00:50" max="3:00" value="Duration">
+                    <span class="text-danger" asp-validation-for="@Model.Duration"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="@Model.IMDBLink" class="control-label"></label>
+                    <input asp-for="@Model.IMDBLink" class="form-control" />
+                    <span asp-validation-for="@Model.IMDBLink" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <div class="form-group">
+                        <label asp-for="@Model.ReleaseDate">ReleaseDate</label>
+                        <input asp-for="@Model.ReleaseDate" placeholder="Selected date" type="text" id="datepicker" class="form-control datepicker">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary" type="submit">Create Episode</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
+
+
+

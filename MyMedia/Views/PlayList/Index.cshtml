@@ -1,0 +1,31 @@
+﻿@model IEnumerable<MyMedia.Models.Playlist.PlayListIndexViewModel>
+@using MyMedia.Core.Enums;
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<div class="container">
+
+    <div class="card-body">
+        <h2>Playlists <i class="fas fa-angle-double-right"></i> Overzicht</h2>
+        @if (@Model != null && @Model.Any())
+        {
+            foreach (var playlist in @Model)
+            {
+                <h4>@playlist.Naam</h4>
+                <a asp-action="Delete" asp-controller="PlayList" asp-route-id="@playlist.Id"> Delete </a>
+                <a asp-action="Details" asp-controller="PlayList" asp-route-id="@playlist.Id"> Details </a>
+            }
+        }
+        else
+        {
+            <div class="alert alert-info" role="alert">
+                There are currently no playlists.
+            </div>
+        }
+
+        <a asp-action="Create" asp-route-id=" " class="btn btn-warning" asp-controller="PlayList">Create PlayList</a>
+
+    </div>
+</div>
+

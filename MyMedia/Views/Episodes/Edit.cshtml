@@ -1,0 +1,26 @@
+﻿@model MyMedia.Models.Series.Episodes.EpisodeCreateViewModel
+    <form enctype="multipart/form-data" asp-controller="Serie" asp-action="Edit" method="post">
+        <div class="form-group">
+            <label asp-for="@Model.SerieNaam"></label>
+            <input class="form-control" asp-for="@Model.SerieNaam" />
+            <span class="text-danger" asp-validation-for="@Model.SerieNaam"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.Titel"></label>
+            <input class="form-control" asp-for="@Model.Titel" />
+            <span class="text-danger" asp-validation-for="@Model.Titel"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.Foto"></label>
+            <input class="form-control" asp-for="@Model.Foto" />
+            <span class="text-danger" asp-validation-for="@Model.Foto"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.Beschrijving"> </label>
+            <input class="form-control" asp-for="@Model.Beschrijving" />
+            <span class="text-danger" asp-validation-for="@Model.Beschrijving"></span>
+
+        </div>
+
+
+    </form>

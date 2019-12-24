@@ -1,0 +1,46 @@
+﻿@model MyMedia.Models.Media.MediaOverviewViewModel
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+   
+        <div>
+            <form enctype="multipart/form-data" asp-controller="Media" asp-action="ApproveMedia" method="post">
+                @if (@Model.NietPubliekeMediaLijst != null && Model.NietPubliekeMediaLijst.Any() == true)
+                {
+                    @foreach (var media in @Model.NietPubliekeMediaLijst)
+                    {
+                    <div class="form-group">
+                    <label class="container">
+                        Non-Approved
+                        <input type="checkbox" asp-for="@media.IsChecked" checked="checked">
+                        <span class="checkmark"></span>
+                    </label>
+
+                    <div class="card" style="width: 18rem;">
+                        @{ if (media.Foto != null)
+                            {
+                                <img src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(media.Foto))" alt="media Img" class="img-thumbnail" target="_blank" />
+                            }
+                        }
+                        <div class="card-body">
+                            <h5 class="card-title" asp-for="@media.Titel">@media.Titel</h5>
+                        </div>
+                    </div>
+
+                </div>
+                    }
+                }
+                
+                <button class="btn btn-primary" type="submit">Update Media List</button>
+               
+            </form>
+        </div>
+      
+   
+
+
+
+
+
+
+

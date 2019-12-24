@@ -1,0 +1,31 @@
+﻿@model MyMedia.Models.Movie.MovieReviewModel
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+<form enctype="multipart/form-data" asp-controller="Movie" asp-action="CreateReview" method="post">
+    <div class="form-group">
+        <label asp-for="@Model.Titel"></label>
+        <input class="form-control" asp-for="@Model.Titel" />
+        <span class="text-danger" asp-validation-for="@Model.Titel"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.Duration"></label>
+        <input class="form-control" asp-for="@Model.Duration" />
+        <span class="text-danger" asp-validation-for="@Model.Duration"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.IMDBLink"></label>
+        <input class="form-control" asp-for="@Model.IMDBLink" />
+        <span class="text-danger" asp-validation-for="@Model.IMDBLink"></span>
+    </div>
+    <div class="form-group">
+        <div class="form-group">
+            <label asp-for="@Model.Foto"></label>
+            <input class="form-control" asp-for="@Model.Foto" />
+            <span accept=".jpg,.jpeg,.png" class="text-danger" asp-validation-for="@Model.Foto"></span>
+        </div>
+    </div>
+    <button class="btn btn-primary" type="submit" onclick="CreateSnackbarMovie(@Model.Titel)">Add Review</button>
+
+</form>
+

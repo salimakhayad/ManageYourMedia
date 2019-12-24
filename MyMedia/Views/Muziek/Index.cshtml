@@ -1,0 +1,43 @@
+﻿@model List<MyMedia.Models.Muziek.MuziekListViewModel>
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+
+
+    <div class="container">
+        <h2>Music <i class="fas fa-angle-double-right"></i>Index</h2>
+        <hr /><p>
+        </p>
+                  @if (Model.Any() && Model != null)
+                  {
+                          @foreach (var muziek in Model)
+                          {
+                          <div class="col-lg-3 m-1">
+                              <div class="card">
+                                  <div class="card-body">
+                                      <div class="card-img-top">
+                                          @if (muziek.Foto != null)
+                                          {
+                                              <img src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(muziek.Foto))" alt="muziek Img" class="img-thumbnail" target="_blank" />
+                                          }
+                                      </div>
+                                      <div class="hit-the-floor">
+                                          <h4>@muziek.Titel</h4>
+                                      </div>
+                                      <a asp-action="Edit" asp-controller="Muziek" asp-route-id="@muziek.Id"> Edit</a>
+                                      <a asp-action="Delete" asp-controller="Muziek" asp-route-id="@muziek.Id"> Delete</a>
+                                      <a asp-action="Details" asp-controller="Muziek" asp-route-id="@muziek.Id"> Details</a>
+                                  </div>
+                              </div>
+                          </div>
+                          }
+                  }
+                  else
+                  {
+                      <p class="h1"> Currently no Songs for display </p>
+                  }
+              
+
+            <a asp-action="Create" class="btn btn-primary" asp-controller="Muziek">Add Song</a>
+        </div>

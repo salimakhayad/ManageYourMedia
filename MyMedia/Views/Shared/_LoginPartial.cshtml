@@ -1,0 +1,38 @@
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" id="logoutForm">
+        @*<ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
+                </li>
+                <li>
+                    <button type="submit" class="btn btn-link navbar-btn navbar-link">Logout</button>
+                </li>
+            </ul>*@
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-item nav-link active" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
+                <button type="submit" class="btn btn-outline-secondary">Logout</button>
+            </div>
+        </div>
+    </form>
+
+}
+else
+{
+    @*<ul class="nav navbar-nav navbar-right">
+            <li><a asp-area="Identity" asp-page="/Account/Register">Register</a></li>
+            <li><a asp-area="Identity" asp-page="/Account/Login">Login</a></li>
+        </ul>*@
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link active" asp-area="Identity" asp-page="/Account/Register">Register</a>
+            <a class="nav-item nav-link active" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        </div>
+    </div>
+}

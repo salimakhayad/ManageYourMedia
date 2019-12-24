@@ -1,0 +1,72 @@
+﻿@model MyMedia.Models.Muziek.MuziekDetailViewModel
+@using Microsoft.AspNetCore.Identity
+@using MyMedia.Core.MediaClasses
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+
+
+<div class="container">
+    <h2>Muziek <i class="fas fa-angle-double-right"></i> Details <i class="fas fa-angle-double-right"></i>  @Model.Titel  </h2>
+
+    @if (@Model.PlayLists != null && @Model.PlayLists.Count > 0)
+    {
+        <form enctype="multipart/form-data" asp-controller="PlayList" asp-action="AddToPlaylist" method="post">
+            @Html.HiddenFor(pl => pl.MediaId)
+            <div class="btn-group">
+                @Html.DropDownListFor(x => x.PlayListId,
+                    new SelectList(@Model.PlayLists, nameof(PlayList.Id), nameof(PlayList.Name)), "Select PlayList")
+            </div>
+            <button type="submit" class="btn btn-dark">Add to playlist</button>
+        </form>
+    }
+
+    <div class="row">
+        <div class="col-9">
+            <div class="card mt-5" style="width: 70vh;">
+                Score : @Math.Round(@Model.AveragePoints, 2,
+                            MidpointRounding.ToEven) / 10
+                <div class="card-body">
+                    @for (var point = 2; point <= (Math.Round(@Model.AveragePoints, 2,
+                         MidpointRounding.ToEven)); point += 2)
+                    {
+                        <i class="fas fa-star"></i>
+                    }
+                   
+
+                </div>
+
+                @if (@Model.Foto != null)
+                {
+                    <img class="card-img-top" src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(@Model.Foto))" alt="Episode Img" />
+                }
+                <div class="card-body">
+                    <h3 class="card-title"> @Model.Titel</h3>
+                    <h5 class="card-title">  @Model.ZangersNaam</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col-3 mt-5">
+            <div class="">
+                <form enctype="multipart/form-data" asp-controller="Muziek" asp-action="RateMusic" method="post">
+                    @Html.HiddenFor(x => x.MediaId)
+                    @if (!@Model.IsRated)
+                    {
+                        @Html.TextBoxFor(x => x.Points, new { type = "number" })
+                        <button type="submit" class="btn btn-dark">Rate</button>
+                    }
+       
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div>
+        <a asp-action="Edit" asp-controller="Muziek" class="text-dark" asp-route-id="@Model.MediaId">Edit</a> |
+        <a asp-action="Index" asp-controller="Muziek" class="text-dark">Back to List</a>
+    </div>
+ 
+    
+</div>
+
