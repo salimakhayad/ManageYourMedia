@@ -112,5 +112,14 @@ namespace MyMedia.Data
         {
             context.SaveChanges();
         }
+
+        public void InsertSeizoen(Seizoen seizoen)
+        {
+            context.Seizoenen.Add(seizoen);
+        }
+        public void InsertEpisode(Episode episode)
+        {
+            context.Episodes.Add(episode);
+        }
     }
 }

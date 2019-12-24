@@ -26,7 +26,9 @@ namespace MyMedia.Data
         void InsertRating(Rating rating);
         void InsertSerie(Serie serie);
         void InsertPodcast(Podcast podcast);
-        
+        void InsertSeizoen(Seizoen seizoen);
+        void InsertEpisode(Episode episode);
+
 
 
 

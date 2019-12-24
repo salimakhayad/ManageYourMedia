@@ -42,8 +42,7 @@ namespace MyMedia
                 options.Password.RequiredUniqueChars = 1;
             });
             services.AddDbContext<MediaDbContext>(options =>
-                options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
+                options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("MyMedia")));
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("ElevatedRights", policy =>
@@ -54,7 +53,7 @@ namespace MyMedia
                 .AddEntityFrameworkStores<MediaDbContext>()
                 .AddDefaultTokenProviders();
 
-           // services.AddTransient<SignInManager<Profiel>>();
+          
             services.AddTransient<SignInManager<IdentityUser>>();
             services.AddTransient<MediaDbContext>();
             services.AddTransient<IMyMediaService,MyMediaService>();
