@@ -8,9 +8,9 @@
                 {
                     @foreach (var movie in @Model.Movies)
                     {
-                        <a class="mt-2" asp-action="Details" asp-controller="Movie" asp-route-id="@movie.Id">
-                            <li class="list-group-item list-group-item-dark d-flex justify-content-between align-items-center">
 
+                        <li class="list-group-item list-group-item-dark d-flex justify-content-between align-items-center">
+                            <a class="mt-2" asp-action="Details" asp-controller="Movie" asp-route-id="@movie.Id">
                                 @{var avgScore = "";}
                                 @movie.Titel
                                 <span class="badge badge-dark badge">
@@ -18,13 +18,14 @@
                                         { avgScore = movie.Ratings.Average(p => p.Points).ToString("#.##"); }
                                         else
                                         {
-                                            avgScore = "0";
+                                            avgScore = "0.00";
                                         }
                                     }
                                     @avgScore/10
                                 </span>
-                            </li>
-                        </a>
+                            </a>
+                        </li>
+
                     }
                 }
 
@@ -38,8 +39,9 @@
                 {
                     @foreach (var music in @Model.Musics)
                     {
-                        <a class="mt-2" asp-action="Details" asp-controller="Muziek" asp-route-id="@music.Id">
-                            <li class="list-group-item list-group-item-dark d-flex justify-content-between align-items-center">
+
+                        <li class="list-group-item list-group-item-dark d-flex justify-content-between align-items-center">
+                            <a class="mt-2" asp-action="Details" asp-controller="Muziek" asp-route-id="@music.Id">
                                 @music.Titel
                                 @{var avgScore = "";}
                                 <span class="badge badge-dark badge">
@@ -47,12 +49,13 @@
                                         { avgScore = music.Ratings.Average(p => p.Points).ToString("#.##"); }
                                         else
                                         {
-                                            avgScore = "0";
+                                            avgScore = "0.00";
                                         }}
                                     @avgScore/10
                                 </span>
-                            </li>
-                        </a>
+                            </a>
+                        </li>
+
                     }
                 }
 
@@ -68,8 +71,9 @@
                 {
                     @foreach (var serie in @Model.Series)
                     {
-                        <a class="mt-2" asp-action="Details" asp-controller="Serie" asp-route-id="@serie.Id">
-                            <li class="list-group-item list-group-item-dark d-flex justify-content-between align-items-center">
+                        <li class="list-group-item list-group-item-dark d-flex justify-content-between align-items-center">
+                            <a class="mt-2" asp-action="Details" asp-controller="Serie" asp-route-id="@serie.Id">
+
                                 @serie.Naam aantal seizoenen
                                 <span class="badge badge-dark badge">
                                     @{var aantalSeizoenen = 0;}
@@ -81,11 +85,12 @@
                                         }}
                                     @aantalSeizoenen
                                 </span>
-                            </li>
-                        </a>
-                     }
+                            </a>
+                        </li>
+
+                    }
                 }
-                </ul>
+            </ul>
         </div>
         <div class="col-6 mb-1">
             <a asp-action="Index" asp-controller="Podcasts" class="text-dark"><h1><i class="fas fa-podcast"> Top 10 Podcasts</i> </h1></a>
@@ -94,8 +99,9 @@
                 {
                     @foreach (var podcast in @Model.Podcasts)
                     {
-                        <a class="mt-2" asp-action="Details" asp-controller="Podcasts" asp-route-id="@podcast.Id">
-                            <li class="list-group-item list-group-item-dark d-flex justify-content-between align-items-center">
+                        <li class="list-group-item list-group-item-dark d-flex justify-content-between align-items-center">
+                            <a class="mt-2" asp-action="Details" asp-controller="Podcasts" asp-route-id="@podcast.Id">
+
                                 @podcast.Naam
                                 @{var avgScore = "";}
                                 <span class="badge badge-dark badge">
@@ -103,15 +109,16 @@
                                         { avgScore = podcast.Ratings.Average(p => p.Points).ToString("#.##"); }
                                         else
                                         {
-                                            avgScore = "0";
+                                            avgScore = "0.00";
                                         }}
                                     @avgScore/10
                                 </span>
-                            </li>
-                        </a>
-                                        }
-                                        }
-                </ul>
+                            </a>
+                        </li>
+                      
+                    }
+                }
+            </ul>
         </div>
     </div>
 

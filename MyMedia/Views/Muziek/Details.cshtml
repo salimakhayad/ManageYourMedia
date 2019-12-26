@@ -1,8 +1,9 @@
 ﻿@model MyMedia.Models.Muziek.MuziekDetailViewModel
 @using Microsoft.AspNetCore.Identity
 @using MyMedia.Core.MediaClasses
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@using MyMedia.Core.User;
+@inject SignInManager<Profiel> SignInManager
+@inject UserManager<Profiel> UserManager
 
 
 
@@ -25,14 +26,14 @@
         <div class="col-9">
             <div class="card mt-5" style="width: 70vh;">
                 Score : @Math.Round(@Model.AveragePoints, 2,
-                            MidpointRounding.ToEven) / 10
+                    MidpointRounding.ToEven) / 10
                 <div class="card-body">
                     @for (var point = 2; point <= (Math.Round(@Model.AveragePoints, 2,
-                         MidpointRounding.ToEven)); point += 2)
+                        MidpointRounding.ToEven)); point += 2)
                     {
                         <i class="fas fa-star"></i>
                     }
-                   
+
 
                 </div>
 
@@ -55,7 +56,7 @@
                         @Html.TextBoxFor(x => x.Points, new { type = "number" })
                         <button type="submit" class="btn btn-dark">Rate</button>
                     }
-       
+
                 </form>
             </div>
         </div>
@@ -66,7 +67,7 @@
         <a asp-action="Edit" asp-controller="Muziek" class="text-dark" asp-route-id="@Model.MediaId">Edit</a> |
         <a asp-action="Index" asp-controller="Muziek" class="text-dark">Back to List</a>
     </div>
- 
-    
+
+
 </div>
 

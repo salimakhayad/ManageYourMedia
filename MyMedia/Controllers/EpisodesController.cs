@@ -10,6 +10,7 @@ using MyMedia.Models.Episodes;
 using MyMedia.Models.Series.Episodes;
 using MyMedia.Data;
 using MyMedia.Core.MediaClasses;
+using MyMedia.Core.User;
 
 namespace MyMedia.Controllers
 {
@@ -17,10 +18,10 @@ namespace MyMedia.Controllers
     public class EpisodesController : Controller
     {
         private readonly IMyMediaService _mediaService;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<Profiel> _signInManager;
         private Profiel? _currentProfiel;
 
-        public EpisodesController(IMyMediaService service, SignInManager<IdentityUser> signInManager)
+        public EpisodesController(IMyMediaService service, SignInManager<Profiel> signInManager)
         {
             _mediaService = service;
             _signInManager = signInManager;
@@ -101,7 +102,7 @@ namespace MyMedia.Controllers
             var currentUserId = this._signInManager.UserManager.GetUserId(HttpContext.User);
             if (isSignedIn)
             {
-                _currentProfiel =_mediaService.GetAllProfielen().First(p => p.UserId == currentUserId);
+                _currentProfiel =_mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
             }
             var episode = _mediaService.GetAllEpisodes().FirstOrDefault(epi => epi.Id == id);
             var isRated = false;
@@ -277,7 +278,7 @@ namespace MyMedia.Controllers
             var currentUserId = this._signInManager.UserManager.GetUserId(HttpContext.User);
             if (isSignedIn)
             {
-                _currentProfiel = _mediaService.GetAllProfielen().First(p => p.UserId == currentUserId);
+                _currentProfiel = _mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
             }
 
             var newRating = new Rating()

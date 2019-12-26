@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyMedia.Core.User;
+using System;
 
 namespace MyMedia.Core.MediaClasses
 {

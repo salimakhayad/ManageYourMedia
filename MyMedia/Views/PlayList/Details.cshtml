@@ -1,26 +1,27 @@
 ﻿@model MyMedia.Models.Playlist.PlayListDetailViewModel
-@using MyMedia.Core.Enums
-@using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@using MyMedia.Core.Enums;
+@using MyMedia.Core.User;
+@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<Profiel> SignInManager
+@inject UserManager<Profiel> UserManager
 <div class="container">
     <h2>Playlist <i class="fas fa-angle-double-right"></i>Detail</h2>
     <div class="row">
         <div class="card mt-5">
-            
-                <div class="card-title">@Model.Naam</div>
+
+            <div class="card-title">@Model.Naam</div>
             @if (Model.MediaList != null && Model.MediaList.Any() == false)
             {
-                 @foreach (var media in @Model.MediaList)
-                 {
-                     <div>
-                         @media.Titel
-                         @if (media.Foto != null)
-                         {
-                             <img style="width: 300px; height: 120px;" src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(media.Foto))" alt="@media.Titel Img" class="img-thumbnail" target="_blank" />
-                         }
-                     </div>
-                 }
+                @foreach (var media in @Model.MediaList)
+                {
+                    <div>
+                        @media.Titel
+                        @if (media.Foto != null)
+                        {
+                            <img style="width: 300px; height: 120px;" src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(media.Foto))" alt="@media.Titel Img" class="img-thumbnail" target="_blank" />
+                        }
+                    </div>
+                }
             }
         </div>
     </div>

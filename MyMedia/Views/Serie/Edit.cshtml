@@ -1,52 +1,53 @@
 ﻿@model MyMedia.Models.Series.SerieEditViewModel
 @using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@using MyMedia.Core.User;
+@inject SignInManager<Profiel> SignInManager
+@inject UserManager<Profiel> UserManager
 <div class="container">
 
-        <h2>Serie <i class="fas fa-angle-double-right"></i>Details</h2><i class="fas fa-angle-double-right"></i>@Model.Naam
+    <h2>Serie <i class="fas fa-angle-double-right"></i>Details</h2><i class="fas fa-angle-double-right"></i>@Model.Naam
     <hr />
-<form enctype="multipart/form-data" asp-controller="Serie" asp-action="Edit" method="post">
-    <div class="form-group">
-        <label asp-for="@Model.Naam"></label>
-        <input class="form-control" asp-for="@Model.Naam" />
-        <span class="text-danger" asp-validation-for="@Model.Naam"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="@Model.Foto"></label>
-        <input class="form-control" asp-for="@Model.Foto" />
-        <span accept=".jpg,.jpeg,.png" class="text-danger" asp-validation-for="@Model.Foto"></span>
-    </div>
-    <div class="form-group">
+    <form enctype="multipart/form-data" asp-controller="Serie" asp-action="Edit" method="post">
         <div class="form-group">
-            <b>Seizoenen</b>
-            <ol>
-                @{ int seizoenNummer = 1; }
-                @if (Model.Seizoenen != null && Model.Seizoenen.Any())
-                {
-                @foreach (var seizoen in Model.Seizoenen)
-                {
-                    <li>Seizoen @seizoenNummer</li>
-                    int episodeNummer = 1;
-                    @foreach (var episode in seizoen.Episodes)
-                    {
-                        <li>Episode: @episodeNummer</li>
-                        <li>Titel: @episode.Titel</li>
-                        <li>Beschrijving: @episode.Beschrijving</li>
-
-                        @if (@episode.Foto != null)
-                        {
-                            <li>  <img style="width: 300px; height: 120px;" src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(episode.Foto))" alt="Episode Img" class="img-thumbnail" /> </li>
-                        }
-
-                        episodeNummer++;
-                    }
-                    seizoenNummer++;
-                }
-                }
-            </ol>
-
+            <label asp-for="@Model.Naam"></label>
+            <input class="form-control" asp-for="@Model.Naam" />
+            <span class="text-danger" asp-validation-for="@Model.Naam"></span>
         </div>
-    </div>
-</form>
+        <div class="form-group">
+            <label asp-for="@Model.Foto"></label>
+            <input class="form-control" asp-for="@Model.Foto" />
+            <span accept=".jpg,.jpeg,.png" class="text-danger" asp-validation-for="@Model.Foto"></span>
+        </div>
+        <div class="form-group">
+            <div class="form-group">
+                <b>Seizoenen</b>
+                <ol>
+                    @{ int seizoenNummer = 1; }
+                    @if (Model.Seizoenen != null && Model.Seizoenen.Any())
+                    {
+                        @foreach (var seizoen in Model.Seizoenen)
+                        {
+                            <li>Seizoen @seizoenNummer</li>
+                            int episodeNummer = 1;
+                            @foreach (var episode in seizoen.Episodes)
+                            {
+                                <li>Episode: @episodeNummer</li>
+                                <li>Titel: @episode.Titel</li>
+                                <li>Beschrijving: @episode.Beschrijving</li>
+
+                                @if (@episode.Foto != null)
+                                {
+                                    <li>  <img style="width: 300px; height: 120px;" src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(episode.Foto))" alt="Episode Img" class="img-thumbnail" /> </li>
+                                }
+
+                                episodeNummer++;
+                            }
+                            seizoenNummer++;
+                        }
+                    }
+                </ol>
+
+            </div>
+        </div>
+    </form>
 </div>

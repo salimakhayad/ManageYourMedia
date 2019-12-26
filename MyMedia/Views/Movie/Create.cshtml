@@ -1,9 +1,11 @@
 ﻿@model MyMedia.Models.Movie.MovieCreateViewModel
 @using MyMedia.Core.MediaClasses;
 @using MyMedia.Core.Enums;
+@using MyMedia.Core.User;
 @using Microsoft.AspNetCore.Identity;
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<Profiel> SignInManager
+@inject UserManager<Profiel> UserManager
+
 <div class="container">
     <h2>Movie <i class="fas fa-angle-double-right"></i>Create</h2>
     <hr />
@@ -41,23 +43,25 @@
             <div class="form-group">
                 <div class="form-group">
                     <table>
-                        <tr>
-                            <td>
-                                @foreach (var mogelijkeStatus in Enum.GetNames(typeof(StatusMovie)))
-                                {
+
+                        @foreach (var mogelijkeStatus in Enum.GetNames(typeof(StatusMovie)))
+                        {
+                            <tr>
+                                <td>
                                     @Html.RadioButtonFor(r => r.Status, mogelijkeStatus.ToString())
                                     @Html.Label(mogelijkeStatus.ToString())
-                                }
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
+                        }
+
                     </table>
                 </div>
             </div>
-            <button class="btn btn-primary" type="submit">Add Movie</button>
         </div>
-
+        <button class="btn btn-primary" type="submit">Create Movie</button>
     </form>
 </div>
+
 
 
 

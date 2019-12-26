@@ -1,44 +1,45 @@
 ﻿@model MyMedia.Models.Muziek.MuziekEditViewModel
 @using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@using MyMedia.Core.User;
+@inject SignInManager<Profiel> SignInManager
+@inject UserManager<Profiel> UserManager
 
-    <div class="container">
-        <h2>Muziek <i class="fas fa-angle-double-right"></i>Edit</h2>
-     <hr />
+<div class="container">
+    <h2>Muziek <i class="fas fa-angle-double-right"></i>Edit</h2>
+    <hr />
 
-        <div class="row">
-            <div class="col-md-4">
-                <form enctype="multipart/form-data" asp-controller="Muziek" asp-action="Edit" method="post">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input type="hidden" asp-for="@Model.Id" />
-                    <div class="form-group">
-                        <label asp-for="@Model.ZangersNaam" class="control-label"></label>
-                        <input asp-for="@Model.ZangersNaam" class="form-control" />
-                        <span asp-validation-for="@Model.ZangersNaam" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="@Model.Naam" class="control-label"></label>
-                        <input asp-for="@Model.Naam" class="form-control" />
-                        <span asp-validation-for="@Model.Naam" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="@Model.Lied" class="control-label"></label>
-                        <input asp-for="@Model.Lied" class="form-control" />
-                        <span asp-validation-for="@Model.Lied" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <input type="submit" value="Save" class="btn btn-default" />
-                    </div>
-                </form>
-            </div>
-        </div>
-
-        <div>
-            <a asp-action="Index" asp-controller="Muziek">Back to List</a>
+    <div class="row">
+        <div class="col-md-4">
+            <form enctype="multipart/form-data" asp-controller="Muziek" asp-action="Edit" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="@Model.Id" />
+                <div class="form-group">
+                    <label asp-for="@Model.ZangersNaam" class="control-label"></label>
+                    <input asp-for="@Model.ZangersNaam" class="form-control" />
+                    <span asp-validation-for="@Model.ZangersNaam" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.Naam" class="control-label"></label>
+                    <input asp-for="@Model.Naam" class="form-control" />
+                    <span asp-validation-for="@Model.Naam" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.Lied" class="control-label"></label>
+                    <input asp-for="@Model.Lied" class="form-control" />
+                    <span asp-validation-for="@Model.Lied" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-default" />
+                </div>
+            </form>
         </div>
     </div>
 
-        @section Scripts {
-            @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-        }
+    <div>
+        <a asp-action="Index" asp-controller="Muziek">Back to List</a>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

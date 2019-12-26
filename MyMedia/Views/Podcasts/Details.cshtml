@@ -1,67 +1,68 @@
 ﻿@model MyMedia.Models.Podcast.PodcastDetailViewModel
 @using Microsoft.AspNetCore.Identity
 @using MyMedia.Core.MediaClasses;
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
-    <div class="container">
-        <h2>Podcast <i class="fas fa-angle-double-right"></i>Details</h2><i class="fas fa-angle-double-right"></i>@Model.Naam
+@using MyMedia.Core.User;
+@inject SignInManager<Profiel> SignInManager
+@inject UserManager<Profiel> UserManager
+<div class="container">
+    <h2>Podcast <i class="fas fa-angle-double-right"></i>Details</h2><i class="fas fa-angle-double-right"></i>@Model.Naam
 
-        @if (@Model.PlayLists != null && @Model.PlayLists.Count > 0)
-        {
-            <form enctype="multipart/form-data" asp-controller="PlayList" asp-action="AddToPlaylist" method="post">
-                @Html.HiddenFor(pl => pl.MediaId);
-                <div class="btn-group">
-                    @Html.DropDownListFor(x => x.PlayListId,
-                        new SelectList(@Model.PlayLists, nameof(PlayList.Id), nameof(PlayList.Name)), "Select PlayList")
-                    <i class="fas fa-caret-down"></i>
-                </div>
-                <button type="submit" class="btn btn-primary">Add to playlist</button>
-            </form>
-        }
-        <div class="row">
-            <div class="col-9">
-                <div class="card mt-5" style="width: 70vh;">
-                    Score : @Math.Round(@Model.AveragePoints, 2, MidpointRounding.ToEven) / 10
-                    <div class="card-body">
-                        @for (var point = 2; point <= (Math.Round(@Model.AveragePoints, 2,
-                         MidpointRounding.ToEven)); point += 2)
+    @if (@Model.PlayLists != null && @Model.PlayLists.Count > 0)
+    {
+        <form enctype="multipart/form-data" asp-controller="PlayList" asp-action="AddToPlaylist" method="post">
+            @Html.HiddenFor(pl => pl.MediaId);
+            <div class="btn-group">
+                @Html.DropDownListFor(x => x.PlayListId,
+                    new SelectList(@Model.PlayLists, nameof(PlayList.Id), nameof(PlayList.Name)), "Select PlayList")
+                <i class="fas fa-caret-down"></i>
+            </div>
+            <button type="submit" class="btn btn-primary">Add to playlist</button>
+        </form>
+    }
+    <div class="row">
+        <div class="col-9">
+            <div class="card mt-5" style="width: 70vh;">
+                Score : @Math.Round(@Model.AveragePoints, 2, MidpointRounding.ToEven) / 10
+                <div class="card-body">
+                    @for (var point = 2; point <= (Math.Round(@Model.AveragePoints, 2,
+                    MidpointRounding.ToEven)); point += 2)
+                    {
+                        <i class="fas fa-star"></i>
+                    }
+                    <h2 class="card-title">@Model.Naam</h2>
+
+                    <div class=" row">
+                        @if (@Model.Foto != null)
                         {
-                            <i class="fas fa-star"></i>
+                            <img style="width: 50px;" src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(@Model.Foto))" alt="Serie Img" class="img-thumbnail  col-6" target="_blank" />
                         }
-                        <h2 class="card-title">@Model.Naam</h2>
-                        
-                        <div class=" row">
-                            @if (@Model.Foto != null)
-                            {
-                                <img style="width: 50px;" src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(@Model.Foto))" alt="Serie Img" class="img-thumbnail  col-6" target="_blank" />
-                            }
-                            <a class="col-6" href="@Model.PodcastLink">
-                                <img border="0" alt="@Model.Naam" src="~/images/imdb_Logo.png" height="30">
-                            </a>
-                        </div>
+                        <a class="col-6" href="@Model.PodcastLink">
+                            <img border="0" alt="@Model.Naam" src="~/images/imdb_Logo.png" height="30">
+                        </a>
                     </div>
                 </div>
-
-                <form enctype="multipart/form-data" asp-controller="Podcasts" asp-action="RatePodcast" method="post">
-                    @Html.HiddenFor(x => x.MediaId)
-
-                    @if (!@Model.IsRated)
-                    {
-                        @Html.TextBoxFor(x => x.Points, new { type = "number" })
-                        <button type="submit" class="btn btn-primary">Rate</button>
-                    }
-                </form>
             </div>
-        </div>
 
-        <div>
-            <a asp-controller="Podcasts" asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-            <a asp-controller="Podcasts" asp-action="Index"> Go back to list</a>
+            <form enctype="multipart/form-data" asp-controller="Podcasts" asp-action="RatePodcast" method="post">
+                @Html.HiddenFor(x => x.MediaId)
+
+                @if (!@Model.IsRated)
+                {
+                    @Html.TextBoxFor(x => x.Points, new { type = "number" })
+                    <button type="submit" class="btn btn-primary">Rate</button>
+                }
+            </form>
         </div>
     </div>
-    
 
-    
+    <div>
+        <a asp-controller="Podcasts" asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+        <a asp-controller="Podcasts" asp-action="Index"> Go back to list</a>
+    </div>
+</div>
+
+
+
 
 
 

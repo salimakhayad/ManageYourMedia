@@ -1,46 +1,50 @@
 ﻿@model IEnumerable<MyMedia.Models.Movie.MovieListViewModel>
 @using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@using MyMedia.Core.User;
+@inject SignInManager<Profiel> SignInManager
+@inject UserManager<Profiel> UserManager
 
 <div class="container">
     <h2>Movie <i class="fas fa-angle-double-right"></i> Index</h2>
-    <div class="row justify-content-end">
-        <a asp-action="Create" asp-route-id=" " class="btn btn-warning" asp-controller="Movie">Add Movie</a>
-    </div>
-    <div class="row mt-3">
-      
-        <div class="row">
-            @if (Model.Any() && Model != null)
-            {
-                foreach (var mov in Model)
-                {
-                    <div class="col-lg-3 m-1">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="card-img-top">
-                                    @if (mov.Foto != null)
-                                    {
-                                        <img src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(@mov.Foto))" alt="Movie Img" class="img-thumbnail" target="_blank"/>
-                                    }
-                                </div>
-                                <div class="hit-the-floor">
-                                    <h4>@mov.Titel</h4>
-                                </div>
-                                <a asp-action="Edit" asp-controller="Movie" asp-route-id="@mov.Id"> Edit</a>
-                                <a asp-action="Delete" asp-controller="Movie" asp-route-id="@mov.Id"> Delete</a>
-                                <a asp-action="Details" asp-controller="Movie" asp-route-id="@mov.Id"> Details</a>
-                            </div>
+
+
+
+
+    @if (Model.Any() && Model != null)
+    {
+        foreach (var mov in Model)
+        {
+            <div class="col-lg-3 m-1">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="card-img-top">
+                            @if (mov.Foto != null)
+                            {
+                                <img src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(@mov.Foto))" alt="Movie Img" class="img-thumbnail" target="_blank" />
+                            }
                         </div>
+                        <div class="hit-the-floor">
+                            <h4>@mov.Titel</h4>
+                        </div>
+                        <a asp-action="Edit" asp-controller="Movie" asp-route-id="@mov.Id"> Edit</a>
+                        <a asp-action="Delete" asp-controller="Movie" asp-route-id="@mov.Id"> Delete</a>
+                        <a asp-action="Details" asp-controller="Movie" asp-route-id="@mov.Id"> Details</a>
                     </div>
-                }
-            }
-            else
-            {
-                <p class="h1"> Currently no movies for display </p>
-            }
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="alert alert-info" role="alert">
+            Currently no movies for display.
 
         </div>
 
+
+    }
+    <div class="row justify-content-end">
+        <a asp-action="Create" asp-route-id=" " class="btn btn-warning" asp-controller="Movie">Add Movie</a>
     </div>
+
 </div>

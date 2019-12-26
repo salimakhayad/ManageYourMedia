@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MyMedia.Core.MediaClasses;
+using MyMedia.Core.User;
 using MyMedia.Data;
 using MyMedia.Models.Playlist;
 using System.Collections.Generic;
@@ -14,9 +15,9 @@ namespace MyMedia.Controllers
     {
         private readonly IMyMediaService _mediaService;
 
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<Profiel> _signInManager;
         private Profiel? _currentProfiel;
-        public PlayListController(IMyMediaService service,SignInManager<IdentityUser> signInManager)
+        public PlayListController(IMyMediaService service,SignInManager<Profiel> signInManager)
         {
 
             _mediaService = service;
@@ -29,18 +30,18 @@ namespace MyMedia.Controllers
             var currentUserId = this._signInManager.UserManager.GetUserId(HttpContext.User);
             if (isSignedIn)
             {
-                var profiel = _mediaService.GetAllProfielen().FirstOrDefault(p => p.UserId == currentUserId);
+                var profiel = _mediaService.GetAllProfielen().FirstOrDefault(p => p.Id == currentUserId);
                 if (profiel == null)
                 {
                     var newProfiel = new Profiel
                     {
-                        UserId = currentUserId,
+                        Id = currentUserId,
                     };
                     _mediaService.InsertProfiel(newProfiel);
                     _mediaService.SaveChanges();
                 }
 
-                _currentProfiel = _mediaService.GetAllProfielen().FirstOrDefault(p => p.UserId == currentUserId);
+                _currentProfiel = _mediaService.GetAllProfielen().FirstOrDefault(p => p.Id == currentUserId);
 
             }
             List<PlayListIndexViewModel> model = new List<PlayListIndexViewModel>();
@@ -53,7 +54,7 @@ namespace MyMedia.Controllers
                     Id = playlist.Id,
                     Naam = playlist.Name,
                     IsSignedIn = currentUserId!=null,
-                    UserNaam = _currentProfiel.Naam
+                    UserNaam = _currentProfiel.UserName
                 });
             }
 
@@ -86,7 +87,7 @@ namespace MyMedia.Controllers
             var currentUserId = this._signInManager.UserManager.GetUserId(HttpContext.User);
             if(currentUserId!=null)
             {
-                _currentProfiel = _mediaService.GetAllProfielen().First(p => p.UserId == currentUserId);
+                _currentProfiel = _mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
             }
             var newPlayList = new PlayList()
             {

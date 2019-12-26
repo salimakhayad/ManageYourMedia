@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using MyMedia.Core.MediaClasses;
+using MyMedia.Core.User;
+
 namespace MyMedia.Models.Home
 {
     public class HomeOverviewViewModel : AuthenticatedViewModel
@@ -9,6 +11,6 @@ namespace MyMedia.Models.Home
         public IEnumerable<Core.MediaClasses.Podcast>? Podcasts { get; set; }
         public IEnumerable<Core.MediaClasses.Serie>? Series { get; set; }
         public IEnumerable<Core.MediaClasses.PlayList>? PlayLists { get; set; }
-        public Profiel? Profiel { get; set; }
+        public Core.User.Profiel? Profiel { get; set; }
     }
 }

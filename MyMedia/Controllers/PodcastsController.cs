@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MyMedia.Core.MediaClasses;
+using MyMedia.Core.User;
 using MyMedia.Data;
 using MyMedia.Models.Podcast;
 using System;
@@ -15,10 +16,10 @@ namespace MyMedia.Controllers
     public class PodcastsController : Controller
     {
         private readonly IMyMediaService _mediaService;
-        private readonly SignInManager<IdentityUser> _signinManager;
+        private readonly SignInManager<Profiel> _signinManager;
         private Profiel? _currentProfiel;
 
-        public PodcastsController(IMyMediaService service, SignInManager<IdentityUser> signinManager)
+        public PodcastsController(IMyMediaService service, SignInManager<Profiel> signinManager)
         {
             _mediaService = service;
             _signinManager = signinManager;
@@ -45,7 +46,7 @@ namespace MyMedia.Controllers
             var currentUserId = this._signinManager.UserManager.GetUserId(HttpContext.User);
             if (isSignedIn)
             {
-                _currentProfiel = _mediaService.GetAllProfielen().First(p => p.UserId == currentUserId);
+                _currentProfiel = _mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
             }
             Podcast selectedPodcast = _mediaService.GetAllPodcasts().FirstOrDefault(x => x.Id == id);
 
@@ -146,7 +147,7 @@ namespace MyMedia.Controllers
             var currentUserId = this._signinManager.UserManager.GetUserId(HttpContext.User);
             if (isSignedIn)
             {
-                _currentProfiel = _mediaService.GetAllProfielen().First(p => p.UserId == currentUserId);
+                _currentProfiel = _mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
             }
 
             var newRating = new Rating()

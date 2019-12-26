@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MyMedia.Core.MediaClasses;
+using MyMedia.Core.User;
 using MyMedia.Data;
 using MyMedia.Models.Series;
 using System.Collections.Generic;
@@ -13,10 +14,10 @@ namespace MyMedia.Controllers
     public class SerieController : Controller
     {
         private readonly IMyMediaService service;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<Profiel> _signInManager;
         private Profiel? _currentProfiel;
 
-        public SerieController(IMyMediaService context, SignInManager<IdentityUser> signinManager)
+        public SerieController(IMyMediaService context, SignInManager<Profiel> signinManager)
         {
             service = context;
             _signInManager = signinManager;
@@ -27,18 +28,18 @@ namespace MyMedia.Controllers
             var currentUserId = this._signInManager.UserManager.GetUserId(HttpContext.User);
             if (isSignedIn)
             {
-                var profiel = service.GetAllProfielen().FirstOrDefault(p => p.UserId == currentUserId);
+                var profiel = service.GetAllProfielen().FirstOrDefault(p => p.Id == currentUserId);
                 if (profiel == null)
                 {
                     var newProfiel = new Profiel
                     {
-                        UserId = currentUserId,
+                        Id = currentUserId,
                     };
                     service.InsertProfiel(newProfiel);
                     service.SaveChanges();
                 }
 
-                _currentProfiel = service.GetAllProfielen().First(p => p.UserId == currentUserId);
+                _currentProfiel = service.GetAllProfielen().First(p => p.Id == currentUserId);
 
             }
             var series = service.GetAllSeries();
@@ -113,17 +114,7 @@ namespace MyMedia.Controllers
         }
 
 
-        private void SetSeasonsAndEpisodes(SerieDetailViewModel vm)
-        {
-            foreach (var seizoen in vm.Seizoenen)
-            {
-                var listEpisodes = service.GetAllEpisodes().Where(x => x.Seizoen.Id == seizoen.Id);
-                foreach (var episode in listEpisodes)
-                {
-                    vm.Seizoenen.First(x => x.Id == seizoen.Id).Episodes.Add(episode);
-                }
-            }
-        }
+
 
         private SerieDetailViewModel MapToViewModel(Serie serie)
         {

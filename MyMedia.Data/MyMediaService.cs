@@ -1,5 +1,6 @@
 ﻿using MyMedia.Core;
 using MyMedia.Core.MediaClasses;
+using MyMedia.Core.User;
 using System.Collections.Generic;
 using System.Linq;
 

@@ -1,16 +1,20 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using MyMedia.Core.MediaClasses;
+using System;
 using System.Collections.Generic;
 
-namespace MyMedia.Core.MediaClasses
+namespace MyMedia.Core.User
 {
-    public class Profiel:IdentityUser
+    public class Profiel :IdentityUser
     {
-        //public int Id { get; set; }
+        
         public virtual ICollection<ProfielMedia> Bekeken { get; set; }
         public virtual ICollection<PlayList> Playlists { get; set; }
         public virtual ICollection<Rating> Ratings { get; set; }
-        public string UserId { get; set; }
-        public string Naam { get; set; }
-        
+      //  public string Id { get; set; }
+      //  public string UserName { get; set; }
+      //  public string NormalizedUserName { get; set; }
+      //  public string PasswordHash { get; set; }
+
     }
 }

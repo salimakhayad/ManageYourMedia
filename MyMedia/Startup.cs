@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MyMedia.Data;
 using Microsoft.Extensions.Hosting;
 using MyMedia.Core.MediaClasses;
+using MyMedia.Core.User;
 
 namespace MyMedia
 {
@@ -49,17 +50,23 @@ namespace MyMedia
                   policy.RequireRole("Administrator", "Gebruiker"));
             });
 
-            services.AddIdentity<IdentityUser,IdentityRole>()
-                .AddEntityFrameworkStores<MediaDbContext>()
-                .AddDefaultTokenProviders();
+            services.AddIdentityCore<Profiel>(options => { })
+                 .AddEntityFrameworkStores<MediaDbContext>()
+                 .AddDefaultTokenProviders();
 
-          
-            services.AddTransient<SignInManager<IdentityUser>>();
+            services.AddScoped<IUserStore<Profiel>, ProfielUserStore>();
+
+            //services.AddIdentityCore<string>(options => { });
+
+            services.AddTransient<SignInManager<Profiel>>();
             services.AddTransient<MediaDbContext>();
             services.AddTransient<IMyMediaService,MyMediaService>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddMvc((opt) => opt.EnableEndpointRouting = false);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

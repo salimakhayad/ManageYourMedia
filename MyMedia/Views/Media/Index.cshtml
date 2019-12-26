@@ -1,7 +1,8 @@
 ﻿@model MyMedia.Models.Media.MediaOverviewViewModel
 @using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@using MyMedia.Core.User
+@inject SignInManager<Profiel> SignInManager
+@inject UserManager<Profiel> UserManager
    
         <div>
             <form enctype="multipart/form-data" asp-controller="Media" asp-action="ApproveMedia" method="post">
@@ -9,30 +10,37 @@
                 {
                     @foreach (var media in @Model.NietPubliekeMediaLijst)
                     {
-                    <div class="form-group">
-                    <label class="container">
-                        Non-Approved
-                        <input type="checkbox" asp-for="@media.IsChecked" checked="checked">
-                        <span class="checkmark"></span>
-                    </label>
+                        <div class="form-group">
+                            <label class="mcontainer">
+                                Non-Approved
+                                <input type="checkbox" asp-for="@media.IsChecked" checked="checked">
+                                <span class="mcheckmark"></span>
+                            </label>
 
-                    <div class="card" style="width: 18rem;">
-                        @{ if (media.Foto != null)
-                            {
-                                <img src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(media.Foto))" alt="media Img" class="img-thumbnail" target="_blank" />
-                            }
-                        }
-                        <div class="card-body">
-                            <h5 class="card-title" asp-for="@media.Titel">@media.Titel</h5>
+                            <div class="card" style="width: 18rem;">
+                                @{ if (media.Foto != null)
+                                    {
+                                        <img src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(media.Foto))" alt="media Img" class="img-thumbnail" target="_blank" />
+                                    }
+                                }
+                                <div class="card-body">
+                                    <h5 class="card-title" asp-for="@media.Titel">@media.Titel</h5>
+                                </div>
+                            </div>
+
                         </div>
-                    </div>
-
-                </div>
                     }
+                    <button class="btn btn-primary" type="submit">Update Media List</button>
                 }
-                
-                <button class="btn btn-primary" type="submit">Update Media List</button>
-               
+                else
+                {
+                    <div class="alert alert-info" role="alert">
+                       There is no media waiting for approval.
+                    </div>
+                }
+
+
+
             </form>
         </div>
       

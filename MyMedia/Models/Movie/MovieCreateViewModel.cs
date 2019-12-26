@@ -10,17 +10,23 @@ namespace MyMedia.Models.Movie
     {
         [StringLength(60, MinimumLength = 3)]
         [Required]
-        [DisplayName("Foto")]
+        [DisplayName("Titel")]
         public string? Titel { get; set; }
         [DisplayName("Foto")]
+        [Required]
         public IFormFile? Foto { get; set; }
         [DisplayName("Duration")]
+        [Required]
         public TimeSpan Duration { get; set; }
+
         [DisplayName("ReleaseDate")]
+        [Required]
         public DateTime? ReleaseDate { get; set; }
         [DisplayName("IMDBLink")]
+        [Required]
         public string? IMDBLink { get; set; }
         [DisplayName("Status")]
+        [Required]
         public StatusMovie Status { get; set; } 
 
 

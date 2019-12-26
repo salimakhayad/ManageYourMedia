@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MyMedia.Core.MediaClasses;
+using MyMedia.Core.User;
 using MyMedia.Data;
 using MyMedia.Models.Movie;
 using System;
@@ -16,10 +17,10 @@ namespace MyMedia.Controllers
     {
         //private readonly MediaDbContext _context;
         private readonly IMyMediaService _mediaService;
-        private readonly SignInManager<IdentityUser> _signinManager;
+        private readonly SignInManager<Profiel> _signinManager;
         private Profiel? _currentProfiel;
 
-        public MovieController(IMyMediaService service,SignInManager<IdentityUser> signinManager)
+        public MovieController(IMyMediaService service,SignInManager<Profiel> signinManager)
         {
             _mediaService = service;
             _signinManager = signinManager;
@@ -101,14 +102,14 @@ namespace MyMedia.Controllers
             var currentUserId = this._signinManager.UserManager.GetUserId(HttpContext.User);
             if (isSignedIn)
             {
-                _currentProfiel = _mediaService.GetAllProfielen().First(p => p.UserId == currentUserId);
+                _currentProfiel = _mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
             }
             Movie selectedMovie = _mediaService.GetAllMedia().OfType<Movie>().FirstOrDefault(x => x.Id == id);
             bool isAlreadyRated = false;
             var playlists = new List<PlayList>();
             if (_currentProfiel != null)
             {
-                isAlreadyRated = _mediaService.GetAllRatings().Where(movie => movie.Media.Titel == selectedMovie.Titel).Where(user => user.Profiel.UserId == _currentProfiel.UserId).Any();
+                isAlreadyRated = _mediaService.GetAllRatings().Where(movie => movie.Media.Titel == selectedMovie.Titel).Where(user => user.Profiel.Id == _currentProfiel.Id).Any();
                 playlists = _currentProfiel.Playlists.ToList();
             }
 
@@ -195,7 +196,7 @@ namespace MyMedia.Controllers
             var currentUserId = this._signinManager.UserManager.GetUserId(HttpContext.User);
             if (isSignedIn)
             {
-                _currentProfiel = _mediaService.GetAllProfielen().First(p => p.UserId == currentUserId);
+                _currentProfiel = _mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
             }
 
             var newRating = new Rating()

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MyMedia.Core.User;
+using System.ComponentModel.DataAnnotations;
 
 namespace MyMedia.Core.MediaClasses
 {

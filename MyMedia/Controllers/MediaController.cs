@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MyMedia.Models.Media;
 using MyMedia.Core.MediaClasses;
+using MyMedia.Core.User;
 
 namespace MyMedia.Controllers
 {
@@ -14,9 +15,9 @@ namespace MyMedia.Controllers
     {
         
         private readonly IMyMediaService _mediaService;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<Profiel> _signInManager;
         private Profiel? _currentProfiel;
-        public MediaController(IMyMediaService mediaService, SignInManager<IdentityUser> signInManager)
+        public MediaController(IMyMediaService mediaService, SignInManager<Profiel> signInManager)
         {
             _mediaService = mediaService;
             _signInManager = signInManager;
@@ -28,18 +29,18 @@ namespace MyMedia.Controllers
             var currentUserId = this._signInManager.UserManager.GetUserId(HttpContext.User);
             if (isSignedIn)
             {
-                var profiel = _mediaService.GetAllProfielen().FirstOrDefault(p => p.UserId == currentUserId);
+                var profiel = _mediaService.GetAllProfielen().FirstOrDefault(p => p.Id == currentUserId);
                 if (profiel == null)
                 {
                     var newProfiel = new Profiel
                     {
-                        UserId = currentUserId,
+                        Id = currentUserId,
                     };
                     _mediaService.InsertProfiel(newProfiel);
                     _mediaService.SaveChanges();
                 }
 
-                _currentProfiel = _mediaService.GetAllProfielen().First(p => p.UserId == currentUserId);
+                _currentProfiel = _mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
 
             }
             // selects non approved media 
@@ -68,7 +69,6 @@ namespace MyMedia.Controllers
         }
 
         [HttpPost]
-
         public IActionResult ApproveMedia(ICollection<MediaListViewModel> NietPubliekeMediaLijst)
         {
             return View();

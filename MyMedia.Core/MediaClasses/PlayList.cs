@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using MyMedia.Core.User;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MyMedia.Core.MediaClasses
@@ -10,9 +11,9 @@ namespace MyMedia.Core.MediaClasses
         public virtual ICollection<Media> MediaList { get; set; }
 
         [NotMapped]
-        public virtual List<Profiel> ProfielIds { get; set; }
+        public virtual List<Profiel> ToegankelijkeProfielen { get; set; }
         public string Name { get; set; }
-        public bool IsPubliek { get; set; }
+        
 
     }
 }

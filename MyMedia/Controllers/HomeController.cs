@@ -1,49 +1,54 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MyMedia.Core.MediaClasses;
+using MyMedia.Core.User;
 using MyMedia.Data;
 using MyMedia.Models;
 using MyMedia.Models.Home;
+using MyMedia.Models.Profiel;
 
 namespace MyMedia.Controllers
 {
     public class HomeController : Controller
     {
-        // private readonly MediaDbContext _context;
         private readonly IMyMediaService _mediaService;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        //private readonly SignInManager<Profiel>? _signInManager;
+        private readonly UserManager<Profiel>? _userManager;
         private Profiel? _currentProfiel;
 
-        public HomeController(IMyMediaService mediaService, SignInManager<IdentityUser> signInManager)
+        public HomeController(IMyMediaService mediaService, UserManager<Profiel> userManager/*SignInManager<Profiel> signInManager*/)
         {
-            // _context = context;
-            _signInManager = signInManager;
+
+            // _signInManager = signInManager;
+            _userManager = userManager;
             _mediaService = mediaService;
         }
 
         [Route("")]
         public IActionResult Index()
         {
-            var isSignedIn = this._signInManager.IsSignedIn(HttpContext.User);
-            var currentUserId = this._signInManager.UserManager.GetUserId(HttpContext.User);
-            if (isSignedIn)
-            {
-                var profiel = _mediaService.GetAllProfielen().FirstOrDefault(p => p.UserId == currentUserId);
-                if (profiel == null)
-                {
-                    var newProfiel = new Profiel
-                    {
-                        UserId = currentUserId,
-                    };
-                    _mediaService.InsertProfiel(newProfiel);
-                    _mediaService.SaveChanges();
-                }
-
-                _currentProfiel = _mediaService.GetAllProfielen().FirstOrDefault(p => p.UserId == currentUserId);
-
-            }
+            // var isSignedIn = this._signInManager.IsSignedIn(HttpContext.User);
+            // var currentUserId = this._signInManager.UserManager.GetUserId(HttpContext.User);
+            // if (isSignedIn)
+            // {
+            //     var profiel = _mediaService.GetAllProfielen().FirstOrDefault(p => p.Id == currentUserId);
+            //     if (profiel == null)
+            //     {
+            //         var newProfiel = new Profiel
+            //         {
+            //             Id = currentUserId,
+            //         };
+            //         _mediaService.InsertProfiel(newProfiel);
+            //         _mediaService.SaveChanges();
+            //     }
+            // 
+            //     _currentProfiel = _mediaService.GetAllProfielen().FirstOrDefault(p => p.Id == currentUserId);
+            // 
+            // }
             var topMovies = _mediaService.GetAllMedia().OfType<Movie>().Take(10);//.Where(m=>m.IsPubliek==true) .OrderBy(r => r.Rating.Points);
             var topSeries = _mediaService.GetAllSeries().Take(10);//.Where(m=>m.IsPubliek==true);
             var topMusic = _mediaService.GetAllMedia().OfType<Muziek>().Take(10);//.Where(m=>m.IsPubliek==true);
@@ -57,8 +62,8 @@ namespace MyMedia.Controllers
                 Musics = topMusic,
                 Podcasts = topPodcasts,
                 PlayLists = topPlaylists,
-                IsSignedIn = isSignedIn,
-                Profiel = _currentProfiel
+                IsSignedIn = false,//isSignedIn,
+                Profiel = null//_currentProfiel
             };
 
             return View(vm);
@@ -88,5 +93,32 @@ namespace MyMedia.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(RegisterModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByNameAsync(model.UserName);
+                if (user == null)
+                {
+                    user = new Profiel
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        UserName = model.UserName
+                    };
+
+                    var result = await _userManager.CreateAsync(user, model.Password);
+                }
+                return View("Success");
+            }
+            return View();
+        }
+
     }
 }

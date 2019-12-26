@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MyMedia.Core.MediaClasses;
+using MyMedia.Core.User;
 using MyMedia.Data;
 using MyMedia.Models.Muziek;
 using System;
@@ -15,9 +16,9 @@ namespace MyMedia.Controllers
     public class MuziekController : Controller
     {
         private readonly IMyMediaService _mediaService;
-        private readonly SignInManager<IdentityUser> _signinManager;
+        private readonly SignInManager<Profiel> _signinManager;
         private Profiel? _currentProfiel;
-        public MuziekController(IMyMediaService service, SignInManager<IdentityUser> signinManager)
+        public MuziekController(IMyMediaService service, SignInManager<Profiel> signinManager)
         {
             _mediaService = service;
             _signinManager = signinManager;
@@ -44,7 +45,7 @@ namespace MyMedia.Controllers
             var currentUserId = this._signinManager.UserManager.GetUserId(HttpContext.User);
             if (isSignedIn)
             {
-                _currentProfiel = _mediaService.GetAllProfielen().First(p => p.UserId == currentUserId);
+                _currentProfiel = _mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
             }
             Muziek selectedMusic = _mediaService.GetAllMedia().OfType<Muziek>().Where(muz => muz.Id == id).FirstOrDefault();
             List<Rating> UserRatingList=new List<Rating>();
@@ -174,7 +175,7 @@ namespace MyMedia.Controllers
             var currentUserId = this._signinManager.UserManager.GetUserId(HttpContext.User);
             if (isSignedIn)
             {
-                _currentProfiel = _mediaService.GetAllProfielen().First(p => p.UserId == currentUserId);
+                _currentProfiel = _mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
             }
 
             var newRating = new Rating()

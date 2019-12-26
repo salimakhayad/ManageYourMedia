@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MyMedia.Core.MediaClasses;
+using MyMedia.Core.User;
 
 namespace MyMedia.Data
 {
