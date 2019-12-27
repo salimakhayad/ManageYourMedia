@@ -1,45 +1,51 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
-using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using MyMedia.Core.User;
 using Dapper;
 
-namespace MyMedia.Core.User
+
+namespace MyMedia
 {
+    
     public class ProfielUserStore : IUserStore<Profiel>,IUserPasswordStore<Profiel>
     {
+        
+        public ProfielUserStore()
+        {
+
+        }
         public async Task<IdentityResult> CreateAsync(Profiel user, CancellationToken cancellationToken)
         {
-            using (var connection = GetOpenConnection())
-            {
-                await connection.ExecuteAsync(
-                    "insert into Profiel([Id]," +
-                    "[UserName]," +
-                    "[NormalizedUserName]," +
-                    "[PasswordHash]) " +
-                    "Values(@id,@userName,@normalizedUserName,@passwordHash)",
-                    new
-                    {
-                        id = user.Id,
-                        userName = user.UserName,
-                        normalizedUserName = user.NormalizedUserName,
-                        passwordHash = user.PasswordHash
-                    }
-                );
-            }
+
+            
+           using (var connection = GetOpenConnection())
+           {
+               await connection.ExecuteAsync(
+                   "insert into Profiel([Id]," +
+                   "[UserName]," +
+                   "[NormalizedUserName]," +
+                   "[PasswordHash]) " +
+                   "Values(@id,@userName,@normalizedUserName,@passwordHash)",
+                   new
+                   {
+                       id = user.Id,
+                       userName = user.UserName,
+                       normalizedUserName = user.NormalizedUserName,
+                       passwordHash = user.PasswordHash
+                   }
+               );
+           }
 
             return IdentityResult.Success;
         }
-        public ProfielUserStore()
-        {
-            
-        }
+
         public void Dispose()
         {
+
         }
 
         public Task<string> GetUserIdAsync(Profiel user, CancellationToken cancellationToken)
@@ -71,7 +77,7 @@ namespace MyMedia.Core.User
 
         public static DbConnection GetOpenConnection()
         {
-            var connection = new SqlConnection("Server=(localdb)\\MSSQLLocalDB;Database=MyMediaManager;Trusted_Connection=True;MultipleActiveResultSets=true");
+            var connection = new SqlConnection("Server=(localdb)\\MSSQLLocalDB;Trusted_Connection=True;MultipleActiveResultSets=true");
             connection.Open();
 
             return connection;
@@ -99,7 +105,7 @@ namespace MyMedia.Core.User
                     }
                 );
             }
-
+           
             return IdentityResult.Success;
         }
 

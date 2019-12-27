@@ -4,7 +4,7 @@
         <div class="col-6">
             <a asp-action="Index" asp-controller="Movie" class="text-dark"><h1> <i class="fas fa-film"> Top 10 Movies </i></h1></a>
             <ul class="list-group  movies">
-                @if (Model.Movies != null && Model.Movies.Any())
+                @if (Model.Movies.Any() && Model.Movies != null)
                 {
                     @foreach (var movie in @Model.Movies)
                     {
@@ -35,7 +35,7 @@
         <div class="col-6">
             <a asp-action="Index" asp-controller="Muziek" class="text-dark"><h1> <i class="fas fa-music"> Top 10 Music</i>  </h1></a>
             <ul class="list-group muziek">
-                @if (@Model.Musics != null && Model.Musics.Any())
+                @if (@Model.Musics != null && !Model.Musics.Any())
                 {
                     @foreach (var music in @Model.Musics)
                     {

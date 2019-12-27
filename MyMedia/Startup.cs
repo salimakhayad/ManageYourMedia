@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using MyMedia.Core.MediaClasses;
 using MyMedia.Core.User;
 
+
 namespace MyMedia
 {
     public class Startup
@@ -42,8 +43,10 @@ namespace MyMedia
                 options.Password.RequiredLength = 6;
                 options.Password.RequiredUniqueChars = 1;
             });
+            
             services.AddDbContext<MediaDbContext>(options =>
-                options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("MyMedia")));
+                options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("MediaConnection"), b => b.MigrationsAssembly("MyMedia")));
+           
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("ElevatedRights", policy =>
@@ -54,7 +57,7 @@ namespace MyMedia
                  .AddEntityFrameworkStores<MediaDbContext>()
                  .AddDefaultTokenProviders();
 
-            services.AddScoped<IUserStore<Profiel>, ProfielUserStore>();
+             services.AddScoped<IUserStore<Profiel>, ProfielUserStore>();
 
             //services.AddIdentityCore<string>(options => { });
 
