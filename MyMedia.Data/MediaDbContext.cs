@@ -6,7 +6,7 @@ using MyMedia.Core.User;
 
 namespace MyMedia.Data
 {
-    public class MediaDbContext : IdentityDbContext<IdentityUser>
+    public class MediaDbContext : IdentityDbContext<Profiel>
     {
         public MediaDbContext(DbContextOptions<MediaDbContext> options)
             : base(options)

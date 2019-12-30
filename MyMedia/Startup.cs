@@ -33,20 +33,9 @@ namespace MyMedia
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
             // default settings
-            services.Configure<IdentityOptions>(options =>
-            {
-                // Default Password settings.
-                options.Password.RequireDigit = true;
-                options.Password.RequireLowercase = true;
-                options.Password.RequireNonAlphanumeric = true;
-                options.Password.RequireUppercase = true;
-                options.Password.RequiredLength = 6;
-                options.Password.RequiredUniqueChars = 1;
-            });
-            
-            services.AddDbContext<MediaDbContext>(options =>
-                options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("MediaConnection"), b => b.MigrationsAssembly("MyMedia")));
-           
+            services.AddDbContextPool<MediaDbContext>(options =>
+                options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("MediaDb")));
+                                                                                                        //, b => b.MigrationsAssembly("MyMedia")
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("ElevatedRights", policy =>
@@ -57,11 +46,13 @@ namespace MyMedia
                  .AddEntityFrameworkStores<MediaDbContext>()
                  .AddDefaultTokenProviders();
 
-             services.AddScoped<IUserStore<Profiel>, ProfielUserStore>();
+             services.AddScoped<IUserStore<Profiel>,ProfielUserStore>();
 
-            //services.AddIdentityCore<string>(options => { });
+            services.AddAuthentication("cookies")
+               .AddCookie("cookies", options => options.LoginPath = "/Home/Login");
 
             services.AddTransient<SignInManager<Profiel>>();
+            services.AddTransient<UserManager<Profiel>>();
             services.AddTransient<MediaDbContext>();
             services.AddTransient<IMyMediaService,MyMediaService>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

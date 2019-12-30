@@ -11,10 +11,12 @@ namespace MyMedia.Core.User
         public virtual ICollection<ProfielMedia> Bekeken { get; set; }
         public virtual ICollection<PlayList> Playlists { get; set; }
         public virtual ICollection<Rating> Ratings { get; set; }
-      //  public string Id { get; set; }
-      //  public string UserName { get; set; }
-      //  public string NormalizedUserName { get; set; }
-      //  public string PasswordHash { get; set; }
+        public string FavorieteKleur { get; set; }
+
+        //  public string Id { get; set; }
+        //  public string UserName { get; set; }
+        //  public string NormalizedUserName { get; set; }
+        //  public string PasswordHash { get; set; }
 
     }
 }

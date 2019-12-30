@@ -24,6 +24,7 @@ namespace MyMedia.Controllers
             _signInManager = signInManager;
 
         }
+        [Authorize]
         public IActionResult Index()
         {
             var isSignedIn = this._signInManager.IsSignedIn(HttpContext.User);

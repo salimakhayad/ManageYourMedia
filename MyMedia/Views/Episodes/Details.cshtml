@@ -1,8 +1,9 @@
-﻿@using MyMedia.Core.MediaClasses;
-@model MyMedia.Models.Episodes.EpisodeDetailViewModel
-@using Microsoft.AspNetCore.Identity
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+﻿@model MyMedia.Models.Episodes.EpisodeDetailViewModel
+@using MyMedia.Core.MediaClasses;
+@using Microsoft.AspNetCore.Identity;
+@using MyMedia.Core.User;
+@inject SignInManager<Profiel> SignInManager
+@inject UserManager<Profiel> UserManager
 <div class="container">
     <h2>Movie <i class="fas fa-angle-double-right"></i>Details<i class="fas fa-angle-double-right"></i>@Model.Titel</h2>
 
@@ -22,10 +23,10 @@
         <div class="col-9">
             <div class="card mt-5" style="width: 70vh;">
                 Score : @Math.Round(@Model.AveragePoints, 2,
-            MidpointRounding.ToEven) / 10
+    MidpointRounding.ToEven) / 10
                 <div class="card-body">
                     @for (var point = 2; point <= (Math.Round(@Model.AveragePoints, 2,
-                      MidpointRounding.ToEven)); point += 2)
+                     MidpointRounding.ToEven)); point += 2)
                     {
                         <i class="fas fa-star"></i>
                     }

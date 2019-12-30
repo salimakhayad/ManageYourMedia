@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MyMedia.Core.MediaClasses;
@@ -16,15 +20,16 @@ namespace MyMedia.Controllers
     public class HomeController : Controller
     {
         private readonly IMyMediaService _mediaService;
-        //private readonly SignInManager<Profiel>? _signInManager;
-        private readonly UserManager<Profiel>? _userManager;
+        //private readonly SignInManager<Profiel> _signInManager;
+        //private readonly UserManager<Profiel> _userManager;
+
+        private readonly IUserStore<Profiel> _userStore;
         private Profiel? _currentProfiel;
 
-        public HomeController(IMyMediaService mediaService, UserManager<Profiel> userManager/*SignInManager<Profiel> signInManager*/)
+        public HomeController(IMyMediaService mediaService, IUserStore<Profiel> userStore/*,UserManager<Profiel> userManager*/)
         {
-
-            // _signInManager = signInManager;
-            _userManager = userManager;
+            //_userManager = userManager;
+            _userStore = userStore;
             _mediaService = mediaService;
         }
 
@@ -68,7 +73,7 @@ namespace MyMedia.Controllers
 
             return View(vm);
         }
-
+        [Authorize]
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
@@ -100,25 +105,58 @@ namespace MyMedia.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterModel model)
+        // protection for other websites using this post endpoints
+        public async Task<IActionResult> Register(RegisterModel model, CancellationToken cancellationToken)
         {
             if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByNameAsync(model.UserName);
+                var user = await _userStore.FindByNameAsync(model.UserName, cancellationToken);
                 if (user == null)
                 {
                     user = new Profiel
                     {
                         Id = Guid.NewGuid().ToString(),
-                        UserName = model.UserName
+                        UserName = model.UserName,
+                        NormalizedUserName = model.UserName,
+                        PasswordHash = model.Password,
+                        FavorieteKleur = "Dark Orange"
                     };
 
-                    var result = await _userManager.CreateAsync(user, model.Password);
+                    var identityResult = await _userStore.CreateAsync(user, cancellationToken);
+                    _mediaService.SaveChanges();
                 }
                 return View("Success");
             }
             return View();
         }
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginModel model, CancellationToken cancellationToken)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userStore.FindByNameAsync(model.UserName, cancellationToken);
+
+                //if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
+                if(user!=null && model.Password == user.PasswordHash)
+                {
+                    var identity = new ClaimsIdentity("Cookies");
+                    identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id));
+                    identity.AddClaim(new Claim(ClaimTypes.Name, user.UserName));
+
+                    await HttpContext.SignInAsync("cookies", new ClaimsPrincipal(identity));
+                    return RedirectToAction("Index");
+                }
+                ModelState.AddModelError("", "Invalid Username or Password");
+            }
+            return View();
+        }
+
 
     }
 }

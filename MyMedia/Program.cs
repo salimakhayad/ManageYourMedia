@@ -16,7 +16,7 @@ namespace MyMedia
     {
         public static void Main(string[] args)
         {
-            //CreateWebHostBuilder(args).Build();
+            
             var host = CreateWebHostBuilder(args).Build();
 
             using (var scope = host.Services.CreateScope())
@@ -26,6 +26,7 @@ namespace MyMedia
                 {
                     var context = services.GetRequiredService<MediaDbContext>();
                     DbInitialize.Initialize(context);
+                    context.SaveChanges();
                 }
                 catch (Exception ex)
                 {

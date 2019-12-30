@@ -71,6 +71,7 @@ namespace MyMedia.Controllers
         [HttpPost]
         public IActionResult ApproveMedia(ICollection<MediaListViewModel> NietPubliekeMediaLijst)
         {
+
             return View();
         }
     }
