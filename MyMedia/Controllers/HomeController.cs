@@ -21,14 +21,14 @@ namespace MyMedia.Controllers
     {
         private readonly IMyMediaService _mediaService;
         //private readonly SignInManager<Profiel> _signInManager;
-        //private readonly UserManager<Profiel> _userManager;
+        private readonly UserManager<Profiel> _userManager;
 
         private readonly IUserStore<Profiel> _userStore;
         private Profiel? _currentProfiel;
 
-        public HomeController(IMyMediaService mediaService, IUserStore<Profiel> userStore/*,UserManager<Profiel> userManager*/)
+        public HomeController(IMyMediaService mediaService, IUserStore<Profiel> userStore,UserManager<Profiel> userManager)
         {
-            //_userManager = userManager;
+            _userManager = userManager;
             _userStore = userStore;
             _mediaService = mediaService;
         }
@@ -106,24 +106,20 @@ namespace MyMedia.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         // protection for other websites using this post endpoints
-        public async Task<IActionResult> Register(RegisterModel model, CancellationToken cancellationToken)
+        public async Task<IActionResult> Register(RegisterModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = await _userStore.FindByNameAsync(model.UserName, cancellationToken);
+                var user = await _userManager.FindByNameAsync(model.UserName);
+                
                 if (user == null)
                 {
                     user = new Profiel
                     {
                         Id = Guid.NewGuid().ToString(),
-                        UserName = model.UserName,
-                        NormalizedUserName = model.UserName,
-                        PasswordHash = model.Password,
-                        FavorieteKleur = "Dark Orange"
+                        UserName = model.UserName
                     };
-
-                    var identityResult = await _userStore.CreateAsync(user, cancellationToken);
-                    _mediaService.SaveChanges();
+                    var identityResult = await _userManager.CreateAsync(user);
                 }
                 return View("Success");
             }
@@ -136,14 +132,13 @@ namespace MyMedia.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginModel model, CancellationToken cancellationToken)
+        public async Task<IActionResult> Login(LoginModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = await _userStore.FindByNameAsync(model.UserName, cancellationToken);
+                var user = await _userManager.FindByNameAsync(model.UserName);
 
-                //if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
-                if(user!=null && model.Password == user.PasswordHash)
+                if (user!=null && await _userManager.CheckPasswordAsync(user, model.Password))
                 {
                     var identity = new ClaimsIdentity("Cookies");
                     identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id));

@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MyMedia.Core.User;
 using Dapper;
-
+using System.Data;
 
 namespace MyMedia.Core.User
 {
@@ -28,11 +28,11 @@ namespace MyMedia.Core.User
             using (var connection = GetOpenConnection())
             {
                 return await connection.QueryFirstOrDefaultAsync<Profiel>(
-                     "select * From Profiel" +
+                     "select * From AspNetUsers" +
                      "where [Id] = @id",
                      new
                      {
-                         id = userId
+                         id = userId,
                      });
                
             }
@@ -44,7 +44,7 @@ namespace MyMedia.Core.User
             using (var connection = GetOpenConnection())
             {
                 return await connection.QueryFirstOrDefaultAsync<Profiel>(
-                     "SELECT * FROM Profiel WHERE NormalizedUserName = @name",
+                     "SELECT * FROM AspNetUsers WHERE NormalizedUserName = @name",
                      new
                      {
                          name = normalizedUserName
@@ -99,7 +99,7 @@ namespace MyMedia.Core.User
             using (var connection = GetOpenConnection())
             {
                 await connection.ExecuteAsync(
-                    "update Profiel"+
+                    "update AspNetUsers" +
                     "set [Id] = @id," +
                     "[UserName] = @username," +
                     "[NormalizedUserName] = @normalizedUserName," +
@@ -119,22 +119,29 @@ namespace MyMedia.Core.User
         public async Task<IdentityResult> CreateAsync(Profiel user, CancellationToken cancellationToken)
         {
             // orm dapper
+            string commandText = "insert into AspNetUsers([Id],[UserName],[NormalizedUserName],[PasswordHash]," +
+                                "[EmailConfirmed],[PhoneNumberConfirmed],[TwoFactorEnabled]," +
+                                "[LockoutEnabled],[AccessFailedCount])" +
+                    "Values(@id,@username,@normalizedUserName," +
+                            "@passwordHash,@emailConfirmed," +
+                            "@phoneNumberConfirmed,@twoFactorEnabled," +
+                            "@lockoutEnabled,@accessFailedCount)";
+           
             using (var connection = GetOpenConnection())
             {
-                await connection.ExecuteAsync(
-                    "insert into Profiel([Id]," +
-                    "[UserName]," +
-                    "[NormalizedUserName]," +
-                    "[PasswordHash])" +
-                    "Values(@id,@username,@normalizedUserName,@passwordHash)",
+                await connection.ExecuteAsync(commandText,
                     new
                     {
                         id = user.Id,
                         username = user.UserName,
                         normalizedUserName = user.NormalizedUserName,
-                        passwordHash = user.PasswordHash
-                    }
-                );
+                        passwordHash = user.PasswordHash,
+                        emailConfirmed = false,
+                        phoneNumberConfirmed = false,
+                        twoFactorEnabled = false,
+                        lockoutEnabled = 0,
+                        accessFailedCount = 0
+                    });
             }
             return IdentityResult.Success;
 
