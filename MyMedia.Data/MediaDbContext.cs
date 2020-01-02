@@ -28,10 +28,6 @@ namespace MyMedia.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<Profiel>(prof => prof.HasIndex(x => x.FavorieteKleur).IsUnique(false));
-
-
         }
 
     }

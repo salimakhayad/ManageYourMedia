@@ -108,6 +108,7 @@ namespace MyMedia.Controllers
             return View(detailViewModel);
 
         }
+        [Authorize]
         [HttpPost]
         public IActionResult Edit(MuziekEditViewModel model)
         {
@@ -121,7 +122,7 @@ namespace MyMedia.Controllers
 
         }
 
-        
+        [Authorize]
         public IActionResult Delete(int id)
         {
             Muziek selectedMusic = _mediaService.GetAllMedia().OfType<Muziek>().FirstOrDefault(x => x.Id == id);
@@ -143,13 +144,14 @@ namespace MyMedia.Controllers
             return RedirectToAction("Index");
         }
 
-       
+        [Authorize]
         public IActionResult Create()
         {
             MuziekCreateViewModel Muz = new MuziekCreateViewModel();
 
             return View(Muz);
         }
+        [Authorize]
 
         [HttpPost]
         public IActionResult Create(MuziekCreateViewModel model)
@@ -182,6 +184,7 @@ namespace MyMedia.Controllers
             return RedirectToAction("Details", new { muzFrmDb.Id });
 
         }
+        [Authorize]
         public IActionResult RateMusic(MusicRateViewModel model)
         {
             var music = _mediaService.GetAllMedia().OfType<Muziek>().First(muz => muz.Id == model.MediaId);

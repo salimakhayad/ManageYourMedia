@@ -61,6 +61,7 @@ namespace MyMedia.Controllers
 
             return View(Movies);
         }
+        [Authorize]
         public IActionResult Create()
         {
 
@@ -68,7 +69,7 @@ namespace MyMedia.Controllers
 
             return View(mov);
         }
-        // [Authorize]
+        [Authorize]
         [HttpPost]
         public IActionResult Create(MovieCreateViewModel model)
         {
@@ -151,7 +152,7 @@ namespace MyMedia.Controllers
             };
             return View(model);
         }
-
+        [Authorize]
         public IActionResult ConfirmDelete(int Id)
         {
           
@@ -161,11 +162,13 @@ namespace MyMedia.Controllers
             _mediaService.SaveChanges();
             return RedirectToAction("Index");
         }
+        [Authorize]
         public IActionResult CreateReview()
         {
             MovieCreateViewModel model = new MovieCreateViewModel();
             return View(model);
         }
+        [Authorize]
         public IActionResult Edit(int id)
         {
             Movie mvFromDb = _mediaService.GetAllMedia().OfType<Movie>().First(z => z.Id == id);
@@ -201,7 +204,7 @@ namespace MyMedia.Controllers
 
             return RedirectToAction("Details", new { mvFromDb.Id });
         }
-
+        [Authorize]
         public IActionResult RateMovie(MovieRateViewModel model)
         {
             var movie = _mediaService.GetAllMedia().OfType<Movie>().First(mov => mov.Id == model.MediaId);
