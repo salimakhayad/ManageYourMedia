@@ -16,13 +16,24 @@ namespace MyMedia.Controllers
     public class PodcastsController : Controller
     {
         private readonly IMyMediaService _mediaService;
-        private readonly SignInManager<Profiel> _signinManager;
+        private readonly IUserStore<Profiel> _userStore;
+        private readonly IUserClaimsPrincipalFactory<Profiel> _claimsPrincipalFactory;
+        private readonly SignInManager<Profiel> _signInManager;
+        private readonly UserManager<Profiel> _userManager;
         private Profiel? _currentProfiel;
 
-        public PodcastsController(IMyMediaService service, SignInManager<Profiel> signinManager)
+        public PodcastsController(IMyMediaService mediaService,
+            SignInManager<Profiel> signInManager,
+            IUserClaimsPrincipalFactory<Profiel> claimsPrincipalFactory,
+            IUserStore<Profiel> userStore,
+            UserManager<Profiel> userManager
+            )
         {
-            _mediaService = service;
-            _signinManager = signinManager;
+            this._userManager = userManager;
+            this._claimsPrincipalFactory = claimsPrincipalFactory;
+            this._userStore = userStore;
+            this._mediaService = mediaService;
+            this._signInManager = signInManager;
         }
         public IActionResult Index()
         {
@@ -42,12 +53,12 @@ namespace MyMedia.Controllers
 
         public IActionResult Details(int id)
         {
-            var isSignedIn = this._signinManager.IsSignedIn(HttpContext.User);
-            var currentUserId = this._signinManager.UserManager.GetUserId(HttpContext.User);
-            if (isSignedIn)
-            {
-                _currentProfiel = _mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
-            }
+           //var isSignedIn = this._signinManager.IsSignedIn(HttpContext.User);
+           //var currentUserId = this._signinManager.UserManager.GetUserId(HttpContext.User);
+           //if (isSignedIn)
+           //{
+           //    _currentProfiel = _mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
+           //}
             Podcast selectedPodcast = _mediaService.GetAllPodcasts().FirstOrDefault(x => x.Id == id);
 
             var UserRatingList = _mediaService.GetAllRatings().Where(pod => pod.Media.Id == selectedPodcast.Id);
@@ -60,7 +71,7 @@ namespace MyMedia.Controllers
                 Foto = podcast.Foto,
                 PodcastLink = podcast.ConversationMP3,
                 IsRated = UserRatingList.Count()>0? true :false,
-                IsSignedIn = currentUserId == null ? false : true,
+                IsSignedIn = false//currentUserId == null ? false : true,
                 
             };
             vm.AveragePoints = selectedPodcast.Ratings.Count() > 0 ? selectedPodcast.Ratings.Average(r => r.Points) : 0;
@@ -143,12 +154,12 @@ namespace MyMedia.Controllers
         public IActionResult RatePodcast(PodcastRateViewModel model)
         {
             var podcast = _mediaService.GetAllPodcasts().First(pod => pod.Id == model.MediaId);            
-            var isSignedIn = this._signinManager.IsSignedIn(HttpContext.User);
-            var currentUserId = this._signinManager.UserManager.GetUserId(HttpContext.User);
-            if (isSignedIn)
-            {
-                _currentProfiel = _mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
-            }
+           //var isSignedIn = this._signinManager.IsSignedIn(HttpContext.User);
+           //var currentUserId = this._signinManager.UserManager.GetUserId(HttpContext.User);
+           //if (isSignedIn)
+           //{
+           //    _currentProfiel = _mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
+           //}
 
             var newRating = new Rating()
             {

@@ -18,13 +18,24 @@ namespace MyMedia.Controllers
     public class EpisodesController : Controller
     {
         private readonly IMyMediaService _mediaService;
+        private readonly IUserStore<Profiel> _userStore;
+        private readonly IUserClaimsPrincipalFactory<Profiel> _claimsPrincipalFactory;
         private readonly SignInManager<Profiel> _signInManager;
+        private readonly UserManager<Profiel> _userManager;
         private Profiel? _currentProfiel;
 
-        public EpisodesController(IMyMediaService service, SignInManager<Profiel> signInManager)
+        public EpisodesController(IMyMediaService mediaService,
+            SignInManager<Profiel> signInManager,
+            IUserClaimsPrincipalFactory<Profiel> claimsPrincipalFactory,
+            IUserStore<Profiel> userStore,
+            UserManager<Profiel> userManager
+            )
         {
-            _mediaService = service;
-            _signInManager = signInManager;
+            this._userManager = userManager;
+            this._claimsPrincipalFactory = claimsPrincipalFactory;
+            this._userStore = userStore;
+            this._mediaService = mediaService;
+            this._signInManager = signInManager;
         }
         public IActionResult AddEpisode(int serieId)
         {
@@ -112,6 +123,8 @@ namespace MyMedia.Controllers
             {
                 isRated = _mediaService.GetAllRatings().Where(epi => epi.Media.Id == epi.Id && epi.Profiel.Id == _currentProfiel.Id).Any();
                 playLists = _currentProfiel.Playlists.ToList();
+            
+
             }
             AveragePoints = _mediaService.GetAllRatings().Where(epi => epi.Media.Id == epi.Id).Average(epi => epi.Points);
 

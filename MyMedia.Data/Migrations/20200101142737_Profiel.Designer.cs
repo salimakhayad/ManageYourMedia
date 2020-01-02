@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyMedia.Data;
 
-namespace MyMedia.Migrations
+namespace MyMedia.Data.Migrations
 {
     [DbContext(typeof(MediaDbContext))]
-    [Migration("20191227145448_RegisterUsers")]
-    partial class RegisterUsers
+    [Migration("20200101142737_Profiel")]
+    partial class Profiel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -314,6 +314,9 @@ namespace MyMedia.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("FavorieteKleur")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -348,6 +351,8 @@ namespace MyMedia.Migrations
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FavorieteKleur");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");

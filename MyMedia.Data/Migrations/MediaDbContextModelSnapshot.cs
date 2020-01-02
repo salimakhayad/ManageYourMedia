@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyMedia.Data;
 
-namespace MyMedia.Migrations
+namespace MyMedia.Data.Migrations
 {
     [DbContext(typeof(MediaDbContext))]
     partial class MediaDbContextModelSnapshot : ModelSnapshot
@@ -313,7 +313,7 @@ namespace MyMedia.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FavorieteKleur")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -349,6 +349,8 @@ namespace MyMedia.Migrations
                         .HasMaxLength(256);
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FavorieteKleur");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");

@@ -8,41 +8,36 @@ using System.Threading.Tasks;
 using MyMedia.Models.Media;
 using MyMedia.Core.MediaClasses;
 using MyMedia.Core.User;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MyMedia.Controllers
 {
     public class MediaController : Controller
     {
-        
+
         private readonly IMyMediaService _mediaService;
+        private readonly IUserStore<Profiel> _userStore;
+        private readonly IUserClaimsPrincipalFactory<Profiel> _claimsPrincipalFactory;
         private readonly SignInManager<Profiel> _signInManager;
+        private readonly UserManager<Profiel> _userManager;
         private Profiel? _currentProfiel;
-        public MediaController(IMyMediaService mediaService, SignInManager<Profiel> signInManager)
+        public MediaController(IMyMediaService mediaService,
+            SignInManager<Profiel> signInManager,
+            IUserClaimsPrincipalFactory<Profiel> claimsPrincipalFactory,
+            IUserStore<Profiel> userStore,
+            UserManager<Profiel> userManager
+            )
         {
-            _mediaService = mediaService;
-            _signInManager = signInManager;
+            this._userManager = userManager;
+            this._claimsPrincipalFactory = claimsPrincipalFactory;
+            this._userStore = userStore;
+            this._mediaService = mediaService;
+            this._signInManager = signInManager;
         }
-        
+        [Authorize]
         public IActionResult Index()
         {
-            var isSignedIn = this._signInManager.IsSignedIn(HttpContext.User);
-            var currentUserId = this._signInManager.UserManager.GetUserId(HttpContext.User);
-            if (isSignedIn)
-            {
-                var profiel = _mediaService.GetAllProfielen().FirstOrDefault(p => p.Id == currentUserId);
-                if (profiel == null)
-                {
-                    var newProfiel = new Profiel
-                    {
-                        Id = currentUserId,
-                    };
-                    _mediaService.InsertProfiel(newProfiel);
-                    _mediaService.SaveChanges();
-                }
-
-                _currentProfiel = _mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
-
-            }
+          
             // selects non approved media 
             var MediaList = _mediaService.GetAllMedia().Where(m => m.IsPubliek != true);
 

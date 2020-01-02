@@ -15,15 +15,27 @@ namespace MyMedia.Controllers
    
     public class MovieController : Controller
     {
-        //private readonly MediaDbContext _context;
+        
         private readonly IMyMediaService _mediaService;
-        private readonly SignInManager<Profiel> _signinManager;
+        private readonly SignInManager<Profiel> _signInManager;
+        private readonly IUserStore<Profiel> _userStore;
+        private readonly UserManager<Profiel> _userManager;
+        private readonly IUserClaimsPrincipalFactory<Profiel> _claimsPrincipalFactory;
         private Profiel? _currentProfiel;
 
-        public MovieController(IMyMediaService service,SignInManager<Profiel> signinManager)
+        public MovieController(IMyMediaService mediaService,
+            SignInManager<Profiel> signInManager,
+            IUserClaimsPrincipalFactory<Profiel> claimsPrincipalFactory,
+            IUserStore<Profiel> userStore,
+            UserManager<Profiel> userManager
+            )
         {
-            _mediaService = service;
-            _signinManager = signinManager;
+            this._userManager = userManager;
+            this._claimsPrincipalFactory = claimsPrincipalFactory;
+            this._userStore = userStore;
+            this._mediaService = mediaService;
+            this._signInManager = signInManager;
+
         }
         //[HttpGet("Movie")]
         public IActionResult Index()
@@ -51,6 +63,7 @@ namespace MyMedia.Controllers
         }
         public IActionResult Create()
         {
+
             MovieCreateViewModel mov = new MovieCreateViewModel();
 
             return View(mov);
@@ -98,12 +111,12 @@ namespace MyMedia.Controllers
 
         public IActionResult Details(int id)
         {
-            var isSignedIn = this._signinManager.IsSignedIn(HttpContext.User);
-            var currentUserId = this._signinManager.UserManager.GetUserId(HttpContext.User);
-            if (isSignedIn)
-            {
-                _currentProfiel = _mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
-            }
+           // var isSignedIn = this._signinManager.IsSignedIn(HttpContext.User);
+           // var currentUserId = this._signinManager.UserManager.GetUserId(HttpContext.User);
+           // if (isSignedIn)
+           // {
+           //     _currentProfiel = _mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
+           // }
             Movie selectedMovie = _mediaService.GetAllMedia().OfType<Movie>().FirstOrDefault(x => x.Id == id);
             bool isAlreadyRated = false;
             var playlists = new List<PlayList>();
@@ -192,12 +205,12 @@ namespace MyMedia.Controllers
         public IActionResult RateMovie(MovieRateViewModel model)
         {
             var movie = _mediaService.GetAllMedia().OfType<Movie>().First(mov => mov.Id == model.MediaId);
-            var isSignedIn = this._signinManager.IsSignedIn(HttpContext.User);
-            var currentUserId = this._signinManager.UserManager.GetUserId(HttpContext.User);
-            if (isSignedIn)
-            {
-                _currentProfiel = _mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
-            }
+            //var isSignedIn = this._signinManager.IsSignedIn(HttpContext.User);
+            //var currentUserId = this._signinManager.UserManager.GetUserId(HttpContext.User);
+            //if (isSignedIn)
+            //{
+            //    _currentProfiel = _mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
+            //}
 
             var newRating = new Rating()
             {
@@ -205,7 +218,6 @@ namespace MyMedia.Controllers
                 CreationDate = DateTime.Now,
                 Points = model.Points,
                 Profiel = _currentProfiel
-
             };
 
              _mediaService.InsertRating(newRating);

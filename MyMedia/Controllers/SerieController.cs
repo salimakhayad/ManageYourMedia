@@ -13,36 +13,47 @@ namespace MyMedia.Controllers
 
     public class SerieController : Controller
     {
-        private readonly IMyMediaService service;
+        private readonly IMyMediaService _mediaService;
         private readonly SignInManager<Profiel> _signInManager;
+        private readonly UserManager<Profiel> _userManager;
+        private readonly IUserClaimsPrincipalFactory<Profiel> _claimsPrincipalFactory;
+        private readonly IUserStore<Profiel> _userStore;
         private Profiel? _currentProfiel;
 
-        public SerieController(IMyMediaService context, SignInManager<Profiel> signinManager)
+        public SerieController(IMyMediaService mediaService,
+            SignInManager<Profiel> signInManager,
+            IUserClaimsPrincipalFactory<Profiel> claimsPrincipalFactory,
+            IUserStore<Profiel> userStore,
+            UserManager<Profiel> userManager
+            )
         {
-            service = context;
-            _signInManager = signinManager;
+            this._userManager = userManager;
+            this._claimsPrincipalFactory = claimsPrincipalFactory;
+            this._userStore = userStore;
+            this._mediaService = mediaService;
+            this._signInManager = signInManager;
         }
         public IActionResult Index()
         {
-            var isSignedIn = this._signInManager.IsSignedIn(HttpContext.User);
-            var currentUserId = this._signInManager.UserManager.GetUserId(HttpContext.User);
-            if (isSignedIn)
-            {
-                var profiel = service.GetAllProfielen().FirstOrDefault(p => p.Id == currentUserId);
-                if (profiel == null)
-                {
-                    var newProfiel = new Profiel
-                    {
-                        Id = currentUserId,
-                    };
-                    service.InsertProfiel(newProfiel);
-                    service.SaveChanges();
-                }
-
-                _currentProfiel = service.GetAllProfielen().First(p => p.Id == currentUserId);
-
-            }
-            var series = service.GetAllSeries();
+           //  var isSignedIn = this._signInManager.IsSignedIn(HttpContext.User);
+           //  var currentUserId = this._signInManager.UserManager.GetUserId(HttpContext.User);
+           //  if (isSignedIn)
+           //  {
+           //      var profiel = service.GetAllProfielen().FirstOrDefault(p => p.Id == currentUserId);
+           //      if (profiel == null)
+           //      {
+           //          var newProfiel = new Profiel
+           //          {
+           //              Id = currentUserId,
+           //          };
+           //          service.InsertProfiel(newProfiel);
+           //          service.SaveChanges();
+           //      }
+           // 
+           //      _currentProfiel = service.GetAllProfielen().First(p => p.Id == currentUserId);
+           // 
+           //  }
+            var series = _mediaService.GetAllSeries();
             if (series != null && series.Any())
             {
                 var seriesViewModels = series.Select(MapToListViewModel).ToList();
@@ -65,7 +76,7 @@ namespace MyMedia.Controllers
        
         public IActionResult Delete(int id)
         {
-            Serie selectedMovie = service.GetAllSeries().FirstOrDefault(x => x.Id == id);
+            Serie selectedMovie = _mediaService.GetAllSeries().FirstOrDefault(x => x.Id == id);
             SerieDeleteViewModel model = new SerieDeleteViewModel()
             {
                 Id = id,
@@ -77,8 +88,8 @@ namespace MyMedia.Controllers
         [HttpPost]
         public IActionResult ConfirmDelete(int id)
         {
-            service.DeleteSerieById(id);
-            service.SaveChanges();
+            _mediaService.DeleteSerieById(id);
+            _mediaService.SaveChanges();
             return RedirectToAction("Index");
         }
        
@@ -95,8 +106,8 @@ namespace MyMedia.Controllers
             {
                 Naam = model.Naam
             };
-            service.InsertSerie(newSerie);
-            service.SaveChanges();
+            _mediaService.InsertSerie(newSerie);
+            _mediaService.SaveChanges();
 
             return RedirectToAction("Index");
         }
@@ -104,9 +115,9 @@ namespace MyMedia.Controllers
 
         public IActionResult Details(int id)
         {
-            Serie serie = service.GetAllSeries().FirstOrDefault(x => x.Id == id);
-            var allseasons = service.GetAllSeasons();
-            serie.Seizoenen = service.GetAllSeasons().Where(seizoen=>seizoen.Serie == serie).ToList();
+            Serie serie = _mediaService.GetAllSeries().FirstOrDefault(x => x.Id == id);
+            var allseasons = _mediaService.GetAllSeasons();
+            serie.Seizoenen = _mediaService.GetAllSeasons().Where(seizoen=>seizoen.Serie == serie).ToList();
 
             SerieDetailViewModel vm = MapToViewModel(serie);
             // SetSeasonsAndEpisodes(vm);
@@ -129,13 +140,13 @@ namespace MyMedia.Controllers
       
         public IActionResult Edit(int id)
         {
-            Serie serie = service.GetAllSeries().FirstOrDefault(x => x.Id == id);
+            Serie serie = _mediaService.GetAllSeries().FirstOrDefault(x => x.Id == id);
             SerieEditViewModel vm = new SerieEditViewModel()
             {
                 Id = id,
                 Naam = serie.Naam
             };
-            vm.Seizoenen = service.GetAllSeasons().Where(z => z.Serie.Id == serie.Id).ToList();
+            vm.Seizoenen = _mediaService.GetAllSeasons().Where(z => z.Serie.Id == serie.Id).ToList();
 
             return View(vm);
         }

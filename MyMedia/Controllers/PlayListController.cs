@@ -7,6 +7,7 @@ using MyMedia.Data;
 using MyMedia.Models.Playlist;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace MyMedia.Controllers
 {
@@ -14,37 +15,33 @@ namespace MyMedia.Controllers
     public class PlayListController : Controller
     {
         private readonly IMyMediaService _mediaService;
-
+        private readonly IUserStore<Profiel> _userStore;
+        private readonly IUserClaimsPrincipalFactory<Profiel> _claimsPrincipalFactory;
         private readonly SignInManager<Profiel> _signInManager;
+        private readonly UserManager<Profiel> _userManager;
         private Profiel? _currentProfiel;
-        public PlayListController(IMyMediaService service,SignInManager<Profiel> signInManager)
+        public PlayListController(IMyMediaService mediaService,
+            SignInManager<Profiel> signInManager,
+            IUserClaimsPrincipalFactory<Profiel> claimsPrincipalFactory,
+            IUserStore<Profiel> userStore,
+            UserManager<Profiel> userManager
+            )
         {
-
-            _mediaService = service;
-            _signInManager = signInManager;
+            this._userManager = userManager;
+            this._claimsPrincipalFactory = claimsPrincipalFactory;
+            this._userStore = userStore;
+            this._mediaService = mediaService;
+            this._signInManager = signInManager;
 
         }
         [Authorize]
         public IActionResult Index()
         {
-            var isSignedIn = this._signInManager.IsSignedIn(HttpContext.User);
-            var currentUserId = this._signInManager.UserManager.GetUserId(HttpContext.User);
-            if (isSignedIn)
-            {
-                var profiel = _mediaService.GetAllProfielen().FirstOrDefault(p => p.Id == currentUserId);
-                if (profiel == null)
-                {
-                    var newProfiel = new Profiel
-                    {
-                        Id = currentUserId,
-                    };
-                    _mediaService.InsertProfiel(newProfiel);
-                    _mediaService.SaveChanges();
-                }
-
-                _currentProfiel = _mediaService.GetAllProfielen().FirstOrDefault(p => p.Id == currentUserId);
-
-            }
+           var isSignedIn = this._signInManager.IsSignedIn(HttpContext.User);
+           var currentUserId = this._signInManager.UserManager.GetUserId(HttpContext.User);
+           _currentProfiel = _mediaService.GetAllProfielen().FirstOrDefault(p => p.Id == currentUserId);
+           
+        
             List<PlayListIndexViewModel> model = new List<PlayListIndexViewModel>();
             var playlistsFromDb = _mediaService.GetAllPlaylists().ToList();
 
@@ -54,7 +51,7 @@ namespace MyMedia.Controllers
                 {
                     Id = playlist.Id,
                     Naam = playlist.Name,
-                    IsSignedIn = currentUserId!=null,
+                    IsSignedIn = true,  // edit
                     UserNaam = _currentProfiel.UserName
                 });
             }
@@ -64,21 +61,23 @@ namespace MyMedia.Controllers
 
         public IActionResult Details(int id)
         {
-          
-
             var playlist = _mediaService.GetAllPlaylists().First(playlst => playlst.Id == id);
             PlayListDetailViewModel model = new PlayListDetailViewModel()
             {
                 Naam = playlist.Name,
                 MediaList = playlist.MediaList.ToList(),
-                UserNaam = " Playlistcontroller.Details => yet to be defined",
+                UserNaam = playlist.Profiel.UserName,
             };
             return View(model);
         }
-
-        public IActionResult Create()
+        [Authorize]
+        public async Task<IActionResult> Create()
         {
+            
             PlayListCreateViewModel model = new PlayListCreateViewModel();
+            var currentUserId = this._signInManager.UserManager.GetUserId(HttpContext.User);
+            _currentProfiel = _mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
+            model.UserName = _currentProfiel.UserName;
             return View(model);
         }
         [HttpPost]
@@ -86,10 +85,7 @@ namespace MyMedia.Controllers
         public IActionResult Create(PlayListCreateViewModel model)
         {
             var currentUserId = this._signInManager.UserManager.GetUserId(HttpContext.User);
-            if(currentUserId!=null)
-            {
-                _currentProfiel = _mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
-            }
+            _currentProfiel = _mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
             var newPlayList = new PlayList()
             {
                 Name = model.Naam,

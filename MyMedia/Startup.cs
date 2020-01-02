@@ -10,7 +10,8 @@ using MyMedia.Data;
 using Microsoft.Extensions.Hosting;
 using MyMedia.Core.MediaClasses;
 using MyMedia.Core.User;
-
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using System.Reflection;
 
 namespace MyMedia
 {
@@ -32,28 +33,30 @@ namespace MyMedia
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-            // default settings
+
+          
             services.AddDbContextPool<MediaDbContext>(options =>
-                options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("MediaDb")));
-                                                                                                        //, b => b.MigrationsAssembly("MyMedia")
+                options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("MediaDb")
+                ));
+                   
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("ElevatedRights", policy =>
                   policy.RequireRole("Administrator", "Gebruiker"));
             });
 
-            services.AddIdentityCore<Profiel>(options => { })
-                 .AddEntityFrameworkStores<MediaDbContext>()
+            services.AddIdentity<Profiel,IdentityRole>(options => { })
+                 .AddEntityFrameworkStores<MediaDbContext>() // adds userstore and rolestore
                  .AddDefaultTokenProviders();
 
-             services.AddScoped<IUserStore<Profiel>,ProfielUserStore>();
+            services.AddScoped<IUserClaimsPrincipalFactory<Profiel>, ProfielUserClaimsPrincipalFactory>();
 
-            services.AddAuthentication("cookies")
-               .AddCookie("cookies", options => options.LoginPath = "/Home/Login");
+
+            services.ConfigureApplicationCookie(options => options.LoginPath = "/Home/Login");
 
             services.AddTransient<SignInManager<Profiel>>();
             services.AddTransient<UserManager<Profiel>>();
-            services.AddTransient<MediaDbContext>();
+           
             services.AddTransient<IMyMediaService,MyMediaService>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 

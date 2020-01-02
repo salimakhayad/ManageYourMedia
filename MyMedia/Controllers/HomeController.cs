@@ -20,40 +20,26 @@ namespace MyMedia.Controllers
     public class HomeController : Controller
     {
         private readonly IMyMediaService _mediaService;
-        //private readonly SignInManager<Profiel> _signInManager;
+        private readonly IUserStore<Profiel> _userStore;
+        private readonly IUserClaimsPrincipalFactory<Profiel> _claimsPrincipalFactory;
+        private readonly SignInManager<Profiel> _signInManager;
         private readonly UserManager<Profiel> _userManager;
 
-        private readonly IUserStore<Profiel> _userStore;
         private Profiel? _currentProfiel;
 
-        public HomeController(IMyMediaService mediaService, IUserStore<Profiel> userStore,UserManager<Profiel> userManager)
+        public HomeController(IMyMediaService mediaService, IUserStore<Profiel> userStore,UserManager<Profiel> userManager,IUserClaimsPrincipalFactory<Profiel> claimsPrincipalFactory, SignInManager<Profiel> signInManager)
         {
-            _userManager = userManager;
-            _userStore = userStore;
-            _mediaService = mediaService;
+            this._userManager = userManager;
+            this._claimsPrincipalFactory = claimsPrincipalFactory;
+            this._userStore = userStore;
+            this._mediaService = mediaService;
+            this._signInManager = signInManager;
         }
 
         [Route("")]
         public IActionResult Index()
         {
-            // var isSignedIn = this._signInManager.IsSignedIn(HttpContext.User);
-            // var currentUserId = this._signInManager.UserManager.GetUserId(HttpContext.User);
-            // if (isSignedIn)
-            // {
-            //     var profiel = _mediaService.GetAllProfielen().FirstOrDefault(p => p.Id == currentUserId);
-            //     if (profiel == null)
-            //     {
-            //         var newProfiel = new Profiel
-            //         {
-            //             Id = currentUserId,
-            //         };
-            //         _mediaService.InsertProfiel(newProfiel);
-            //         _mediaService.SaveChanges();
-            //     }
-            // 
-            //     _currentProfiel = _mediaService.GetAllProfielen().FirstOrDefault(p => p.Id == currentUserId);
-            // 
-            // }
+            
             var topMovies = _mediaService.GetAllMedia().OfType<Movie>().Take(10);//.Where(m=>m.IsPubliek==true) .OrderBy(r => r.Rating.Points);
             var topSeries = _mediaService.GetAllSeries().Take(10);//.Where(m=>m.IsPubliek==true);
             var topMusic = _mediaService.GetAllMedia().OfType<Muziek>().Take(10);//.Where(m=>m.IsPubliek==true);
@@ -117,13 +103,19 @@ namespace MyMedia.Controllers
                     user = new Profiel
                     {
                         Id = Guid.NewGuid().ToString(),
-                        UserName = model.UserName
+                        UserName = model.UserName,
+                        FavorieteKleur = "Dark Orange"
                     };
-                    var identityResult = await _userManager.CreateAsync(user);
+                    var identityResult = await _userManager.CreateAsync(user,model.Password);
+                   if (identityResult.Succeeded)
+                    {
+                        return View("Success");
+                    }
+                    return View();
                 }
-                return View("Success");
             }
             return View();
+
         }
         [HttpGet]
         public IActionResult Login()
@@ -136,20 +128,32 @@ namespace MyMedia.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await _userManager.FindByNameAsync(model.UserName);
+               //var signInResult = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, 
+               //    false, false);
+               //
+               //if (signInResult.Succeeded)
+               //{
+               //    return RedirectToAction("Index");
+               //}
 
-                if (user!=null && await _userManager.CheckPasswordAsync(user, model.Password))
-                {
-                    var identity = new ClaimsIdentity("Cookies");
-                    identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id));
-                    identity.AddClaim(new Claim(ClaimTypes.Name, user.UserName));
-
-                    await HttpContext.SignInAsync("cookies", new ClaimsPrincipal(identity));
-                    return RedirectToAction("Index");
-                }
+               var user = await _userManager.FindByNameAsync(model.UserName);
+               
+               if (user!=null && await _userManager.CheckPasswordAsync(user, model.Password))
+               {
+                   var principal = await _claimsPrincipalFactory.CreateAsync(user);
+               
+                   await HttpContext.SignInAsync("Identity.Application", principal);
+                   return RedirectToAction("Index");
+               }
                 ModelState.AddModelError("", "Invalid Username or Password");
             }
             return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            return View("Index");
         }
 
 

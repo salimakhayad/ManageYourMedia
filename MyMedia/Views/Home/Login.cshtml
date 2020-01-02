@@ -1,8 +1,11 @@
 ﻿@using MyMedia.Models.Profiel;
 @model LoginModel
+
     <div class="container">
         <div class="row">
             <div class="col-xs-8 col-xs-offset-2">
+                @if(User.Claims.AsQueryable().ElementAt(1).Value==null) // check login
+                {
                 <h1 class="text-center">Login</h1>
                 <form asp-action="Login" method="post" class="form-horizontal">
                     <div class="form-group">
@@ -20,6 +23,14 @@
                     <button type="submit" class="btn-primary"> Submit </button>
                     <div asp-validation-summary="All"></div>
                 </form>
+                }
+                else
+                {
+                <h1 class="text-center">@User.Claims.AsQueryable().ElementAt(1).Value is already Logged In</h1>
+                <h1 class="text-center">His favourite colour is : @User.Claims.AsQueryable().ElementAt(3).Value</h1>
+                }
+
+
             </div>
         </div>
     </div>  

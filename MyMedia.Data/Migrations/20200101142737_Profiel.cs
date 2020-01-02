@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace MyMedia.Migrations
+namespace MyMedia.Data.Migrations
 {
-    public partial class initial : Migration
+    public partial class Profiel : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -40,9 +40,7 @@ namespace MyMedia.Migrations
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
-                    Discriminator = table.Column<string>(nullable: false),
-                    UserId = table.Column<string>(nullable: true),
-                    Naam = table.Column<string>(nullable: true)
+                    FavorieteKleur = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -177,8 +175,7 @@ namespace MyMedia.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ProfielId = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true),
-                    IsPubliek = table.Column<bool>(nullable: false)
+                    Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -333,6 +330,11 @@ namespace MyMedia.Migrations
                 name: "IX_AspNetUserRoles_RoleId",
                 table: "AspNetUserRoles",
                 column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_FavorieteKleur",
+                table: "AspNetUsers",
+                column: "FavorieteKleur");
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",

@@ -69,8 +69,19 @@
                 <div class="justify-content-end col-1">
                     <a class="navbar-brand" asp-controller="Home" asp-action="About">About</a>
                 </div>
-                <div class="justify-content-end col-1">
-                    <a class="navbar-brand" asp-controller="Home" asp-action="Register">Register</a>
+                <div class="justify-content-end col-2">
+                    
+                    @if (User.Claims.Any()!=false)
+                    {
+                        <a class="navbar-brand" asp-controller="Home" asp-action="Login">Login</a>
+                        <a class="navbar-brand" asp-controller="Home" asp-action="Register">Register</a>
+                    }
+                    else
+                    {
+                        <a class="navbar-brand" asp-controller="Home" asp-action="Logout">Log out</a>
+                    }
+
+
                 </div>
             </nav>
             <div class="mt-5">
