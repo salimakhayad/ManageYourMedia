@@ -56,6 +56,14 @@
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+                @if (User.Claims.Any())
+                {
+                    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                        <div class="navbar-nav">
+                            <a  class="nav-item nav-link active">Welcome back @User.Claims.AsQueryable().ElementAt(1).Value! <span class="sr-only"></span></a>
+                        </div>
+                    </div>
+                }
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
                         <a class="nav-item nav-link active" asp-controller="PlayList" asp-action="Index">My Playlists <i class="fas fa-caret-down"></i> <span class="sr-only"></span></a>
@@ -67,11 +75,11 @@
                     </div>
                 </div>
                 <div class="justify-content-end col-1">
-                    <a class="navbar-brand" asp-controller="Home" asp-action="About">About</a>
+                    <a class="navbar-brand" asp-controller="Home" asp-action="About">Claims</a>
                 </div>
                 <div class="justify-content-end col-2">
-                    
-                    @if (User.Claims.Any()!=false)
+
+                    @if (!User.Claims.Any())
                     {
                         <a class="navbar-brand" asp-controller="Home" asp-action="Login">Login</a>
                         <a class="navbar-brand" asp-controller="Home" asp-action="Register">Register</a>

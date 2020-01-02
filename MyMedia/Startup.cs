@@ -12,6 +12,7 @@ using MyMedia.Core.MediaClasses;
 using MyMedia.Core.User;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System.Reflection;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace MyMedia
 {
@@ -50,6 +51,14 @@ namespace MyMedia
                  .AddDefaultTokenProviders();
 
             services.AddScoped<IUserClaimsPrincipalFactory<Profiel>, ProfielUserClaimsPrincipalFactory>();
+
+            services.AddAuthentication(options=>
+            {
+                options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
+                options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
+                options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
+            }).AddCookie("Cookies");
+
 
 
             services.ConfigureApplicationCookie(options => options.LoginPath = "/Home/Login");

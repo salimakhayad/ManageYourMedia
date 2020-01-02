@@ -128,13 +128,7 @@ namespace MyMedia.Controllers
         {
             if (ModelState.IsValid)
             {
-               //var signInResult = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, 
-               //    false, false);
-               //
-               //if (signInResult.Succeeded)
-               //{
-               //    return RedirectToAction("Index");
-               //}
+
 
                var user = await _userManager.FindByNameAsync(model.UserName);
                
@@ -149,11 +143,12 @@ namespace MyMedia.Controllers
             }
             return View();
         }
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync();
-            return View("Index");
+          await this._signInManager.SignOutAsync();
+
+          return View("Index");
         }
 
 
