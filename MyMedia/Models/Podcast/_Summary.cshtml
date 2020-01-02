@@ -1,0 +1,23 @@
+﻿@model MyMedia.Models.Podcast.PodcastListViewModel
+
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => Model.Naam)
+        </td>
+        <td>
+            @if (@Model.Foto != null)
+            {
+                <img style="width: 300px; height: 120px;" src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(Model.Foto))" alt="Movie Img" class="img-thumbnail" target="_blank" />
+            }
+            <div class="hit-the-floor">
+                <h4><a href="@Model.PodcastLink" >Beluister Podcast</a></h4>
+            </div>
+        </td>
+
+        <td>
+            <a asp-action="Edit" asp-controller="Muziek" asp-route-id="@Model.Id"> Edit</a> |
+            <a asp-action="Details" asp-controller="Muziek" asp-route-id="@Model.Id"> Details</a>
+            <a asp-action="Delete" asp-controller="Muziek" asp-route-id="@Model.Id"> Delete</a>
+        </td>
+
+    </tr>

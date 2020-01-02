@@ -4,69 +4,21 @@
         <div class="col-6">
             <a asp-action="Index" asp-controller="Movie" class="text-dark"><h1> <i class="fas fa-film"> Top 10 Movies </i></h1></a>
             <ul class="list-group  movies">
-                @if (Model != null)
+                @foreach (var movie in @Model.Movies)
                 {
-                    @if (Model.Movies.Any() && Model.Movies != null)
-                    {
-                        @foreach (var movie in @Model.Movies)
-                        {
-
-                            <li class="list-group-item list-group-item-dark d-flex justify-content-between align-items-center">
-                                <a class="mt-2" asp-action="Details" asp-controller="Movie" asp-route-id="@movie.Id">
-                                    @{var avgScore = "";}
-                                    @movie.Titel
-                                    <span class="badge badge-dark badge">
-                                        @{if (movie.Ratings.Count() > 0)
-                                            { avgScore = movie.Ratings.Average(p => p.Points).ToString("#.##"); }
-                                            else
-                                            {
-                                                avgScore = "0.00";
-                                            }
-                                        }
-                                        @avgScore/10
-                                    </span>
-                                </a>
-                            </li>
-
-                        }
-                    }
+                    <partial name="_HomeView" model="movie" />
                 }
-
-
 
             </ul>
         </div>
         <div class="col-6">
             <a asp-action="Index" asp-controller="Muziek" class="text-dark"><h1> <i class="fas fa-music"> Top 10 Music</i>  </h1></a>
             <ul class="list-group muziek">
-                @if (Model != null)
+                @foreach (var music in @Model.Musics)
                 {
-                    @if (@Model.Musics != null && !Model.Musics.Any())
-                    {
-                        @foreach (var music in @Model.Musics)
-                        {
-
-                            <li class="list-group-item list-group-item-dark d-flex justify-content-between align-items-center">
-                                <a class="mt-2" asp-action="Details" asp-controller="Muziek" asp-route-id="@music.Id">
-                                    @music.Titel
-                                    @{var avgScore = "";}
-                                    <span class="badge badge-dark badge">
-                                        @{if (music.Ratings.Count() > 0)
-                                            { avgScore = music.Ratings.Average(p => p.Points).ToString("#.##"); }
-                                            else
-                                            {
-                                                avgScore = "0.00";
-                                            }}
-                                        @avgScore/10
-                                    </span>
-                                </a>
-                            </li>
-
-                          }
-                     }
-                 }
-
-                </ul>
+                    <partial name="_HomeView" model="music" />
+                }
+            </ul>
         </div>
     </div>
 
@@ -74,64 +26,20 @@
         <div class="col-6 mb-1">
             <a asp-action="Index" asp-controller="Serie" class="text-dark"><h1><i class="fas fa-video"> Top 10 Series</i>  </h1></a>
             <ul class="list-group series">
-                @if (Model != null)
+                @foreach (var serie in @Model.Series)
                 {
-                    @if (@Model.Series != null && Model.Series.Any())
-                    {
-                        @foreach (var serie in @Model.Series)
-                        {
-                            <li class="list-group-item list-group-item-dark d-flex justify-content-between align-items-center">
-                                <a class="mt-2" asp-action="Details" asp-controller="Serie" asp-route-id="@serie.Id">
-
-                                    @serie.Naam aantal seizoenen
-                                    <span class="badge badge-dark badge">
-                                        @{var aantalSeizoenen = 0;}
-                                        @{if (serie.Seizoenen.Count() > 0)
-                                            { aantalSeizoenen = serie.Seizoenen.Count(); }
-                                            else
-                                            {
-                                                aantalSeizoenen = 0;
-                                            }}
-                                        @aantalSeizoenen
-                                    </span>
-                                </a>
-                            </li>
-
-                                            }
-                                            }
-                                            }
-                </ul>
+                    <partial name="_HomeView" model="serie" />
+                }
+            </ul>
         </div>
         <div class="col-6 mb-1">
             <a asp-action="Index" asp-controller="Podcasts" class="text-dark"><h1><i class="fas fa-podcast"> Top 10 Podcasts</i> </h1></a>
             <ul class="list-group podcasts">
-                @if (Model != null)
+                @foreach (var podcast in @Model.Podcasts)
                 {
-                    @if (@Model.Podcasts != null && Model.Podcasts.Any())
-                    {
-                        @foreach (var podcast in @Model.Podcasts)
-                        {
-                            <li class="list-group-item list-group-item-dark d-flex justify-content-between align-items-center">
-                                <a class="mt-2" asp-action="Details" asp-controller="Podcasts" asp-route-id="@podcast.Id">
-
-                                    @podcast.Naam
-                                    @{var avgScore = "";}
-                                    <span class="badge badge-dark badge">
-                                        @{if (podcast.Ratings.Count() > 0)
-                                            { avgScore = podcast.Ratings.Average(p => p.Points).ToString("#.##"); }
-                                            else
-                                            {
-                                                avgScore = "0.00";
-                                            }}
-                                        @avgScore/10
-                                    </span>
-                                </a>
-                            </li>
-
-                                            }
-                                            }
-                                            }
-                </ul>
+                    <partial name="_HomeView" model="podcast" />
+                }
+            </ul>
         </div>
     </div>
 

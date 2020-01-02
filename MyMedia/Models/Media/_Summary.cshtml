@@ -1,0 +1,19 @@
+﻿@model MyMedia.Models.Media.MediaListViewModel
+
+    <li class="list-group-item list-group-item-dark d-flex justify-content-between align-items-center">
+        <div class="media">
+            @if (@Model.Foto != null)
+            {
+                <img src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(@Model.Foto))" alt="media Img" class="img-thumbnail" />
+            }
+            <div class="media-body">
+                <h5 class="mt-0">@Model.Titel</h5>
+            </div>
+        </div>
+
+        <label class="container">
+            <input type="checkbox" asp-for="@Model.IsChecked">
+            <span class="small">Zichtbaar maken</span>
+        </label>
+
+    </li>

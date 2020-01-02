@@ -13,24 +13,7 @@
     {
         @foreach (var podcast in Model)
         {
-            <div class="col-lg-3 m-1">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-img-top">
-                            @if (podcast.Foto != null)
-                            {
-                                <img src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(podcast.Foto))" alt="podcast Img" class="img-thumbnail" target="_blank" />
-                            }
-                        </div>
-                        <div class="hit-the-floor">
-                            <h4>@podcast.Naam</h4>
-                        </div>
-                        <a asp-action="Edit" asp-controller="Podcasts" asp-route-id="@podcast.Id"> Edit</a>
-                        <a asp-action="Delete" asp-controller="Podcasts" asp-route-id="@podcast.Id"> Delete</a>
-                        <a asp-action="Details" asp-controller="Podcasts" asp-route-id="@podcast.Id"> Details</a>
-                    </div>
-                </div>
-            </div>
+            <partial name="_Summary" model="podcast" />
         }
     }
     else

@@ -1,0 +1,17 @@
+﻿@model MyMedia.Core.MediaClasses.Podcast
+
+    <a class="mt-2" asp-action="Details" asp-controller="Podcasts" asp-route-id="@Model.Id">
+        <li class="list-group-item list-group-item-dark d-flex justify-content-between align-items-center">
+            @Model.Naam
+            @{var avgScore = "";}
+            <span class="badge badge-dark badge">
+                @{if (Model.Ratings.Count() > 0)
+                    { avgScore = Model.Ratings.Average(p => p.Points).ToString("#.##"); }
+                    else
+                    {
+                        avgScore = "0";
+                    }}
+                @avgScore/10
+            </span>
+        </li>
+    </a>
