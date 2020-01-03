@@ -24,11 +24,12 @@ namespace MyMedia.Data
         public DbSet<Seizoen> Seizoenen { get; set; }
         public DbSet<PlayList> Playlist { get; set; }
         public DbSet<Profiel> Profiel { get; set; }
-        public DbSet<ProfielMedia> Bekeken { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            
             base.OnModelCreating(modelBuilder);
-        }
+            
+    }
 
     }
 }

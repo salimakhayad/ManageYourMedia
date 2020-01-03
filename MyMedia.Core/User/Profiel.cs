@@ -13,10 +13,6 @@ namespace MyMedia.Core.User
         public virtual ICollection<Rating> Ratings { get; set; }
         public string FavorieteKleur { get; set; }
 
-        //  public string Id { get; set; }
-        //  public string UserName { get; set; }
-        //  public string NormalizedUserName { get; set; }
-        //  public string PasswordHash { get; set; }
 
     }
 }

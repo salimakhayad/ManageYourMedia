@@ -153,13 +153,11 @@ namespace MyMedia.Controllers
         }
         public IActionResult RatePodcast(PodcastRateViewModel model)
         {
-            var podcast = _mediaService.GetAllPodcasts().First(pod => pod.Id == model.MediaId);            
-           //var isSignedIn = this._signinManager.IsSignedIn(HttpContext.User);
-           //var currentUserId = this._signinManager.UserManager.GetUserId(HttpContext.User);
-           //if (isSignedIn)
-           //{
-           //    _currentProfiel = _mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
-           //}
+            var podcast = _mediaService.GetAllPodcasts().First(pod => pod.Id == model.MediaId);
+            var currentUserId = this._signInManager.UserManager.GetUserId(HttpContext.User);
+
+
+            _currentProfiel = _mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
 
             var newRating = new Rating()
             {

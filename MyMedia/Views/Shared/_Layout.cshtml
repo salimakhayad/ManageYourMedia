@@ -58,17 +58,16 @@
                 </button>
                 @if (User.Claims.Any())
                 {
-                    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                        <div class="navbar-nav">
-                            <a  class="nav-item nav-link active">Welcome back @User.Claims.AsQueryable().ElementAt(1).Value! <span class="sr-only"></span></a>
-                        </div>
-                    </div>
-                }
-                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                    <div class="navbar-nav">
-                        <a class="nav-item nav-link active" asp-controller="PlayList" asp-action="Index">My Playlists <i class="fas fa-caret-down"></i> <span class="sr-only"></span></a>
-                    </div>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link active">Welcome back @User.Claims.AsQueryable().ElementAt(1).Value! <span class="sr-only"></span></a>
                 </div>
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link active" asp-controller="PlayList" asp-action="Index">My Playlists <i class="fas fa-caret-down"></i> <span class="sr-only"></span></a>
+                </div>
+            </div>
+                }
+               
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
                         <a class="nav-item nav-link active" asp-controller="Media" asp-action="Index"> Approve Media <i class="fas fa-check-circle"></i> <span class="sr-only"></span></a>

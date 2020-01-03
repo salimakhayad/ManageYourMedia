@@ -27,7 +27,7 @@
                         @foreach (var episode in @seizoen.Episodes)
                         {
                             <div class="row justify-content-between">
-                                <a asp-controller="Episodes" asp-action="Details" asp-route-id="@episode.Id" class="col-11"><li class="list-group-item list-group-item-dark"> @episode.Titel</li></a>
+                                <a asp-controller="Episodes" asp-action="Details" asp-route-id="@episode.Id" class="col-11"><li class="list-group-item list-group-item-info"> @episode.Titel</li></a>
                                 <a class="btn btn-warning col-1" asp-route-id="@episode.Id" asp-controller="Episodes" asp-action="Details">Details <i class="fas fa-caret-right"></i></a>
                             </div>
 

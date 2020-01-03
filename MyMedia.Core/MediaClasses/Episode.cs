@@ -13,7 +13,7 @@ namespace MyMedia.Core.MediaClasses
         public string IMDBLink { get; set; }
         public string Beschrijving { get; set; }
         public DateTime ReleaseDate { get; set; }
-        // public StatusUserMovie Status { get; set; }
+        
         public virtual Seizoen Seizoen { get; set; }
 
     }

@@ -7,7 +7,7 @@
                 
                 @foreach (var movie in @Model.Movies)
                 {
-                    <partial name="_HomeView" model="movie" />
+                    <partial name="../Movie/_HomeView.cshtml" model="movie" />
                 }
 
             </ul>
@@ -17,7 +17,7 @@
             <ul class="list-group muziek">
                 @foreach (var music in @Model.Musics)
                 {
-                    <partial name="_HomeView" model="music" />
+                    <partial name="../Muziek/_HomeView.cshtml" model="music" />
                 }
             </ul>
         </div>
@@ -29,7 +29,7 @@
             <ul class="list-group series">
                 @foreach (var serie in @Model.Series)
                 {
-                    <partial name="_HomeView" model="serie" />
+                    <partial name="../Serie/_HomeView.cshtml" model="serie" />
                 }
             </ul>
         </div>
@@ -38,7 +38,7 @@
             <ul class="list-group podcasts">
                 @foreach (var podcast in @Model.Podcasts)
                 {
-                    <partial name="_HomeView" model="podcast" />
+                    <partial name="../Podcast/_HomeView.cshtml" model="podcast" />
                 }
             </ul>
         </div>

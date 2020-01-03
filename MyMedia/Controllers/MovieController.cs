@@ -110,15 +110,15 @@ namespace MyMedia.Controllers
 
         }
 
-        public IActionResult Details(int id)
+        public IActionResult Details(int Id)
         {
            // var isSignedIn = this._signinManager.IsSignedIn(HttpContext.User);
-           // var currentUserId = this._signinManager.UserManager.GetUserId(HttpContext.User);
-           // if (isSignedIn)
-           // {
-           //     _currentProfiel = _mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
-           // }
-            Movie selectedMovie = _mediaService.GetAllMedia().OfType<Movie>().FirstOrDefault(x => x.Id == id);
+            var currentUserId = this._signInManager.UserManager.GetUserId(HttpContext.User);
+           
+           
+            _currentProfiel = _mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
+          
+            Movie selectedMovie = _mediaService.GetAllMedia().OfType<Movie>().FirstOrDefault(mov => mov.Id == Id);
             bool isAlreadyRated = false;
             var playlists = new List<PlayList>();
             if (_currentProfiel != null)
@@ -207,20 +207,16 @@ namespace MyMedia.Controllers
         [Authorize]
         public IActionResult RateMovie(MovieRateViewModel model)
         {
-            var movie = _mediaService.GetAllMedia().OfType<Movie>().First(mov => mov.Id == model.MediaId);
-            //var isSignedIn = this._signinManager.IsSignedIn(HttpContext.User);
-            //var currentUserId = this._signinManager.UserManager.GetUserId(HttpContext.User);
-            //if (isSignedIn)
-            //{
-            //    _currentProfiel = _mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
-            //}
-
+           var movie = _mediaService.GetAllMedia().OfType<Movie>().First(mov => mov.Id == model.MediaId);
+           var currentUserId = this._signInManager.UserManager.GetUserId(HttpContext.User);
+           var user = _mediaService.GetAllProfielen().Where(prof => prof.Id == currentUserId).FirstOrDefault();
+            
             var newRating = new Rating()
             {
                 Media = movie,
                 CreationDate = DateTime.Now,
                 Points = model.Points,
-                Profiel = _currentProfiel
+                Profiel = user
             };
 
              _mediaService.InsertRating(newRating);

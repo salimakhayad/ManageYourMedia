@@ -66,8 +66,44 @@ namespace MyMedia.Controllers
         [HttpPost]
         public IActionResult ApproveMedia(ICollection<MediaListViewModel> NietPubliekeMediaLijst)
         {
-
-            return View();
+            var unapprovedMedia =_mediaService.GetAllMedia().Where(m => m.IsPubliek != true);
+            foreach (var media in unapprovedMedia)
+            {
+                media.IsPubliek = true;
+            }
+            _mediaService.SaveChanges();
+            return RedirectToAction("Index", "Home");
         }
+        [Authorize]
+        public IActionResult Share(int Id)
+        {
+            var currentUserId = this._signInManager.UserManager.GetUserId(HttpContext.User);
+        
+            _currentProfiel = _mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
+
+            var playlist = _mediaService.GetAllPlaylists().FirstOrDefault(playlist => playlist.Id == Id);
+           
+            var listUsers = _mediaService.GetAllProfielen();
+             
+            foreach(var user in listUsers)
+            {
+                if (user != _currentProfiel)
+                {
+                    user.Playlists.Add(
+                        new PlayList()
+                        {
+                            MediaList = playlist.MediaList,
+                            Name = playlist.Name,
+                            Profiel = _currentProfiel
+                        });
+                }
+
+            }
+            
+            // share with all
+            _mediaService.SaveChanges();
+            return RedirectToAction("Index", "Home");
+        }
+      
     }
 }

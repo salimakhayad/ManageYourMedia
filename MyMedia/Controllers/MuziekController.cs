@@ -53,20 +53,24 @@ namespace MyMedia.Controllers
             return View(Songs);
 
         }
+        [Authorize]
         public IActionResult Details(int id)
         {
-           // var isSignedIn = this._signinManager.IsSignedIn(HttpContext.User);
-           // var currentUserId = this._signinManager.UserManager.GetUserId(HttpContext.User);
-           // if (isSignedIn)
-           // {
-           //     _currentProfiel = _mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
-           // }
+           
+           var currentUserId = this._signInManager.UserManager.GetUserId(HttpContext.User);
+          
+           _currentProfiel = _mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
+        
             Muziek selectedMusic = _mediaService.GetAllMedia().OfType<Muziek>().Where(muz => muz.Id == id).FirstOrDefault();
             List<Rating> UserRatingList=new List<Rating>();
-            // if (currentUserId != null)
-            // {
-            //     UserRatingList = _mediaService.GetAllRatings().Where(music => music.Media.Titel == selectedMusic.Titel).Where(user => user.Profiel == _currentProfiel).ToList();
-            // }
+            bool isAlreadyRated = false;
+            var playlists = new List<PlayList>();
+            if (_currentProfiel != null)
+            {
+                isAlreadyRated = _mediaService.GetAllRatings().Where(movie => movie.Media.Titel == selectedMusic.Titel).Where(user => user.Profiel.Id == _currentProfiel.Id).Any();
+                playlists = _currentProfiel.Playlists.ToList();
+            }
+
             UserRatingList = _mediaService.GetAllRatings().Where(music => music.Media.Id == selectedMusic.Id).ToList();
             var detailViewModel = new MuziekDetailViewModel()
             {
@@ -75,9 +79,9 @@ namespace MyMedia.Controllers
                 Titel = selectedMusic.Titel,
                 ZangersNaam = selectedMusic.ZangersNaam,
                 Foto = selectedMusic.Foto,
-                IsRated = UserRatingList.Any(),
-                PlayLists = new List<PlayList>(),
-                IsSignedIn = false/*isSignedIn*/
+                IsRated = isAlreadyRated,
+                PlayLists = playlists,
+                IsSignedIn = true
             };
             if (selectedMusic.Ratings.Count() > 0)
             {
@@ -188,12 +192,11 @@ namespace MyMedia.Controllers
         public IActionResult RateMusic(MusicRateViewModel model)
         {
             var music = _mediaService.GetAllMedia().OfType<Muziek>().First(muz => muz.Id == model.MediaId);
-          // var isSignedIn = this._signinManager.IsSignedIn(HttpContext.User);
-          // var currentUserId = this._signinManager.UserManager.GetUserId(HttpContext.User);
-          // if (isSignedIn)
-          // {
-          //     _currentProfiel = _mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
-          // }
+            var currentUserId = this._signInManager.UserManager.GetUserId(HttpContext.User);
+
+
+            _currentProfiel = _mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
+
 
             var newRating = new Rating()
             {

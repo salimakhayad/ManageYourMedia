@@ -37,14 +37,18 @@ namespace MyMedia.Controllers
         }
 
         [Route("")]
+        [Authorize]
         public IActionResult Index()
         {
-            
-            var topMovies = _mediaService.GetAllMedia().OfType<Movie>().Take(10);//.Where(m=>m.IsPubliek==true) .OrderBy(r => r.Rating.Points);
-            var topSeries = _mediaService.GetAllSeries().Take(10);//.Where(m=>m.IsPubliek==true);
-            var topMusic = _mediaService.GetAllMedia().OfType<Muziek>().Take(10);//.Where(m=>m.IsPubliek==true);
-            var topPodcasts = _mediaService.GetAllPodcasts().Take(10);//.Where(p=>p.IsPubliek==true);
-            var topPlaylists = _mediaService.GetAllPlaylists().Take(10);//.Where(pl=>pl.IsPubliek==true);
+
+            var currentUserId = this._signInManager.UserManager.GetUserId(HttpContext.User);
+            var user = _mediaService.GetAllProfielen().Where(prof => prof.Id == currentUserId).FirstOrDefault();
+
+            var topMovies = _mediaService.GetAllMedia().OfType<Movie>().Take(10).Where(m=>m.IsPubliek==true) .OrderBy(r => r.Ratings);
+            var topSeries = _mediaService.GetAllSeries().Take(10).Where(m => m.IsPubliek == true);
+            var topMusic = _mediaService.GetAllMedia().OfType<Muziek>().Take(10).Where(m => m.IsPubliek == true).OrderBy(r => r.Ratings);
+            var topPodcasts = _mediaService.GetAllPodcasts().Take(10).Where(m => m.IsPubliek == true).OrderBy(r => r.Ratings);
+            var topPlaylists = _mediaService.GetAllPlaylists().Take(10).Where(m => m.Profiel==_currentProfiel);
 
             var vm = new HomeOverviewViewModel
             {
@@ -53,8 +57,8 @@ namespace MyMedia.Controllers
                 Musics = topMusic,
                 Podcasts = topPodcasts,
                 PlayLists = topPlaylists,
-                IsSignedIn = false,//isSignedIn,
-                Profiel = null//_currentProfiel
+                IsSignedIn = true,//isSignedIn,
+                Profiel = user//_currentProfiel
             };
 
             return View(vm);
@@ -137,6 +141,7 @@ namespace MyMedia.Controllers
                    var principal = await _claimsPrincipalFactory.CreateAsync(user);
                
                    await HttpContext.SignInAsync("Identity.Application", principal);
+                    _currentProfiel = _mediaService.GetAllProfielen().FirstOrDefault(usr => usr.Id == user.Id);
                    return RedirectToAction("Index");
                }
                 ModelState.AddModelError("", "Invalid Username or Password");
@@ -148,7 +153,7 @@ namespace MyMedia.Controllers
         {
           await this._signInManager.SignOutAsync();
 
-          return View("Index");
+            return RedirectToAction("Index", "Home");
         }
 
 

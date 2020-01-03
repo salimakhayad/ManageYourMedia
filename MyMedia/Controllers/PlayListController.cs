@@ -71,14 +71,14 @@ namespace MyMedia.Controllers
             return View(model);
         }
         [Authorize]
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
-            
             PlayListCreateViewModel model = new PlayListCreateViewModel();
             var currentUserId = this._signInManager.UserManager.GetUserId(HttpContext.User);
             _currentProfiel = _mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
             model.UserName = _currentProfiel.UserName;
             return View(model);
+
         }
         [HttpPost]
         [Authorize]

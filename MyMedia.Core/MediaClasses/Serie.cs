@@ -5,6 +5,7 @@ namespace MyMedia.Core.MediaClasses
 {
     public class Serie
     {
+        
         public int Id { get; set; }
         public string Naam { get; set; }
         public byte[] Foto { get; set; }

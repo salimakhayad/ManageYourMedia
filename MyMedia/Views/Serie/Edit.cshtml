@@ -5,7 +5,7 @@
 @inject UserManager<Profiel> UserManager
 <div class="container">
 
-    <h2>Serie <i class="fas fa-angle-double-right"></i>Details</h2><i class="fas fa-angle-double-right"></i>@Model.Naam
+    <h2>Serie <i class="fas fa-angle-double-right"></i>Edit</h2><i class="fas fa-angle-double-right"></i>@Model.Naam
     <hr />
     <form enctype="multipart/form-data" asp-controller="Serie" asp-action="Edit" method="post">
         <div class="form-group">
@@ -49,5 +49,6 @@
 
             </div>
         </div>
+        <button class="btn btn-primary" type="submit">Edit Serie</button>
     </form>
 </div>

@@ -13,7 +13,6 @@ namespace MyMedia.Core.MediaClasses
         public string Titel { get; set; }
         public byte[] Foto { get; set; }
         public bool IsPubliek { get; set; }
-        public virtual ICollection<ProfielMedia> Bekeken { get; set; }
         public virtual ICollection<Rating> Ratings { get; set; }
 
 

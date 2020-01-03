@@ -6,6 +6,7 @@ using MyMedia.Core.User;
 using MyMedia.Data;
 using MyMedia.Models.Series;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace MyMedia.Controllers
@@ -18,7 +19,7 @@ namespace MyMedia.Controllers
         private readonly UserManager<Profiel> _userManager;
         private readonly IUserClaimsPrincipalFactory<Profiel> _claimsPrincipalFactory;
         private readonly IUserStore<Profiel> _userStore;
-        private Profiel? _currentProfiel;
+        private readonly Profiel? _currentProfiel;
 
         public SerieController(IMyMediaService mediaService,
             SignInManager<Profiel> signInManager,
@@ -104,9 +105,20 @@ namespace MyMedia.Controllers
         {
             Serie newSerie = new Serie()
             {
-                Naam = model.Naam
+                Naam = model.Naam,
+                IsPubliek = true
             };
             _mediaService.InsertSerie(newSerie);
+            var foundSerie = _mediaService.GetAllMedia().OfType<Serie>().FirstOrDefault(x => x.Id == newSerie.Id);
+            _mediaService.SaveChanges();
+
+            if (model.Foto != null)
+            {
+                using var memoryStream = new MemoryStream();
+                model.Foto.CopyTo(memoryStream);
+                foundSerie.Foto = memoryStream.ToArray();
+            }
+
             _mediaService.SaveChanges();
 
             return RedirectToAction("Index");
