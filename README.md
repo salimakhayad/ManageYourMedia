@@ -1,11 +1,6 @@
 "# ManageYourMedia" 
-
-using folowing technologies:
 (.NET core 3.1 application)
-- HTML / CSS / Js
-- Viewmodels / Partial Views
-- contruction injection / services
-- Linq / Sql / Dapper
+
 
 Completed Functionalities:
 -Adding Media-
@@ -16,21 +11,19 @@ Completed Functionalities:
 
 -Rating Media-
 - Rate Movie
-- Rate Serie / Season / Episode
+- Rate Episode
 - Rate Music
 - Rate Podcast
 
 -Approving Media-
-- Approve Media
+- Approve Media before its visibile @ HomePage
 
 -Playlist
-- Add to Playlist
+- Add Media to Playlist
+- Share Playlist with All Users
 
--Custom Identity / Claims-
+-Custom Identity
 - Register
 - Login
 
-Yet to be implemented:
-- Roles 
-- Sharing Playlist
 
