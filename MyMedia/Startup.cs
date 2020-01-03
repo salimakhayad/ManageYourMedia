@@ -40,14 +40,10 @@ namespace MyMedia
                 options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("MediaDb")
                 ));
                    
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("ElevatedRights", policy =>
-                  policy.RequireRole("Administrator", "Gebruiker"));
-            });
+
 
             services.AddIdentity<Profiel,IdentityRole>(options => { })
-                 .AddEntityFrameworkStores<MediaDbContext>() // adds userstore and rolestore
+                 .AddEntityFrameworkStores<MediaDbContext>() 
                  .AddDefaultTokenProviders();
 
             services.AddScoped<IUserClaimsPrincipalFactory<Profiel>, ProfielUserClaimsPrincipalFactory>();
