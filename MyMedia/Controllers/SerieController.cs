@@ -109,8 +109,9 @@ namespace MyMedia.Controllers
                 IsPubliek = true
             };
             _mediaService.InsertSerie(newSerie);
-            var foundSerie = _mediaService.GetAllMedia().OfType<Serie>().FirstOrDefault(x => x.Id == newSerie.Id);
             _mediaService.SaveChanges();
+            var foundSerie = _mediaService.GetAllSeries().FirstOrDefault(x => x.Id == newSerie.Id);
+          
 
             if (model.Foto != null)
             {

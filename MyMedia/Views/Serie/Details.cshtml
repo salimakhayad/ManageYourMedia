@@ -6,7 +6,7 @@
     @if (@Model.Foto != null)
     {
         <div class="card-img-top">
-            <img id="image" src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(@Model.Foto))" alt="Serie Img" class="img-thumbnail" target="_blank" />
+            <img id="image" width="350px" height="250px" src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(@Model.Foto))" alt="Serie Img" class="img-thumbnail" target="_blank" />
         </div>
     }
 
