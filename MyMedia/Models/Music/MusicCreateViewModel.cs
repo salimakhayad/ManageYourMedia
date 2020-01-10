@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 
-namespace MyMedia.Models.Muziek
+namespace MyMedia.Models.Music
 {
-    public class MuziekCreateViewModel
+    public class MusicCreateViewModel
     {
         [Required]
         [DisplayName("Titel")]

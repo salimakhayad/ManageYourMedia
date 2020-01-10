@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace MyMedia.Core.MediaClasses
 {
-    public class Muziek:Media
+    public class Music:Media
     {
         public string ZangersNaam { get; set; }
         public string Lied { get; set; }

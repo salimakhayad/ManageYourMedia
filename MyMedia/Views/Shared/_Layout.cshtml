@@ -77,7 +77,6 @@
                     <a class="navbar-brand" asp-controller="Home" asp-action="About">Claims</a>
                 </div>
                 <div class="justify-content-end col-2">
-
                     @if (!User.Claims.Any())
                     {
                         <a class="navbar-brand" asp-controller="Home" asp-action="Login">Login</a>
@@ -87,8 +86,6 @@
                     {
                         <a class="navbar-brand" asp-controller="Home" asp-action="Logout">Log out</a>
                     }
-
-
                 </div>
             </nav>
             <div class="mt-5">

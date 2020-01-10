@@ -34,17 +34,14 @@ namespace MyMedia
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-
           
             services.AddDbContextPool<MediaDbContext>(options =>
                 options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("MediaDb")
                 ));
-                   
 
-
-            services.AddIdentity<Profiel,IdentityRole>(options => { })
-                 .AddEntityFrameworkStores<MediaDbContext>() 
-                 .AddDefaultTokenProviders();
+            services.AddIdentity<Profiel, IdentityRole>(options => { })
+                .AddEntityFrameworkStores<MediaDbContext>()
+                .AddDefaultTokenProviders();
 
             services.AddScoped<IUserClaimsPrincipalFactory<Profiel>, ProfielUserClaimsPrincipalFactory>();
 

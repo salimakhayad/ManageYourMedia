@@ -46,7 +46,7 @@ namespace MyMedia.Controllers
 
             var topMovies = _mediaService.GetAllMedia().OfType<Movie>().Take(10).Where(m=>m.IsPubliek==true) .OrderBy(r => r.Ratings);
             var topSeries = _mediaService.GetAllSeries().Take(10).Where(m => m.IsPubliek == true);
-            var topMusic = _mediaService.GetAllMedia().OfType<Muziek>().Take(10).Where(m => m.IsPubliek == true).OrderBy(r => r.Ratings);
+            var topMusic = _mediaService.GetAllMedia().OfType<Music>().Take(10).Where(m => m.IsPubliek == true).OrderBy(r => r.Ratings);
             var topPodcasts = _mediaService.GetAllPodcasts().Take(10).Where(m => m.IsPubliek == true).OrderBy(r => r.Ratings);
             var topPlaylists = _mediaService.GetAllPlaylists().Take(10).Where(m => m.Profiel==_currentProfiel);
 

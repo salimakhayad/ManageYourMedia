@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using MyMedia.Core.MediaClasses;
 using MyMedia.Core.User;
 using MyMedia.Data;
-using MyMedia.Models.Muziek;
+using MyMedia.Models.Music;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,7 +13,7 @@ using System.Linq;
 namespace MyMedia.Controllers
 {
 
-    public class MuziekController : Controller
+    public class MusicController : Controller
     {
         private readonly IMyMediaService _mediaService;
         private readonly IUserStore<Profiel> _userStore;
@@ -23,7 +23,7 @@ namespace MyMedia.Controllers
 
 
         private Profiel? _currentProfiel;
-        public MuziekController(IMyMediaService mediaService,
+        public MusicController(IMyMediaService mediaService,
             SignInManager<Profiel> signInManager,
             IUserClaimsPrincipalFactory<Profiel> claimsPrincipalFactory,
             IUserStore<Profiel> userStore,
@@ -40,13 +40,13 @@ namespace MyMedia.Controllers
         public IActionResult Index()
         {
             // create list songs view
-            List<MuziekListViewModel> Songs = new List<MuziekListViewModel>();
-            IEnumerable<Muziek>? songListFromDb = _mediaService.GetAllMedia().OfType<Muziek>();
+            List<MusicListViewModel> Songs = new List<MusicListViewModel>();
+            IEnumerable<Music>? songListFromDb = _mediaService.GetAllMedia().OfType<Music>();
             if (songListFromDb.Count() > 0)
             {
                 foreach (var song in songListFromDb)
                 {
-                    Songs.Add(new MuziekListViewModel() { Id=song.Id,ZangersNaam = song.ZangersNaam, Titel = song.Titel,Foto=song.Foto });
+                    Songs.Add(new MusicListViewModel() { Id=song.Id,ZangersNaam = song.ZangersNaam, Titel = song.Titel,Foto=song.Foto });
                 }
             }
 
@@ -61,7 +61,7 @@ namespace MyMedia.Controllers
           
            _currentProfiel = _mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
         
-            Muziek selectedMusic = _mediaService.GetAllMedia().OfType<Muziek>().Where(muz => muz.Id == id).FirstOrDefault();
+            Music selectedMusic = _mediaService.GetAllMedia().OfType<Music>().Where(muz => muz.Id == id).FirstOrDefault();
             List<Rating> UserRatingList=new List<Rating>();
             bool isAlreadyRated = false;
             var playlists = new List<PlayList>();
@@ -72,7 +72,7 @@ namespace MyMedia.Controllers
             }
 
             UserRatingList = _mediaService.GetAllRatings().Where(music => music.Media.Id == selectedMusic.Id).ToList();
-            var detailViewModel = new MuziekDetailViewModel()
+            var detailViewModel = new MusicDetailViewModel()
             {
                 MediaId = selectedMusic.Id,
                 Lied = selectedMusic.Lied,
@@ -98,8 +98,8 @@ namespace MyMedia.Controllers
         [Authorize]
         public IActionResult Edit(int id)
         {
-            Muziek selectedMusic = _mediaService.GetAllMedia().OfType<Muziek>().Where(x => x.Id == id).FirstOrDefault();
-            var detailViewModel = new MuziekEditViewModel()
+            Music selectedMusic = _mediaService.GetAllMedia().OfType<Music>().Where(x => x.Id == id).FirstOrDefault();
+            var editViewModel = new MusicEditViewModel()
             {
                 Id = selectedMusic.Id,
                 Lied = selectedMusic.Lied,
@@ -109,14 +109,14 @@ namespace MyMedia.Controllers
             };
 
 
-            return View(detailViewModel);
+            return View(editViewModel);
 
         }
         [Authorize]
         [HttpPost]
-        public IActionResult Edit(MuziekEditViewModel model)
+        public IActionResult Edit(MusicEditViewModel model)
         {
-            var music = _mediaService.GetAllMedia().OfType<Muziek>().FirstOrDefault(mus => mus.Id == model.Id);
+            var music = _mediaService.GetAllMedia().OfType<Music>().FirstOrDefault(mus => mus.Id == model.Id);
             music.Lied = model.Lied;
             music.Titel = model.Titel;
             music.Foto = model.Foto;
@@ -129,8 +129,8 @@ namespace MyMedia.Controllers
         [Authorize]
         public IActionResult Delete(int id)
         {
-            Muziek selectedMusic = _mediaService.GetAllMedia().OfType<Muziek>().FirstOrDefault(x => x.Id == id);
-            MuziekDeleteViewModel model = new MuziekDeleteViewModel()
+            Music selectedMusic = _mediaService.GetAllMedia().OfType<Music>().FirstOrDefault(x => x.Id == id);
+            MusicDeleteViewModel model = new MusicDeleteViewModel()
             {
                 Id= selectedMusic.Id,
                 Naam = selectedMusic.Titel
@@ -142,7 +142,7 @@ namespace MyMedia.Controllers
         [HttpPost]
         public IActionResult ConfirmDelete(int id)
         {
-            // var muziekToDelete = _mediaService.GetAllMedia().OfType<Muziek>().First(x => x.Id == id);
+            // var musicToDelete = _mediaService.GetAllMedia().OfType<Music>().First(x => x.Id == id);
             _mediaService.DeleteMediaById(id);
             _mediaService.SaveChanges();
             return RedirectToAction("Index");
@@ -151,20 +151,20 @@ namespace MyMedia.Controllers
         [Authorize]
         public IActionResult Create()
         {
-            MuziekCreateViewModel Muz = new MuziekCreateViewModel();
+            MusicCreateViewModel Muz = new MusicCreateViewModel();
 
             return View(Muz);
         }
         [Authorize]
 
         [HttpPost]
-        public IActionResult Create(MuziekCreateViewModel model)
+        public IActionResult Create(MusicCreateViewModel model)
         {
             if (!TryValidateModel(model))
             {
                 return View(model);
             }
-            Muziek newMusic = new Muziek()
+            Music newMusic = new Music()
             {
                 Titel = model.Titel,
                 ZangersNaam = model.ZangersNaam,
@@ -174,8 +174,8 @@ namespace MyMedia.Controllers
             };
             _mediaService.InsertMedia(newMusic);
             _mediaService.SaveChanges();
-       
-            Muziek muzFrmDb = _mediaService.GetAllMedia().OfType<Muziek>().FirstOrDefault(x => x.Id == newMusic.Id);
+
+            Music muzFrmDb = _mediaService.GetAllMedia().OfType<Music>().FirstOrDefault(x => x.Id == newMusic.Id);
             if (model.Foto != null)
             {
                 using var memoryStream = new MemoryStream();
@@ -191,7 +191,7 @@ namespace MyMedia.Controllers
         [Authorize]
         public IActionResult RateMusic(MusicRateViewModel model)
         {
-            var music = _mediaService.GetAllMedia().OfType<Muziek>().First(muz => muz.Id == model.MediaId);
+            var music = _mediaService.GetAllMedia().OfType<Music>().First(muz => muz.Id == model.MediaId);
             var currentUserId = this._signInManager.UserManager.GetUserId(HttpContext.User);
 
 

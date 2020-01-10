@@ -13,11 +13,11 @@
             </ul>
         </div>
         <div class="col-6">
-            <a asp-action="Index" asp-controller="Muziek" class="text-dark"><h1> <i class="fas fa-music"> Top 10 Music</i>  </h1></a>
-            <ul class="list-group muziek">
+            <a asp-action="Index" asp-controller="Music" class="text-dark"><h1> <i class="fas fa-music"> Top 10 Music</i>  </h1></a>
+            <ul class="list-group music">
                 @foreach (var music in @Model.Musics)
                 {
-                    <partial name="../Muziek/_HomeView.cshtml" model="music" />
+                    <partial name="../Music/_HomeView.cshtml" model="music" />
                 }
             </ul>
         </div>

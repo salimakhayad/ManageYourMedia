@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace MyMedia.Models.Muziek
+namespace MyMedia.Models.Music
 {
-    public class MuziekDetailViewModel : AuthenticatedViewModel
+    public class MusicDetailViewModel : AuthenticatedViewModel
     {
         public int MediaId { get; set; }
         public string? Titel { get; set; }

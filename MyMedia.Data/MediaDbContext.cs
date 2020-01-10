@@ -18,7 +18,7 @@ namespace MyMedia.Data
         public DbSet<Media> Media { get; set; }
         public DbSet<Serie> Series { get; set; }
         public DbSet<Podcast> Podcast { get; set; }
-        public DbSet<Muziek> Muziek { get; set; }
+        public DbSet<Music> Music { get; set; }
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<Episode> Episodes { get; set; }
         public DbSet<Seizoen> Seizoenen { get; set; }

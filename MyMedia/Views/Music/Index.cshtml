@@ -1,4 +1,4 @@
-﻿@model List<MyMedia.Models.Muziek.MuziekListViewModel>
+﻿@model List<MyMedia.Models.Music.MusicListViewModel>
 @using Microsoft.AspNetCore.Identity
 @using MyMedia.Core.User;
 @inject SignInManager<Profiel> SignInManager
@@ -12,9 +12,9 @@
     </p>
     @if (Model.Any() && Model != null)
     {
-        @foreach (var muziek in Model)
+        @foreach (var music in Model)
         {
-            <partial name="_Summary" model="muziek" />
+            <partial name="_Summary" model="music" />
         }
     }
     else
@@ -26,7 +26,7 @@
     }
 
     <div class="row justify-content-end">
-        <a asp-action="Create" class="btn btn-primary" asp-controller="Muziek">Add Song</a>
+        <a asp-action="Create" class="btn btn-primary" asp-controller="Music">Add Song</a>
     </div>
 
 </div>

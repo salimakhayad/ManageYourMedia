@@ -1,6 +1,6 @@
-﻿namespace MyMedia.Models.Muziek
+﻿namespace MyMedia.Models.Music
 {
-    public class MuziekListViewModel : AuthenticatedViewModel
+    public class MusicListViewModel : AuthenticatedViewModel
     {
         public int Id { get; set; }
         public string? Titel { get; set; }
