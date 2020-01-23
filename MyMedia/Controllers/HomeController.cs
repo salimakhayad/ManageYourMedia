@@ -13,21 +13,22 @@ using MyMedia.Core.User;
 using MyMedia.Data;
 using MyMedia.Models;
 using MyMedia.Models.Home;
-using MyMedia.Models.Profiel;
+using MyMedia.Models.MediaUser;
 
 namespace MyMedia.Controllers
 {
     public class HomeController : Controller
     {
         private readonly IMyMediaService _mediaService;
-        private readonly IUserStore<Profiel> _userStore;
-        private readonly IUserClaimsPrincipalFactory<Profiel> _claimsPrincipalFactory;
-        private readonly SignInManager<Profiel> _signInManager;
-        private readonly UserManager<Profiel> _userManager;
+        private readonly IUserStore<MediaUser> _userStore;
+        private readonly IUserClaimsPrincipalFactory<MediaUser> _claimsPrincipalFactory;
+        private readonly SignInManager<MediaUser> _signInManager;
+        private readonly UserManager<MediaUser> _userManager;
+        // private readonly RoleManager<>
 
-        private Profiel? _currentProfiel;
+        private MediaUser? _currentMediaUser;
 
-        public HomeController(IMyMediaService mediaService, IUserStore<Profiel> userStore,UserManager<Profiel> userManager,IUserClaimsPrincipalFactory<Profiel> claimsPrincipalFactory, SignInManager<Profiel> signInManager)
+        public HomeController(IMyMediaService mediaService, IUserStore<MediaUser> userStore,UserManager<MediaUser> userManager,IUserClaimsPrincipalFactory<MediaUser> claimsPrincipalFactory, SignInManager<MediaUser> signInManager)
         {
             this._userManager = userManager;
             this._claimsPrincipalFactory = claimsPrincipalFactory;
@@ -42,13 +43,13 @@ namespace MyMedia.Controllers
         {
 
             var currentUserId = this._signInManager.UserManager.GetUserId(HttpContext.User);
-            var user = _mediaService.GetAllProfielen().Where(prof => prof.Id == currentUserId).FirstOrDefault();
+            var user = _mediaService.GetAllMediaUsers().Where(prof => prof.Id == currentUserId).FirstOrDefault();
 
-            var topMovies = _mediaService.GetAllMedia().OfType<Movie>().Take(10).Where(m=>m.IsPubliek==true) .OrderBy(r => r.Ratings);
-            var topSeries = _mediaService.GetAllSeries().Take(10).Where(m => m.IsPubliek == true);
-            var topMusic = _mediaService.GetAllMedia().OfType<Music>().Take(10).Where(m => m.IsPubliek == true).OrderBy(r => r.Ratings);
-            var topPodcasts = _mediaService.GetAllPodcasts().Take(10).Where(m => m.IsPubliek == true).OrderBy(r => r.Ratings);
-            var topPlaylists = _mediaService.GetAllPlaylists().Take(10).Where(m => m.Profiel==_currentProfiel);
+            var topMovies = _mediaService.GetAllMedia().OfType<Movie>().Take(10).Where(m=>m.IsPublic==true) .OrderBy(r => r.Ratings);
+            var topSeries = _mediaService.GetAllSeries().Take(10).Where(m => m.IsPublic == true);
+            var topMusic = _mediaService.GetAllMedia().OfType<Music>().Take(10).Where(m => m.IsPublic == true).OrderBy(r => r.Ratings);
+            var topPodcasts = _mediaService.GetAllPodcasts().Take(10).Where(m => m.IsPublic == true).OrderBy(r => r.Ratings);
+            var topPlaylists = _mediaService.GetAllPlaylists().Take(10).Where(m => m.MediaUser==_currentMediaUser);
 
             var vm = new HomeOverviewViewModel
             {
@@ -58,7 +59,7 @@ namespace MyMedia.Controllers
                 Podcasts = topPodcasts,
                 PlayLists = topPlaylists,
                 IsSignedIn = true,//isSignedIn,
-                Profiel = user//_currentProfiel
+                MediaUser = user//_currentMediaUser
             };
 
             return View(vm);
@@ -104,11 +105,11 @@ namespace MyMedia.Controllers
                 
                 if (user == null)
                 {
-                    user = new Profiel
+                    user = new MediaUser
                     {
                         Id = Guid.NewGuid().ToString(),
                         UserName = model.UserName,
-                        FavorieteKleur = "Dark Orange"
+                        Role = "Gebruiker"
                     };
                     var identityResult = await _userManager.CreateAsync(user,model.Password);
                    if (identityResult.Succeeded)
@@ -141,7 +142,7 @@ namespace MyMedia.Controllers
                    var principal = await _claimsPrincipalFactory.CreateAsync(user);
                
                    await HttpContext.SignInAsync("Identity.Application", principal);
-                    _currentProfiel = _mediaService.GetAllProfielen().FirstOrDefault(usr => usr.Id == user.Id);
+                    _currentMediaUser = _mediaService.GetAllMediaUsers().FirstOrDefault(usr => usr.Id == user.Id);
                    return RedirectToAction("Index");
                }
                 ModelState.AddModelError("", "Invalid Username or Password");

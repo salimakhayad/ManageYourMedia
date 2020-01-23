@@ -16,16 +16,16 @@ namespace MyMedia.Controllers
     {
 
         private readonly IMyMediaService _mediaService;
-        private readonly IUserStore<Profiel> _userStore;
-        private readonly IUserClaimsPrincipalFactory<Profiel> _claimsPrincipalFactory;
-        private readonly SignInManager<Profiel> _signInManager;
-        private readonly UserManager<Profiel> _userManager;
-        private Profiel? _currentProfiel;
+        private readonly IUserStore<MediaUser> _userStore;
+        private readonly IUserClaimsPrincipalFactory<MediaUser> _claimsPrincipalFactory;
+        private readonly SignInManager<MediaUser> _signInManager;
+        private readonly UserManager<MediaUser> _userManager;
+        private MediaUser? _currentMediaUser;
         public MediaController(IMyMediaService mediaService,
-            SignInManager<Profiel> signInManager,
-            IUserClaimsPrincipalFactory<Profiel> claimsPrincipalFactory,
-            IUserStore<Profiel> userStore,
-            UserManager<Profiel> userManager
+            SignInManager<MediaUser> signInManager,
+            IUserClaimsPrincipalFactory<MediaUser> claimsPrincipalFactory,
+            IUserStore<MediaUser> userStore,
+            UserManager<MediaUser> userManager
             )
         {
             this._userManager = userManager;
@@ -37,25 +37,30 @@ namespace MyMedia.Controllers
         [Authorize]
         public IActionResult Index()
         {
-          
+            var currentUserId = this._signInManager.UserManager.GetUserId(HttpContext.User);
             // selects non approved media 
-            var MediaList = _mediaService.GetAllMedia().Where(m => m.IsPubliek != true);
+            var MediaList = _mediaService.GetAllMedia().Where(m => m.IsPublic != true);
 
             // maps to listviewmodel 
             var mediaListViewModel = new List<MediaListViewModel>();
             foreach (var med in MediaList)
             {
-                mediaListViewModel.Add(
+                var model =
                     new MediaListViewModel()
                     {
-                        Foto = med.Foto,
+                        Id = med.Id,
+                        Photo = med.Photo,
                         Titel = med.Titel,
-                        IsChecked = false
-                    });
+                        IsChecked = false,
+                        AddedByMediaUserName = med.MediaUser.UserName
+                    };
+
+                mediaListViewModel.Add(model);
+
             }
             var MediaOverviewVM = new MediaOverviewViewModel()
             {
-                NietPubliekeMediaLijst = mediaListViewModel
+                UnApprovedMediaList = mediaListViewModel
             };
 
 
@@ -64,14 +69,24 @@ namespace MyMedia.Controllers
         }
 
         [HttpPost]
-        public IActionResult ApproveMedia(ICollection<MediaListViewModel> NietPubliekeMediaLijst)
+        public IActionResult ApproveMedia(MediaOverviewViewModel Model)
         {
-            var unapprovedMedia =_mediaService.GetAllMedia().Where(m => m.IsPubliek != true);
-            foreach (var media in unapprovedMedia)
+            if (Model.UnApprovedMediaList != null)
             {
-                media.IsPubliek = true;
+                foreach (var media in Model.UnApprovedMediaList)
+                {
+                    if (media.IsChecked == true)
+                    {
+                        var mediaFromDb = _mediaService.GetAllMedia().Where(m => m.Id == media.Id).FirstOrDefault();
+                        mediaFromDb.IsPublic = true;
+                        _mediaService.SaveChanges();
+
+                    }
+                }
             }
-            _mediaService.SaveChanges();
+           
+           
+
             return RedirectToAction("Index", "Home");
         }
         [Authorize]
@@ -79,22 +94,22 @@ namespace MyMedia.Controllers
         {
             var currentUserId = this._signInManager.UserManager.GetUserId(HttpContext.User);
         
-            _currentProfiel = _mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
+            _currentMediaUser = _mediaService.GetAllMediaUsers().First(p => p.Id == currentUserId);
 
             var playlist = _mediaService.GetAllPlaylists().FirstOrDefault(playlist => playlist.Id == Id);
            
-            var listUsers = _mediaService.GetAllProfielen();
+            var listUsers = _mediaService.GetAllMediaUsers();
              
             foreach(var user in listUsers)
             {
-                if (user != _currentProfiel)
+                if (user != _currentMediaUser)
                 {
                     user.Playlists.Add(
                         new PlayList()
                         {
                             MediaList = playlist.MediaList,
                             Name = playlist.Name,
-                            Profiel = _currentProfiel
+                            MediaUser = _currentMediaUser
                         });
                 }
 

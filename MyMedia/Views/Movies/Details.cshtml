@@ -1,0 +1,93 @@
+﻿@model MyMedia.Models.Movie.MovieDetailViewModel
+@using Microsoft.AspNetCore.Identity
+@using MyMedia.Core.MediaClasses
+@using MyMedia.Core.User;
+@inject SignInManager<MediaUser> SignInManager
+@inject UserManager<MediaUser> UserManager
+<div class="container">
+    <h2>Movies <i class="fas fa-angle-double-right"></i>Details<i class="fas fa-angle-double-right"></i>@Model.Titel</h2>
+
+    @if (@Model.PlayLists != null && @Model.PlayLists.Count > 0)
+    {
+        <form enctype="multipart/form-data" asp-controller="PlayLists" asp-action="AddToPlaylist" method="post">
+            @Html.HiddenFor(pl => pl.MediaId)
+            <div class="btn-group">
+                @Html.DropDownListFor(x => x.PlayListId,
+                    new SelectList(@Model.PlayLists, nameof(PlayList.Id), nameof(PlayList.Name)), "Select PlayList")
+
+            </div>
+            <button type="submit" class="btn btn-primary">Add to playlist</button>
+        </form>
+    }
+    <div class="row">
+        <div class="col-9">
+            <div class="card mt-5" style="width: 70vh;">
+                Score : @Math.Round(@Model.AveragePoints, 2,
+            MidpointRounding.ToEven) / 10
+                <div class="card-body">
+                    @for (var point = 2; point <= (Math.Round(@Model.AveragePoints, 2,
+                      MidpointRounding.ToEven)); point += 2)
+                    {
+                        <i class="fas fa-star"></i>
+                    }
+                    <h2 class="card-title">@Model.Titel</h2>
+                    <div class="">
+                        <label> Duurtijd: <b>@Model.Duration</b></label>
+                    </div>
+                    <div class=" row">
+                        @if (@Model.Photo != null)
+                        {
+                            <img src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(@Model.Photo))" alt="Serie Img" class="img-thumbnail  col-6" target="_blank" />
+                        }
+                        <a class="col-6" href="@Model.IMDBLink">
+                            <img border="0" alt="@Model.Titel" src="~/images/imdb_Logo.png" height="30">
+                        </a>
+                    </div>
+                    <div class="row">
+                        <span class="badge badge-secondary" asp-for="@Model.Status">@Model.Status</span>
+                    </div>
+
+
+                </div>
+            </div>
+            @foreach (var rating in Model.Ratings)
+            {
+                <div class="card-body">
+                    <h5 class="card-title">@rating.MediaUser.UserName</h5>
+                    <small>Rated this Movie: @rating.Points/10 <br /> @rating.CreationDate</small>
+                    <small>Says:</small>
+                    <p class="card-text">@rating.Review</p>
+                    <small>@rating.CreationDate</small>
+
+                </div>
+            }
+            <form enctype="multipart/form-data" asp-controller="Movies" asp-action="RateMovie" method="post">
+                @Html.HiddenFor(x => x.MediaId)
+
+                @if (!@Model.IsRated)
+                {
+                    <label> Points </label>
+                    @Html.TextBoxFor(x => x.Points, new { type = "number" })
+                    <br>
+                    <label> Review </label>
+                    @Html.TextBoxFor(x => x.Review, new { @class = "form-control" })
+                    <button type="submit" class="btn btn-primary">Rate</button>
+                }
+
+            </form>
+            <small>Added by: @Model.AddedByUserName</small>
+        </div>
+        <div class="col-3 mt-5">
+
+        </div>
+
+    </div>
+
+    <div>
+        <a asp-controller="Movies" asp-action="Index"> Go back to list</a>
+    </div>
+</div>
+
+
+
+

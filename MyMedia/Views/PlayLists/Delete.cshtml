@@ -1,0 +1,13 @@
+﻿@model MyMedia.Models.Movie.MovieDeleteViewModel
+@using Microsoft.AspNetCore.Identity
+@using MyMedia.Core.User;
+@inject SignInManager<MediaUser> SignInManager
+@inject UserManager<MediaUser> UserManager
+
+
+<form enctype="multipart/form-data" asp-controller="Movies" asp-route-id="@Model.Id" asp-action="ConfirmDelete" method="post">
+    <b> Weet je zeker dat je <b>@Model.Titel</b> Wilt verwijderen?</b>
+    <button class="btn btn-primary" type="submit">Verwijder Movie</button>
+
+</form>
+

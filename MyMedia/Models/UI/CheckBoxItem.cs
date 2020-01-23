@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace MyMedia.Models.UI
 {
-    public class CheckBoxItemSeizoen
+    public class CheckBoxItemSeason
     {
         public int Id { get; set; }
         public string? Title { get; set; }

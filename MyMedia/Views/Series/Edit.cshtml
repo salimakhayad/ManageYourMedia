@@ -1,0 +1,54 @@
+﻿@model MyMedia.Models.Series.SerieEditViewModel
+@using Microsoft.AspNetCore.Identity
+@using MyMedia.Core.User;
+@inject SignInManager<MediaUser> SignInManager
+@inject UserManager<MediaUser> UserManager
+<div class="container">
+
+    <h2>Series <i class="fas fa-angle-double-right"></i>Edit</h2><i class="fas fa-angle-double-right"></i>@Model.Name
+    <hr />
+    <form enctype="multipart/form-data" asp-controller="Series" asp-action="Edit" method="post">
+        <div class="form-group">
+            <label asp-for="@Model.Name"></label>
+            <input class="form-control" asp-for="@Model.Name" />
+            <span class="text-danger" asp-validation-for="@Model.Name"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="@Model.Photo"></label>
+            <input class="form-control" asp-for="@Model.Photo" />
+            <span accept=".jpg,.jpeg,.png" class="text-danger" asp-validation-for="@Model.Photo"></span>
+        </div>
+        <div class="form-group">
+            <div class="form-group">
+                <b>Seasons</b>
+                <ol>
+                    @{ int SeasonNummer = 1; }
+                    @if (Model.Seasons != null && Model.Seasons.Any())
+                    {
+                        @foreach (var Season in Model.Seasons)
+                        {
+                            <li>Season @SeasonNummer</li>
+                            int episodeNummer = 1;
+                            @foreach (var episode in Season.Episodes)
+                            {
+                                <li>Episode: @episodeNummer</li>
+                                <li>Titel: @episode.Titel</li>
+                                <li>Description: @episode.Description</li>
+
+                                @if (@episode.Photo != null)
+                                {
+                                    <li>  <img style="width: 300px; height: 120px;" src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(episode.Photo))" alt="Episode Img" class="img-thumbnail" /> </li>
+                                }
+
+                                episodeNummer++;
+                            }
+                            SeasonNummer++;
+                        }
+                    }
+                </ol>
+
+            </div>
+        </div>
+        <button class="btn btn-primary" type="submit">Edit Serie</button>
+    </form>
+</div>

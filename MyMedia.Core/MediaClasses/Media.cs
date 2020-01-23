@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyMedia.Core.User;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -10,9 +11,12 @@ namespace MyMedia.Core.MediaClasses
     {
         [Key]
         public int Id { get; set; }
+        public string MediaUserId { get; set; }
+        public virtual MediaUser MediaUser { get; set; }
+
         public string Titel { get; set; }
-        public byte[] Foto { get; set; }
-        public bool IsPubliek { get; set; }
+        public byte[] Photo { get; set; }
+        public bool IsPublic { get; set; }
         public virtual ICollection<Rating> Ratings { get; set; }
 
 

@@ -2,7 +2,7 @@
 
     <a class="mt-2" asp-action="Details" asp-controller="Podcasts" asp-route-id="@Model.Id">
         <li class="list-group-item list-group-item-dark d-flex justify-content-between align-items-center">
-            @Model.Naam
+            @Model.Name
             @{var avgScore = "";}
             <span class="badge badge-dark badge">
                 @{if (Model.Ratings.Count() > 0)

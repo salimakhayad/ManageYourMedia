@@ -1,4 +1,4 @@
-﻿@using MyMedia.Models.Profiel;
+﻿@using MyMedia.Models.MediaUser;
 @model LoginModel
 
     <div class="container">
@@ -27,8 +27,8 @@
                 }
                 else
                 {
-                    <h1 class="text-center">@User.Claims.AsQueryable().ElementAt(1).Value is already Logged In</h1>
-                    <h1 class="text-center">His favourite colour is : @User.Claims.AsQueryable().ElementAt(3).Value</h1>
+                    <h1 class="text-center">Logged In:@User.Claims.AsQueryable().ElementAt(1).Value</h1>
+                    <h1 class="text-center"> UserRole: @User.Claims.AsQueryable().ElementAt(3).Value</h1>
                 }
 
 

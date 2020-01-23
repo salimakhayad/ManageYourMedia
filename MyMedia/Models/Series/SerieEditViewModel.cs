@@ -7,9 +7,9 @@ namespace MyMedia.Models.Series
     public class SerieEditViewModel
     {
         public int Id { get; set; }
-        public string? Naam { get; set; }
-        public IFormFile? Foto { get; set; }
-        public virtual List<Seizoen>? Seizoenen { get; set; }
+        public string? Name { get; set; }
+        public IFormFile? Photo { get; set; }
+        public virtual List<Season>? Seasons { get; set; }
 
     }
 }

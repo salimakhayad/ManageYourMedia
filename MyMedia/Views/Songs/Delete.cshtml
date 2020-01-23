@@ -1,0 +1,31 @@
+﻿@model MyMedia.Models.Music.MusicDeleteViewModel
+@using Microsoft.AspNetCore.Identity
+@using MyMedia.Core.User;
+@inject SignInManager<MediaUser> SignInManager
+@inject UserManager<MediaUser> UserManager
+
+<div class="container">
+    <h2>Music <i class="fas fa-angle-double-right"></i>Delete</h2>
+    <hr />
+
+    <div class="row col-11">
+        <dl class="dl-horizontal">
+            <dd>
+                @Model.Name
+            </dd>
+        </dl>
+
+    </div>
+    <div class="row col-3">
+
+        <form enctype="multipart/form-data" asp-controller="Songs" asp-route-id="@Model.Id" asp-action="ConfirmDelete" method="post">
+            <input type="submit" value="Delete" class="btn btn-default" />
+        </form>
+    </div>
+    <h3>Are you sure you want to delete this?</h3>
+
+
+
+
+    <a asp-action="Index" asp-controller="Songs">Back to List</a>
+</div>

@@ -7,7 +7,7 @@ namespace MyMedia.Core.MediaClasses
 {
     public class Music:Media
     {
-        public string ZangersNaam { get; set; }
+        public string ZangersName { get; set; }
         public string Lied { get; set; }
     }
 }

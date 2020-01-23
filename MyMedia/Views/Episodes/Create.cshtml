@@ -5,29 +5,29 @@
 
 <<div class="container">
     <h2>Episode <i class="fas fa-angle-double-right"></i>Create</h2>
-    <hr /> @Model.SerieNaam
+    <hr /> @Model.SerieName
     <hr /> <!--Voeg episodes Toe , voorzie playlist pagina waarop alle media zichtbaar is, bekijk portfolio- project pagina ivm zoek en selectie van media-->
 
     <div class="row">
         <div class="col-md-4">
             <form enctype="multipart/form-data" asp-controller="Episodes" asp-action="Create" method="post">
                 <!--Aspaction van AddEpisode naar Create-->
-                @Html.HiddenFor(m => m.SerieNaam)
+                @Html.HiddenFor(m => m.SerieName)
                 @Html.HiddenFor(x => x.SerieId)
                 <div class="form-group">
-                    <option selected>Kies een seizoen...</option>
+                    <option selected>Kies een Season...</option>
                     <!---dropdown-->
                     <div class="input-group">
-                        <select asp-for="@Model.SeizoenId"
-                                asp-items="@(new SelectList(Model.MogelijkeSeizoenen,nameof(Seizoen.Id),nameof(Seizoen.SeizoenNr)))">
-                            <option>Nieuw seizoen</option>
+                        <select asp-for="@Model.SeasonId"
+                                asp-items="@(new SelectList(Model.PossibleSeasons,nameof(Season.Id),nameof(Season.SeasonNr)))">
+                            <option>Nieuw Season</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label asp-for="@Model.Foto"></label>
-                    <input class="form-control" asp-for="@Model.Foto" />
-                    <span accept=".jpg,.jpeg,.png" class="text-danger" asp-validation-for="@Model.Foto"></span>
+                    <label asp-for="@Model.Photo"></label>
+                    <input class="form-control" asp-for="@Model.Photo" />
+                    <span accept=".jpg,.jpeg,.png" class="text-danger" asp-validation-for="@Model.Photo"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="@Model.Titel" class="control-label"></label>
@@ -35,9 +35,9 @@
                     <span asp-validation-for="@Model.Titel" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="@Model.Beschrijving" class="control-label"></label>
-                    <input asp-for="@Model.Beschrijving" class="form-control" />
-                    <span asp-validation-for="@Model.Beschrijving" class="text-danger"></span>
+                    <label asp-for="@Model.Description" class="control-label"></label>
+                    <input asp-for="@Model.Description" class="form-control" />
+                    <span asp-validation-for="@Model.Description" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="@Model.Duration"></label>

@@ -8,7 +8,7 @@ namespace MyMedia.Models.Movie
     {
         public int Id { get; set; }
         public string? Titel { get; set; }
-        public IFormFile? Foto { get; set; }
+        public IFormFile? Photo { get; set; }
         public DateTime? ReleaseDate { get; set; }
         public StatusMovie Status { get; set; }
         public TimeSpan? Duration { get; set; }

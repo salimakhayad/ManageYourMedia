@@ -9,9 +9,9 @@ namespace MyMedia.Models.Podcast
         [Required]
         public string? Titel { get; set; }
         [Required]
-        public string? Naam { get; set; }
+        public string? Name { get; set; }
         [Required]
-        public IFormFile? Foto { get; set; }
+        public IFormFile? Photo { get; set; }
         [Required]
         public string? PodcastLink { get; set; }
     }

@@ -16,17 +16,17 @@ namespace MyMedia.Controllers
     public class PodcastsController : Controller
     {
         private readonly IMyMediaService _mediaService;
-        private readonly IUserStore<Profiel> _userStore;
-        private readonly IUserClaimsPrincipalFactory<Profiel> _claimsPrincipalFactory;
-        private readonly SignInManager<Profiel> _signInManager;
-        private readonly UserManager<Profiel> _userManager;
-        private Profiel? _currentProfiel;
+        private readonly IUserStore<MediaUser> _userStore;
+        private readonly IUserClaimsPrincipalFactory<MediaUser> _claimsPrincipalFactory;
+        private readonly SignInManager<MediaUser> _signInManager;
+        private readonly UserManager<MediaUser> _userManager;
+        private MediaUser? _currentMediaUser;
 
         public PodcastsController(IMyMediaService mediaService,
-            SignInManager<Profiel> signInManager,
-            IUserClaimsPrincipalFactory<Profiel> claimsPrincipalFactory,
-            IUserStore<Profiel> userStore,
-            UserManager<Profiel> userManager
+            SignInManager<MediaUser> signInManager,
+            IUserClaimsPrincipalFactory<MediaUser> claimsPrincipalFactory,
+            IUserStore<MediaUser> userStore,
+            UserManager<MediaUser> userManager
             )
         {
             this._userManager = userManager;
@@ -44,8 +44,8 @@ namespace MyMedia.Controllers
                new PodcastListViewModel
                {
                    Id = pl.Id,
-                   Naam = pl.Naam,
-                   Foto = pl.Foto
+                   Name = pl.Name,
+                   Photo = pl.Photo
                }).ToList();
 
             return View(podcastList);
@@ -57,7 +57,7 @@ namespace MyMedia.Controllers
            //var currentUserId = this._signinManager.UserManager.GetUserId(HttpContext.User);
            //if (isSignedIn)
            //{
-           //    _currentProfiel = _mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
+           //    _currentMediaUser = _mediaService.GetAllMediaUseren().First(p => p.Id == currentUserId);
            //}
             Podcast selectedPodcast = _mediaService.GetAllPodcasts().FirstOrDefault(x => x.Id == id);
 
@@ -67,8 +67,8 @@ namespace MyMedia.Controllers
             PodcastDetailViewModel vm = new PodcastDetailViewModel()
             {
                 MediaId = id,
-                Naam = podcast.Naam,
-                Foto = podcast.Foto,
+                Name = podcast.Name,
+                Photo = podcast.Photo,
                 PodcastLink = podcast.ConversationMP3,
                 IsRated = UserRatingList.Count()>0? true :false,
                 IsSignedIn = false//currentUserId == null ? false : true,
@@ -76,9 +76,9 @@ namespace MyMedia.Controllers
             };
             vm.AveragePoints = selectedPodcast.Ratings.Count() > 0 ? selectedPodcast.Ratings.Average(r => r.Points) : 0;
             vm.PlayLists = new List<PlayList>();
-            if (_currentProfiel != null)
+            if (_currentMediaUser != null)
             {
-                vm.PlayLists = _currentProfiel.Playlists.ToList();
+                vm.PlayLists = _currentMediaUser.Playlists.ToList();
             }
             return View(vm);
         }
@@ -97,21 +97,25 @@ namespace MyMedia.Controllers
                 return View(model);
             }
 
+            var currentUserId = this._signInManager.UserManager.GetUserId(HttpContext.User);
+
             Podcast newPodcast = new Podcast()
             {
-                Naam = model.Naam,
+                Name = model.Name,
                 ConversationMP3 = model.PodcastLink,
-                Titel = model.Titel
+                Titel = model.Titel,
+                MediaUser = _currentMediaUser,
+                MediaUserId = currentUserId
             };
             _mediaService.InsertPodcast(newPodcast);
             _mediaService.SaveChanges();
             Podcast podcastFromDb = _mediaService.GetAllPodcasts().FirstOrDefault(z => z.Id == newPodcast.Id);
 
-            if (model.Foto != null)
+            if (model.Photo != null)
             {
                 using var memoryStream = new MemoryStream();
-                model.Foto.CopyTo(memoryStream);
-                podcastFromDb.Foto = memoryStream.ToArray();
+                model.Photo.CopyTo(memoryStream);
+                podcastFromDb.Photo = memoryStream.ToArray();
             }
 
             _mediaService.SaveChanges();
@@ -125,7 +129,7 @@ namespace MyMedia.Controllers
             PodcastEditViewModel podcastEditModel = new PodcastEditViewModel()
             {
                 Id = selectedPodcast.Id,
-                Naam = selectedPodcast.Naam,
+                Name = selectedPodcast.Name,
                 PodcastLink = selectedPodcast.ConversationMP3
             };
             return View(podcastEditModel);
@@ -136,8 +140,8 @@ namespace MyMedia.Controllers
         {
             var selectedPodcast = _mediaService.GetAllPodcasts().First(x => x.Id == model.Id);
             selectedPodcast.ConversationMP3 = model.PodcastLink;
-            selectedPodcast.Naam = model.Naam;
-            selectedPodcast.Titel = model.Naam;
+            selectedPodcast.Name = model.Name;
+            selectedPodcast.Titel = model.Name;
             _mediaService.SaveChanges();
             return RedirectToAction("Details", new {selectedPodcast.Id });
         }
@@ -157,14 +161,14 @@ namespace MyMedia.Controllers
             var currentUserId = this._signInManager.UserManager.GetUserId(HttpContext.User);
 
 
-            _currentProfiel = _mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
+            _currentMediaUser = _mediaService.GetAllMediaUsers().First(p => p.Id == currentUserId);
 
             var newRating = new Rating()
             {
                 Media = podcast,
                 CreationDate = DateTime.Now,
                 Points = model.Points,
-                Profiel = _currentProfiel
+                MediaUser = _currentMediaUser
             };
 
             _mediaService.InsertRating(newRating);

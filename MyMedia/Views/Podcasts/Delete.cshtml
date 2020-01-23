@@ -1,13 +1,13 @@
 ﻿@model MyMedia.Models.Podcast.PodcastDeleteViewModel
 @using Microsoft.AspNetCore.Identity;
 @using MyMedia.Core.User;
-@inject SignInManager<Profiel> SignInManager
-@inject UserManager<Profiel> UserManager
+@inject SignInManager<MediaUser> SignInManager
+@inject UserManager<MediaUser> UserManager
 
 
 <div class="container">
 
-    <h2>Podcast <i class="fas fa-angle-double-right"></i>Delete</h2><i class="fas fa-angle-double-right"></i>@Model.Naam
+    <h2>Podcast <i class="fas fa-angle-double-right"></i>Delete</h2><i class="fas fa-angle-double-right"></i>@Model.Name
     <hr />
     <div class="row col-4">
         <hr />
@@ -16,11 +16,11 @@
 
             </dt>
             <dd>
-                @Html.DisplayFor(model => model.Naam)
+                @Html.DisplayFor(model => model.Name)
             </dd>
         </dl>
 
-        <form enctype="multipart/form-data" asp-controller="Music" asp-action="Delete" method="post">
+        <form enctype="multipart/form-data" asp-controller="Podcasts" asp-action="Delete" method="post">
             <input type="hidden" asp-for="@Model.Id" />
             <input type="submit" value="Delete" class="btn btn-default" /> |
             <a asp-page="./Index">Back to List</a>

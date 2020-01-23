@@ -39,11 +39,11 @@ namespace MyMedia
                 options.UseLazyLoadingProxies().UseSqlServer(Configuration.GetConnectionString("MediaDb")
                 ));
 
-            services.AddIdentity<Profiel, IdentityRole>(options => { })
+            services.AddIdentity<MediaUser, IdentityRole>(options => { })
                 .AddEntityFrameworkStores<MediaDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddScoped<IUserClaimsPrincipalFactory<Profiel>, ProfielUserClaimsPrincipalFactory>();
+            services.AddScoped<IUserClaimsPrincipalFactory<MediaUser>, MediaUserClaimsPrincipalFactory>();
 
             services.AddAuthentication(options=>
             {
@@ -56,8 +56,8 @@ namespace MyMedia
 
             services.ConfigureApplicationCookie(options => options.LoginPath = "/Home/Login");
 
-            services.AddTransient<SignInManager<Profiel>>();
-            services.AddTransient<UserManager<Profiel>>();
+            services.AddTransient<SignInManager<MediaUser>>();
+            services.AddTransient<UserManager<MediaUser>>();
            
             services.AddTransient<IMyMediaService,MyMediaService>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

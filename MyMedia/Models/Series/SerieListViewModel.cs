@@ -10,9 +10,9 @@ namespace MyMedia.Models.Series
 
         }
         public int? Id;
-        public string? Naam;
-        public byte[]? Foto;
-        public List<Seizoen>? Seizoenen;
+        public string? Name;
+        public byte[]? Photo;
+        public List<Season>? Seasons;
         public int AantalLedenReedsGezien;
         public int AantalLedenWillenZien;
     }

@@ -2,12 +2,12 @@
 
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => Model.Naam)
+            @Html.DisplayFor(modelItem => Model.Name)
         </td>
         <td>
-            @if (@Model.Foto != null)
+            @if (@Model.Photo != null)
             {
-                <img style="width: 300px; height: 120px;" src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(Model.Foto))" alt="Movie Img" class="img-thumbnail" target="_blank" />
+                <img style="width: 300px; height: 120px;" src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(Model.Photo))" alt="Movie Img" class="img-thumbnail" target="_blank" />
             }
             <div class="hit-the-floor">
                 <h4><a href="@Model.PodcastLink" >Beluister Podcast</a></h4>

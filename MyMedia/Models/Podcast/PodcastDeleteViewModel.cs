@@ -3,6 +3,6 @@
     public class PodcastDeleteViewModel 
     {
         public int Id { get; set; }
-        public string? Naam { get; set; }
+        public string? Name { get; set; }
     }
 }

@@ -1,0 +1,17 @@
+﻿@model MyMedia.Core.MediaClasses.Serie
+
+    <a class="mt-2" asp-action="Details" asp-controller="Series" asp-route-id="@Model.Id">
+        <li class="list-group-item list-group-item-dark d-flex justify-content-between align-items-center">
+            @Model.Name aantal Seasons
+            <span class="badge badge-dark badge">
+                @{var aantalSeasons = 0;}
+                @{if (Model.Seasons.Count() > 0)
+                    { aantalSeasons = Model.Seasons.Count(); }
+                    else
+                    {
+                        aantalSeasons = 0;
+                    }}
+                @aantalSeasons
+            </span>
+        </li>
+    </a>

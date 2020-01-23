@@ -13,7 +13,7 @@ namespace MyMedia.Models.Movie
         }
         public int Id { get; set; }
         public string? Titel { get; set; }
-        public byte[]? Foto { get; set; }
+        public byte[]? Photo { get; set; }
         public TimeSpan? Duration { get; set; }
         public int? Rating { get; set; }
         public string? IMDBLink { get; set; }

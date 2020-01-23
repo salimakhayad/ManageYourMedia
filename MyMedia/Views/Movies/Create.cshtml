@@ -1,0 +1,67 @@
+﻿@model MyMedia.Models.Movie.MovieCreateViewModel
+@using MyMedia.Core.MediaClasses;
+@using MyMedia.Core.Enums;
+@using MyMedia.Core.User;
+@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<MediaUser> SignInManager
+@inject UserManager<MediaUser> UserManager
+
+<div class="container">
+    <h2>Movies <i class="fas fa-angle-double-right"></i>Create</h2>
+    <hr />
+    <form enctype="multipart/form-data" asp-controller="Movies" asp-action="Create" method="post">
+        <div class="row col-4">
+            <div class="form-group">
+                <label asp-for="Titel">Titel</label>
+                <input class="form-control" asp-for="Titel" />
+                <span class="text-danger" asp-validation-for="Titel"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Duration"></label>
+                <input asp-for="Duration" type="time"
+                       min="00:50" max="3:00" value="Duration">
+                <span class="text-danger" asp-validation-for="Duration"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IMDBLink"></label>
+                <input class="form-control" asp-for="IMDBLink" />
+                <span class="text-danger" asp-validation-for="IMDBLink"></span>
+            </div>
+            <div class="form-group">
+                <div class="form-group">
+                    <label asp-for="Photo"></label>
+                    <input class="form-control" asp-for="Photo" />
+                    <span accept=".jpg,.jpeg,.png" class="text-danger" asp-validation-for="Photo"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-group">
+                    <input asp-for="ReleaseDate" type="date" asp-format="{0:yyyy-MM-dd}" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="form-group">
+                    <table>
+
+                        @foreach (var mogelijkeStatus in Enum.GetNames(typeof(StatusMovie)))
+                        {
+                            <tr>
+                                <td>
+                                    @Html.RadioButtonFor(r => r.Status, mogelijkeStatus.ToString())
+                                    @Html.Label(mogelijkeStatus.ToString())
+                                </td>
+                            </tr>
+                        }
+
+                    </table>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-primary" type="submit">Create Movie</button>
+    </form>
+</div>
+
+
+
+

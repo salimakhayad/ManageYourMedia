@@ -7,8 +7,8 @@ namespace MyMedia.Models.Series
     {
         [StringLength(60, MinimumLength = 3)]
         [Required]
-        public string? Naam { get; set; }
+        public string? Name { get; set; }
         [Required]
-        public IFormFile? Foto { get; set; }
+        public IFormFile? Photo { get; set; }
     }
 }

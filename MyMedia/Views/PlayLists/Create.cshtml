@@ -1,0 +1,18 @@
+﻿@model MyMedia.Models.Playlist.PlayListCreateViewModel
+@using MyMedia.Core.Enums
+@Html.HiddenFor(user => user.UserName)
+<div class="container">
+
+    <h2>@User.Claims.AsQueryable().ElementAt(1).Value's Playlist's <i class="fas fa-angle-double-right"></i> Create</h2>
+    <div class="row col-9">
+        <form enctype="multipart/form-data" asp-controller="PlayLists" asp-action="Create" method="post">
+            <div class="form-group">
+                <label asp-for="Name">Name</label>
+                @Html.TextBoxFor(x => x.Name)
+
+            </div>
+
+            <button class="btn btn-primary" type="submit">Create Playlist</button>
+        </form>
+    </div>
+</div>

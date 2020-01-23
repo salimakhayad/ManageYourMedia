@@ -8,9 +8,9 @@ namespace MyMedia.Models.Music
     {
         public int MediaId { get; set; }
         public string? Titel { get; set; }
-        [DisplayName("Foto")]
-        public byte[]? Foto { get; set; }
-        public string? ZangersNaam { get; set; }
+        [DisplayName("Photo")]
+        public byte[]? Photo { get; set; }
+        public string? ZangersName { get; set; }
         public List<PlayList>? PlayLists { get; set; }
         public int PlayListId { get; set; }
         public string? Lied { get; set; }

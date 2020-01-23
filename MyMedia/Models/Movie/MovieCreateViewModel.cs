@@ -12,9 +12,9 @@ namespace MyMedia.Models.Movie
         [Required]
         [DisplayName("Titel")]
         public string? Titel { get; set; }
-        [DisplayName("Foto")]
+        [DisplayName("Photo")]
         [Required]
-        public IFormFile? Foto { get; set; }
+        public IFormFile? Photo { get; set; }
         [DisplayName("Duration")]
         [Required]
         public TimeSpan Duration { get; set; }

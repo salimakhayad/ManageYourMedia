@@ -18,17 +18,17 @@ namespace MyMedia.Controllers
     public class EpisodesController : Controller
     {
         private readonly IMyMediaService _mediaService;
-        private readonly IUserStore<Profiel> _userStore;
-        private readonly IUserClaimsPrincipalFactory<Profiel> _claimsPrincipalFactory;
-        private readonly SignInManager<Profiel> _signInManager;
-        private readonly UserManager<Profiel> _userManager;
-        private Profiel? _currentProfiel;
+        private readonly IUserStore<MediaUser> _userStore;
+        private readonly IUserClaimsPrincipalFactory<MediaUser> _claimsPrincipalFactory;
+        private readonly SignInManager<MediaUser> _signInManager;
+        private readonly UserManager<MediaUser> _userManager;
+        private MediaUser? _currentMediaUser;
 
         public EpisodesController(IMyMediaService mediaService,
-            SignInManager<Profiel> signInManager,
-            IUserClaimsPrincipalFactory<Profiel> claimsPrincipalFactory,
-            IUserStore<Profiel> userStore,
-            UserManager<Profiel> userManager
+            SignInManager<MediaUser> signInManager,
+            IUserClaimsPrincipalFactory<MediaUser> claimsPrincipalFactory,
+            IUserStore<MediaUser> userStore,
+            UserManager<MediaUser> userManager
             )
         {
             this._userManager = userManager;
@@ -42,13 +42,13 @@ namespace MyMedia.Controllers
             var selectedSerie = _mediaService.GetAllSeries().First(serie => serie.Id == serieId);
 
 
-            selectedSerie.Seizoenen = _mediaService.GetAllSeasons().Where(z => z.Serie.Id == serieId).ToList();
-            var seizoenen = selectedSerie.Seizoenen == null ? new List<Seizoen>() : selectedSerie.Seizoenen.ToList();
+            selectedSerie.Seasons = _mediaService.GetAllSeasons().Where(z => z.Serie.Id == serieId).ToList();
+            var Seasonen = selectedSerie.Seasons == null ? new List<Season>() : selectedSerie.Seasons.ToList();
 
             EpisodeCreateViewModel Epimodel = new EpisodeCreateViewModel()
             {
-                SerieNaam = selectedSerie.Naam,
-                MogelijkeSeizoenen = seizoenen,
+                SerieName = selectedSerie.Name,
+                PossibleSeasons = Seasonen,
                 ReleaseDate = DateTime.Now
             };
             return View(Epimodel);
@@ -61,7 +61,7 @@ namespace MyMedia.Controllers
             EpisodeCreateViewModel Epimodel = new EpisodeCreateViewModel()
             {
                 SerieId = serie.Id,
-                SerieNaam = serie.Naam
+                SerieName = serie.Name
             };
 
             return View(Epimodel);
@@ -73,28 +73,30 @@ namespace MyMedia.Controllers
             var currentUserId = this._signInManager.UserManager.GetUserId(HttpContext.User);
             if (isSignedIn)
             {
-                _currentProfiel =_mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
+                _currentMediaUser =_mediaService.GetAllMediaUsers().First(p => p.Id == currentUserId);
             }
             var episode = _mediaService.GetAllEpisodes().FirstOrDefault(epi => epi.Id == id);
             var isRated = false;
             var playLists = new List<PlayList>();
             var AveragePoints = 0.0;
-            if (_currentProfiel != null)
+            if (_currentMediaUser != null)
             {
-                isRated = _mediaService.GetAllRatings().Where(epi => epi.Media.Id == epi.Id && epi.Profiel.Id == _currentProfiel.Id).Any();
-                playLists = _currentProfiel.Playlists.ToList();
+                isRated = _mediaService.GetAllRatings().Where(epi => epi.Media.Id == epi.Id && epi.MediaUser.Id == _currentMediaUser.Id).Any();
+                playLists = _currentMediaUser.Playlists.ToList();
             
 
             }
+            var points = _mediaService.GetAllRatings().Where(epi => epi.Media.Id == epi.Id).Average(epi => epi.Points); 
+
             AveragePoints = _mediaService.GetAllRatings().Where(epi => epi.Media.Id == epi.Id).Average(epi => epi.Points);
 
             EpisodeDetailViewModel model = new EpisodeDetailViewModel()
             {
                 MediaId = episode.Id,
-                SeizoenNr = episode.Seizoen.SeizoenNr,
-                Beschrijving = episode.Beschrijving,
+                SeasonNr = episode.Season.SeasonNr,
+                Description = episode.Description,
                 Duration = episode.Duration,
-                Foto = episode.Foto,
+                Photo = episode.Photo,
                 ReleaseDate = episode.ReleaseDate,
                 IMDBLink = episode.IMDBLink,
                 Titel = episode.Titel,
@@ -110,36 +112,40 @@ namespace MyMedia.Controllers
         public IActionResult Create(int id)
         {
             var foundSerie = _mediaService.GetAllSeries().First(s => s.Id == id);
-            var seizoenen = _mediaService.GetAllSeasons().Where(sz => sz.Serie.Id == id);
-            if (!IsAanwezig(seizoenen))
+            var Seasonen = _mediaService.GetAllSeasons().Where(sz => sz.Serie.Id == id);
+            if (!IsAanwezig(Seasonen))
             {
-                CreateNewSeizoenVoorSerie(foundSerie);
+                CreateNewSeasonVoorSerie(foundSerie);
             }
+            var currentUserId = this._signInManager.UserManager.GetUserId(HttpContext.User);
+
             EpisodeCreateViewModel vm = new EpisodeCreateViewModel()
             {
                 SerieId = foundSerie.Id,
-                SerieNaam = foundSerie.Naam,
-                MogelijkeSeizoenen = GetSeizoenenVoorSerie(foundSerie),
-                ReleaseDate = DateTime.Now
+                SerieName = foundSerie.Name,
+                PossibleSeasons = GetSeasonenInSerie(foundSerie),
+                ReleaseDate = DateTime.Now,
+                MediaUser = _currentMediaUser,
+                MediaUserId = currentUserId
             };
 
             return View(vm);
         }
-        private static bool IsAanwezig(IEnumerable<Seizoen> seizoenen)
+        private static bool IsAanwezig(IEnumerable<Season> Seasonen)
         {
-            return seizoenen.Any();
+            return Seasonen.Any();
         }
-        private void CreateNewSeizoenVoorSerie(Serie foundSerie)
+        private void CreateNewSeasonVoorSerie(Serie foundSerie)
         {
-            var newSeizoen = new Seizoen
+            var newSeason = new Season
             {
-                SeizoenNr = 1,
+                SeasonNr = 1,
                 Serie = foundSerie
             };
-            _mediaService.InsertSeizoen(newSeizoen);
+            _mediaService.InsertSeason(newSeason);
             _mediaService.SaveChanges();
         }
-        private List<Seizoen> GetSeizoenenVoorSerie(Serie foundSerie)
+        private List<Season> GetSeasonenInSerie(Serie foundSerie)
         {
             return _mediaService.GetAllSeasons().Where(sz => sz.Serie.Id == foundSerie.Id).ToList();
         }
@@ -150,41 +156,41 @@ namespace MyMedia.Controllers
         {
             var serieId = model.SerieId;
 
-            if (model.SeizoenId == 0)
+            if (model.SeasonId == 0)
             {
-                Seizoen newSeason = new Seizoen()
+                Season newSeason = new Season()
                 {
                     Serie = _mediaService.GetAllSeries().FirstOrDefault(ser => ser.Id == serieId),
-                    SeizoenNr = _mediaService.GetAllSeasons().Where(seizoen => seizoen.Serie.Id == serieId).Count() + 1,
+                    SeasonNr = _mediaService.GetAllSeasons().Where(Season => Season.Serie.Id == serieId).Count() + 1,
                     Episodes = new List<Episode>()
-            };
-                _mediaService.InsertSeizoen(newSeason);
+                };
+                _mediaService.InsertSeason(newSeason);
                 _mediaService.SaveChanges();
                 var season = _mediaService.GetAllSeasons().First(sei => sei.Id == newSeason.Id);
                 _mediaService.SaveChanges();
 
                 season.Episodes.Add(new Episode()
                 {
-                    Beschrijving = model.Beschrijving,
+                    Description = model.Description,
                     Duration = model.Duration,
                     ReleaseDate = model.ReleaseDate,
                     Titel = model.Titel,
                     IMDBLink = model.IMDBLink,
-                    Seizoen = newSeason
+                    Season = newSeason
                 });
                 _mediaService.SaveChanges();
             }
             else
             {
-               var seizoen = _mediaService.GetAllSeasons().First(seizoen => seizoen.Serie.Id == serieId && seizoen.SeizoenNr == model.SeizoenId);
-                seizoen.Episodes.Add(new Episode()
+               var Season = _mediaService.GetAllSeasons().First(Season => Season.Serie.Id == serieId && Season.SeasonNr == model.SeasonId);
+                Season.Episodes.Add(new Episode()
                 {
-                    Beschrijving = model.Beschrijving,
+                    Description = model.Description,
                     Duration = model.Duration,
                     ReleaseDate = model.ReleaseDate,
                     Titel = model.Titel,
                     IMDBLink = model.IMDBLink,
-                    Seizoen = seizoen
+                    Season = Season
                 });
                 _mediaService.SaveChanges();
             }
@@ -201,7 +207,7 @@ namespace MyMedia.Controllers
             var currentUserId = this._signInManager.UserManager.GetUserId(HttpContext.User);
             if (isSignedIn)
             {
-                _currentProfiel = _mediaService.GetAllProfielen().First(p => p.Id == currentUserId);
+                _currentMediaUser = _mediaService.GetAllMediaUsers().First(p => p.Id == currentUserId);
             }
 
             var newRating = new Rating()
@@ -209,7 +215,7 @@ namespace MyMedia.Controllers
                 Media = episode,
                 CreationDate = DateTime.Now,
                 Points = model.Points,
-                Profiel = _currentProfiel
+                MediaUser = _currentMediaUser
 
             };
 

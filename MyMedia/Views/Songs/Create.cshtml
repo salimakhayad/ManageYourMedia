@@ -1,0 +1,53 @@
+﻿@model MyMedia.Models.Music.MusicCreateViewModel
+@using Microsoft.AspNetCore.Identity
+@using MyMedia.Core.User;
+@inject SignInManager<MediaUser> SignInManager
+@inject UserManager<MediaUser> UserManager
+
+<div class="container">
+
+    <h2>Songs <i class="fas fa-angle-double-right"></i>Create</h2>
+    <hr />
+    <div class="row col-9">
+        <form enctype="multipart/form-data" asp-controller="Songs" asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="@Model.ZangersName" class="control-label"></label>
+                <input asp-for="@Model.ZangersName" class="form-control" />
+                <span asp-validation-for="@Model.ZangersName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <div class="form-group">
+                    <label asp-for="@Model.Photo"></label>
+                    <input class="form-control" asp-for="@Model.Photo" />
+                    <span accept=".jpg,.jpeg,.png" class="text-danger" asp-validation-for="@Model.Photo"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Titel" class="control-label"></label>
+                <input asp-for="@Model.Titel" class="form-control" />
+                <span asp-validation-for="@Model.Titel" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="@Model.Lied" class="control-label"></label>
+                <input asp-for="@Model.Lied" class="form-control" />
+                <span asp-validation-for="@Model.Lied" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+
+                <button class="btn btn-primary" type="submit">Create Music</button>
+
+            </div>
+
+        </form>
+    </div>
+</div>
+<!--<div>
+    <a asp-page="/Index">Back to List</a>
+</div>-->
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

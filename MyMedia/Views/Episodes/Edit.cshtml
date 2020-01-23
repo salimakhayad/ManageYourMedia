@@ -1,9 +1,9 @@
 ﻿@model MyMedia.Models.Series.Episodes.EpisodeCreateViewModel
-    <form enctype="multipart/form-data" asp-controller="Serie" asp-action="Edit" method="post">
+    <form enctype="multipart/form-data" asp-controller="Series" asp-action="Edit" method="post">
         <div class="form-group">
-            <label asp-for="@Model.SerieNaam"></label>
-            <input class="form-control" asp-for="@Model.SerieNaam" />
-            <span class="text-danger" asp-validation-for="@Model.SerieNaam"></span>
+            <label asp-for="@Model.SerieName"></label>
+            <input class="form-control" asp-for="@Model.SerieName" />
+            <span class="text-danger" asp-validation-for="@Model.SerieName"></span>
         </div>
         <div class="form-group">
             <label asp-for="@Model.Titel"></label>
@@ -11,14 +11,14 @@
             <span class="text-danger" asp-validation-for="@Model.Titel"></span>
         </div>
         <div class="form-group">
-            <label asp-for="@Model.Foto"></label>
-            <input class="form-control" asp-for="@Model.Foto" />
-            <span class="text-danger" asp-validation-for="@Model.Foto"></span>
+            <label asp-for="@Model.Photo"></label>
+            <input class="form-control" asp-for="@Model.Photo" />
+            <span class="text-danger" asp-validation-for="@Model.Photo"></span>
         </div>
         <div class="form-group">
-            <label asp-for="@Model.Beschrijving"> </label>
-            <input class="form-control" asp-for="@Model.Beschrijving" />
-            <span class="text-danger" asp-validation-for="@Model.Beschrijving"></span>
+            <label asp-for="@Model.Description"> </label>
+            <input class="form-control" asp-for="@Model.Description" />
+            <span class="text-danger" asp-validation-for="@Model.Description"></span>
 
         </div>
 

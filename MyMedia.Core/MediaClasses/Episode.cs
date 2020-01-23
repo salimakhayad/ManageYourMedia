@@ -11,10 +11,10 @@ namespace MyMedia.Core.MediaClasses
     {
         public TimeSpan Duration { get; set; }
         public string IMDBLink { get; set; }
-        public string Beschrijving { get; set; }
+        public string Description { get; set; }
         public DateTime ReleaseDate { get; set; }
         
-        public virtual Seizoen Seizoen { get; set; }
+        public virtual Season Season { get; set; }
 
     }
 }

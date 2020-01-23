@@ -7,7 +7,7 @@ namespace MyMedia.Core.MediaClasses
 {
     public class Podcast:Media
     {
-        public string Naam { get; set; }
+        public string Name { get; set; }
         public string ConversationMP3 { get; set; }
         
     }

@@ -1,0 +1,13 @@
+﻿@model MyMedia.Core.MediaClasses.Movie
+<a class="mt-2" asp-action="Details" asp-controller="Movies" asp-route-id="@Model.Id">
+    <li class="list-group-item list-group-item-dark d-flex justify-content-between align-items-center">
+        @{var avgScore = "0";}
+        @Model.Titel
+        <span class="badge badge-dark badge">
+            @{if (Model.Ratings!=null&&Model.Ratings.Count()>0)
+                { avgScore = Model.Ratings.Average(p => p.Points).ToString("#.##"); }
+            }
+            @avgScore/10
+        </span>
+    </li>
+</a>

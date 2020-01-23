@@ -1,0 +1,43 @@
+﻿@model MyMedia.Models.Series.SerieDetailViewModel
+<div class="container-fluid">
+    <h2>Serie <i class="fas fa-angle-double-right"></i>  Details <i class="fas fa-angle-double-right"></i>  @Model.Name</h2>
+
+
+    @if (@Model.Photo != null)
+    {
+        <div class="card-img-top">
+            <img id="image" width="350" height="250" src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(@Model.Photo))" alt="Serie Img" class="img-thumbnail" target="_blank" />
+        </div>
+    }
+
+    <div class="row justify-content-end">
+        <a class="btn btn-warning mr-3" asp-route-id="@Model.Id" asp-controller="Episodes" asp-action="Create">Add Episode</a>
+    </div>
+
+    <div class="list-group mt-2">
+        @foreach (var Season in @Model.Seasons.OrderBy(x => x.SeasonNr))
+        {
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">Season @Season.SeasonNr</h5>
+
+            </div>
+            <span class="list-group-item list-group-item-action list-group-item-dark flex-column align-items-start active">
+            </span>
+                <p class="mb-1">
+                        @foreach (var episode in @Season.Episodes)
+                        {
+                            <div class="row justify-content-between">
+                                <a asp-controller="Episodes" asp-action="Details" asp-route-id="@episode.Id" class="col-11">@episode.Titel</a>
+                                <a class="btn btn-warning col-1" asp-route-id="@episode.Id" asp-controller="Episodes" asp-action="Details">Details <i class="fas fa-caret-right"></i></a>
+                            </div>
+                        }
+                </p>
+            
+        }
+    </div>
+</div>
+
+
+
+
+

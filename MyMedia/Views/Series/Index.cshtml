@@ -1,0 +1,47 @@
+﻿@model List<MyMedia.Models.Series.SerieListViewModel>
+@using Microsoft.AspNetCore.Identity
+@using MyMedia.Core.User;
+@inject SignInManager<MediaUser> SignInManager
+@inject UserManager<MediaUser> UserManager
+    <div class="container">
+        <h2>Serie <i class="fas fa-angle-double-right"></i>Index</h2>
+        <hr />
+
+        @if (Model != null && Model.Any())
+        {
+            foreach (var serie in Model)
+            {
+                <div class="col-6 mt-1">
+                    <div class="card">
+                        <div class="card-body">
+                            @if (serie.Photo != null)
+                            {
+                                <img src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(serie.Photo))" alt="Serie Img" class="img-thumbnail" target="_blank" />
+                            }
+                            <div class="hit-the-floor">
+                                <h4>@serie.Name</h4>
+                            </div>
+                            <a asp-action="Edit" asp-controller="Series" asp-route-id="@serie.Id"> Edit</a>
+                            <a asp-action="Delete" asp-controller="Series" asp-route-id="@serie.Id"> Delete</a>
+                            <a asp-action="Details" asp-controller="Series" asp-route-id="@serie.Id"> Details</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="alert alert-info" role="alert">
+                Currently no Series for display.
+            </div>
+
+        }
+        <div class="row justify-content-end">
+            <a asp-action="Create" class="btn btn-primary" asp-controller="Series">Add Serie</a>
+        </div>
+
+
+    </div>
+
+
+

@@ -6,9 +6,9 @@ namespace MyMedia.Models.Series
     public class SerieDetailViewModel : AuthenticatedViewModel
     {
         public int Id { get; set; }
-        public string? Naam { get; set; }
-        public byte[]? Foto { get; set; }
-        public virtual List<Seizoen>? Seizoenen { get; set; }
+        public string? Name { get; set; }
+        public byte[]? Photo { get; set; }
+        public virtual List<Season>? Seasons { get; set; }
 
     }
 }

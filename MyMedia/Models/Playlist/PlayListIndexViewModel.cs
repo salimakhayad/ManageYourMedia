@@ -3,7 +3,7 @@
     public class PlayListIndexViewModel : AuthenticatedViewModel
     {
         public int Id { get; set; }
-        public string? Naam { get; set; }
-        public string? UserNaam { get; set; }
+        public string? Name { get; set; }
+        public string? UserName { get; set; }
     }
 }

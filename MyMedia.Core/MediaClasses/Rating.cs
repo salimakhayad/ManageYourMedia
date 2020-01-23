@@ -11,9 +11,10 @@ namespace MyMedia.Core.MediaClasses
         public virtual Media Media { get; set; }
       
         public int Points { get; set; }
-     
+        public string Review { get; set; }
+
         public DateTime CreationDate { get; set; }
      
-        public virtual Profiel Profiel { get; set; }
+        public virtual MediaUser MediaUser { get; set; }
     }
 }

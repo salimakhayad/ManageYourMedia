@@ -2,22 +2,22 @@
 <div class="container-fluid">
     <div class="ml-3  mr-3 row justify-content-between">
         <div class="col-6">
-            <a asp-action="Index" asp-controller="Movie" class="text-dark"><h1> <i class="fas fa-film"> Top 10 Movies </i></h1></a>
+            <a asp-action="Index" asp-controller="Movies" class="text-dark"><h1> <i class="fas fa-film"> Top 10 Movies </i></h1></a>
             <ul class="list-group  movies">
-                
+
                 @foreach (var movie in @Model.Movies)
                 {
-                    <partial name="../Movie/_HomeView.cshtml" model="movie" />
+                    <partial name="../Movies/_HomeView.cshtml" model="movie" />
                 }
 
             </ul>
         </div>
         <div class="col-6">
-            <a asp-action="Index" asp-controller="Music" class="text-dark"><h1> <i class="fas fa-music"> Top 10 Music</i>  </h1></a>
+            <a asp-action="Index" asp-controller="Songs" class="text-dark"><h1> <i class="fas fa-music"> Top 10 Music</i>  </h1></a>
             <ul class="list-group music">
                 @foreach (var music in @Model.Musics)
                 {
-                    <partial name="../Music/_HomeView.cshtml" model="music" />
+                    <partial name="../Songs/_HomeView.cshtml" model="music" />
                 }
             </ul>
         </div>
@@ -25,11 +25,11 @@
 
     <div class="ml-3 mr-3 mt-5 row justify-content-between">
         <div class="col-6 mb-1">
-            <a asp-action="Index" asp-controller="Serie" class="text-dark"><h1><i class="fas fa-video"> Top 10 Series</i>  </h1></a>
+            <a asp-action="Index" asp-controller="Series" class="text-dark"><h1><i class="fas fa-video"> Top 10 Series</i>  </h1></a>
             <ul class="list-group series">
                 @foreach (var serie in @Model.Series)
                 {
-                    <partial name="../Serie/_HomeView.cshtml" model="serie" />
+                    <partial name="../Series/_HomeView.cshtml" model="serie" />
                 }
             </ul>
         </div>
@@ -38,7 +38,7 @@
             <ul class="list-group podcasts">
                 @foreach (var podcast in @Model.Podcasts)
                 {
-                    <partial name="../Podcast/_HomeView.cshtml" model="podcast" />
+                    <partial name="../Podcasts/_HomeView.cshtml" model="podcast" />
                 }
             </ul>
         </div>

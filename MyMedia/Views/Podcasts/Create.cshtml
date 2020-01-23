@@ -1,8 +1,8 @@
 ﻿@model MyMedia.Models.Podcast.PodcastCreateViewModel
 @using Microsoft.AspNetCore.Identity;
 @using MyMedia.Core.User;
-@inject SignInManager<Profiel> SignInManager
-@inject UserManager<Profiel> UserManager
+@inject SignInManager<MediaUser> SignInManager
+@inject UserManager<MediaUser> UserManager
 <div class="container">
     <h2>Podcast <i class="fas fa-angle-double-right"></i>Create</h2>
     <hr />
@@ -16,14 +16,14 @@
                     <span asp-validation-for="@Model.Titel" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="@Model.Naam" class="control-label"></label>
-                    <input asp-for="@Model.Naam" class="form-control" />
-                    <span asp-validation-for="@Model.Naam" class="text-danger"></span>
+                    <label asp-for="@Model.Name" class="control-label"></label>
+                    <input asp-for="@Model.Name" class="form-control" />
+                    <span asp-validation-for="@Model.Name" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="@Model.Foto" class="control-label"></label>
-                    <input asp-for="@Model.Foto" class="form-control" />
-                    <span asp-validation-for="@Model.Foto" class="text-danger"></span>
+                    <label asp-for="@Model.Photo" class="control-label"></label>
+                    <input asp-for="@Model.Photo" class="form-control" />
+                    <span asp-validation-for="@Model.Photo" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="@Model.PodcastLink" class="control-label"></label>

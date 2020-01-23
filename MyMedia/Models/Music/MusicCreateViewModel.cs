@@ -9,12 +9,12 @@ namespace MyMedia.Models.Music
         [Required]
         [DisplayName("Titel")]
         public string? Titel { get; set; }
-        [DisplayName("Foto")]
+        [DisplayName("Photo")]
         [Required]
-        public IFormFile? Foto { get; set; }
+        public IFormFile? Photo { get; set; }
         [Required]
-        [DisplayName("ZangersNaam")]
-        public string? ZangersNaam { get; set; }
+        [DisplayName("ZangersName")]
+        public string? ZangersName { get; set; }
         [Required]
         [DisplayName("Lied")]
         public string? Lied { get; set; }

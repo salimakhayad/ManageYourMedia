@@ -12,11 +12,11 @@ namespace MyMedia.Data
         void DeleteMediaById(int id);
         void InsertMedia(Media media);
         void SaveChanges();
-        IEnumerable<Profiel> GetAllProfielen();
-        void InsertProfiel(Profiel profiel);
+        IEnumerable<MediaUser> GetAllMediaUsers();
+        void InsertMediaUser(MediaUser MediaUser);
         IEnumerable<Rating> GetAllRatings();
         IEnumerable<Serie> GetAllSeries();
-        IEnumerable<Seizoen> GetAllSeasons();
+        IEnumerable<Season> GetAllSeasons();
         IEnumerable<Episode> GetAllEpisodes();
 
         IEnumerable<PlayList> GetAllPlaylists();
@@ -27,7 +27,7 @@ namespace MyMedia.Data
         void InsertRating(Rating rating);
         void InsertSerie(Serie serie);
         void InsertPodcast(Podcast podcast);
-        void InsertSeizoen(Seizoen seizoen);
+        void InsertSeason(Season Season);
         void InsertEpisode(Episode episode);
 
 

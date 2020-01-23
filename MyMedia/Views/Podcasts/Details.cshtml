@@ -2,14 +2,14 @@
 @using Microsoft.AspNetCore.Identity
 @using MyMedia.Core.MediaClasses;
 @using MyMedia.Core.User;
-@inject SignInManager<Profiel> SignInManager
-@inject UserManager<Profiel> UserManager
+@inject SignInManager<MediaUser> SignInManager
+@inject UserManager<MediaUser> UserManager
 <div class="container">
-    <h2>Podcast <i class="fas fa-angle-double-right"></i>Details</h2><i class="fas fa-angle-double-right"></i>@Model.Naam
+    <h2>Podcast <i class="fas fa-angle-double-right"></i>Details</h2><i class="fas fa-angle-double-right"></i>@Model.Name
 
     @if (@Model.PlayLists != null && @Model.PlayLists.Count > 0)
     {
-        <form enctype="multipart/form-data" asp-controller="PlayList" asp-action="AddToPlaylist" method="post">
+        <form enctype="multipart/form-data" asp-controller="PlayLists" asp-action="AddToPlaylist" method="post">
             @Html.HiddenFor(pl => pl.MediaId);
             <div class="btn-group">
                 @Html.DropDownListFor(x => x.PlayListId,
@@ -29,15 +29,15 @@
                     {
                         <i class="fas fa-star"></i>
                     }
-                    <h2 class="card-title">@Model.Naam</h2>
+                    <h2 class="card-title">@Model.Name</h2>
 
                     <div class=" row">
-                        @if (@Model.Foto != null)
+                        @if (@Model.Photo != null)
                         {
-                            <img style="width: 50px;" src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(@Model.Foto))" alt="Serie Img" class="img-thumbnail  col-6" target="_blank" />
+                            <img style="width: 50px;" src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(@Model.Photo))" alt="Serie Img" class="img-thumbnail  col-6" target="_blank" />
                         }
                         <a class="col-6" href="@Model.PodcastLink">
-                            <img border="0" alt="@Model.Naam" src="~/images/imdb_Logo.png" height="30">
+                            <img border="0" alt="@Model.Name" src="~/images/imdb_Logo.png" height="30">
                         </a>
                     </div>
                 </div>

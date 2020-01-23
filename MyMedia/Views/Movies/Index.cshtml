@@ -1,0 +1,33 @@
+﻿@model IEnumerable<MyMedia.Models.Movie.MovieListViewModel>
+@using Microsoft.AspNetCore.Identity
+@using MyMedia.Core.User;
+@inject SignInManager<MediaUser> SignInManager
+@inject UserManager<MediaUser> UserManager
+
+<div class="container">
+    <h2>Movies <i class="fas fa-angle-double-right"></i> Index</h2>
+
+
+
+
+    @if (Model.Any() && Model != null)
+    {
+        foreach (var movie in Model)
+        {
+            <partial name="_Summary" model="movie" />
+        }
+    }
+    else
+    {
+        <div class="alert alert-info" role="alert">
+            Currently no movies for display.
+
+        </div>
+
+
+    }
+    <div class="row justify-content-end">
+        <a asp-action="Create" class="btn btn-warning" asp-controller="Movies">Add Movie</a>
+    </div>
+
+</div>

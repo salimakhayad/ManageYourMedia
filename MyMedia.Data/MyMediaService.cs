@@ -23,17 +23,17 @@ namespace MyMedia.Data
         {
             return context.Ratings;
         }
-        public IEnumerable<Profiel> GetAllProfielen()
+        public IEnumerable<MediaUser> GetAllMediaUsers()
         {
-            return context.Profiel;
+            return context.MediaUsers;
         }
         public IEnumerable<Serie> GetAllSeries()
         {
             return context.Series;
         }
-        public IEnumerable<Seizoen> GetAllSeasons()
+        public IEnumerable<Season> GetAllSeasons()
         {
-            return context.Seizoenen;
+            return context.Seasonen;
         }
         public IEnumerable<Episode> GetAllEpisodes()
         {
@@ -45,7 +45,7 @@ namespace MyMedia.Data
         }
         public IEnumerable<Podcast> GetAllPodcasts()
         {
-            return context.Podcast;
+            return context.Podcasts;
         }
 
 
@@ -71,10 +71,10 @@ namespace MyMedia.Data
         }
         public void DeletePodcastById(int id)
         {
-            var podcastToDelete = context.Podcast.FirstOrDefault(m => m.Id == id);
+            var podcastToDelete = context.Podcasts.FirstOrDefault(m => m.Id == id);
             if (podcastToDelete != null)
             {
-                context.Podcast.Remove(podcastToDelete);
+                context.Podcasts.Remove(podcastToDelete);
             }
         }
         public void DeleteRatingsByMediaId(int id)
@@ -100,13 +100,13 @@ namespace MyMedia.Data
         {
             context.Series.Add(serie);
         }
-        public void InsertProfiel(Profiel profiel)
+        public void InsertMediaUser(MediaUser MediaUser)
         {
-            context.Profiel.Add(profiel);
+            context.MediaUsers.Add(MediaUser);
         }
         public void InsertPodcast(Podcast podcast)
         {
-            context.Podcast.Add(podcast);
+            context.Podcasts.Add(podcast);
         }
 
         public void SaveChanges()
@@ -114,9 +114,9 @@ namespace MyMedia.Data
             context.SaveChanges();
         }
 
-        public void InsertSeizoen(Seizoen seizoen)
+        public void InsertSeason(Season Season)
         {
-            context.Seizoenen.Add(seizoen);
+            context.Seasonen.Add(Season);
         }
         public void InsertEpisode(Episode episode)
         {

@@ -5,7 +5,6 @@ namespace MyMedia.Models.Media
 {
     public class MediaOverviewViewModel
     {
-        [BindProperty]
-        public ICollection<MediaListViewModel>? NietPubliekeMediaLijst { get; set; }
+        public List<MediaListViewModel> UnApprovedMediaList { get; set; }
     }
 }
