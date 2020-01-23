@@ -10,13 +10,14 @@ Completed Functionalities:
 - Add Podcast
 
 -Rating Media-
-- Rate Movie
-- Rate Episode
-- Rate Music
-- Rate Podcast
+- Rate/Review Movie
+- Rate/Review Episode
+- Rate/Review Music
+- Rate/Review Podcast
+
 
 -Approving Media-
-- Approve Media before its visibile @ HomePage
+- Approves Selected Media
 
 -Playlist
 - Add Media to Playlist
@@ -25,5 +26,6 @@ Completed Functionalities:
 -Custom Identity
 - Register
 - Login
+- Roles
 
 
