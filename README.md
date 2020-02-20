@@ -11,10 +11,7 @@ Completed Functionalities:
 
 -Rating Media-
 - Rate/Review Movie
-- Rate/Review Episode
 - Rate/Review Music
-- Rate/Review Podcast
-
 
 -Approving Media-
 - Approves Selected Media
@@ -26,6 +23,6 @@ Completed Functionalities:
 -Custom Identity
 - Register
 - Login
-- Roles
+- Roles ("gebruiker","admin")
 
 
