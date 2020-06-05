@@ -1,28 +1,18 @@
 "# ManageYourMedia" 
 (.NET core 3.1 application)
 
+Configure the connectionstring in MyMedia/appsettings.Json & appsettings.Development.json
 
-Completed Functionalities:
--Adding Media-
-- Add Movie
-- Add Serie / Season / Episode
-- Add Music
-- Add Podcast
+Functionalities:
+- Add/Rate/Review Movie
+- Add/Rate/Review Serie / Season / Episode
+- Add/Rate/Review Music
+- Add/Rate/Review Podcast
 
--Rating Media-
-- Rate/Review Movie
-- Rate/Review Music
+- Approving Selected Media
 
--Approving Media-
-- Approves Selected Media
-
--Playlist
 - Add Media to Playlist
-- Share Playlist with All Users
+- Share Playlist 
 
--Custom Identity
-- Register
-- Login
-- Roles ("gebruiker","admin")
 
 
