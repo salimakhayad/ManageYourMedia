@@ -47,7 +47,7 @@
 <body>
 
 
-    <partial name="_CookieConsentPartial" />
+    <!--<partial name="_CookieConsentPartial" />-->
 
     <div class="container-fluid" style="padding-right: 0px; padding-left: 0px;">
         <div style="height:95vh;">
@@ -58,16 +58,16 @@
                 </button>
                 @if (User.Claims.Any())
                 {
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <div class="navbar-nav">
-                    <a class="nav-item nav-link active">Welcome back @User.Claims.AsQueryable().ElementAt(1).Value! <span class="sr-only"></span></a>
-                </div>
-                <div class="navbar-nav">
-                    <a class="nav-item nav-link active" asp-controller="PlayLists" asp-action="Index">My Playlists <i class="fas fa-caret-down"></i> <span class="sr-only"></span></a>
-                </div>
-            </div>
+                    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                        <div class="navbar-nav">
+                            <a class="nav-item nav-link active">Welcome back @User.Claims.AsQueryable().ElementAt(1).Value! <span class="sr-only"></span></a>
+                        </div>
+                        <div class="navbar-nav">
+                            <a class="nav-item nav-link active" asp-controller="PlayLists" asp-action="Index">My Playlists <i class="fas fa-caret-down"></i> <span class="sr-only"></span></a>
+                        </div>
+                    </div>
                 }
-               
+
                 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                     <div class="navbar-nav">
                         <a class="nav-item nav-link active" asp-controller="Media" asp-action="Index"> Approve Media <i class="fas fa-check-circle"></i> <span class="sr-only"></span></a>
@@ -91,8 +91,8 @@
             <div class="mt-5">
                 @RenderBody()
             </div>
-       
-          
+
+
         </div>
     </div>
 

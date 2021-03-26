@@ -1,4 +1,5 @@
-﻿using MyMedia.Core;
+﻿using Microsoft.EntityFrameworkCore;
+using MyMedia.Core;
 using MyMedia.Core.MediaClasses;
 using MyMedia.Core.User;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace MyMedia.Data
 
         public IEnumerable<Media> GetAllMedia()
         {
-            return context.Media;
+            return context.Media.Include("Ratings");
         }
         public IEnumerable<Rating> GetAllRatings()
         {

@@ -4,21 +4,28 @@
         <div class="col-6">
             <a asp-action="Index" asp-controller="Movies" class="text-dark"><h1> <i class="fas fa-film"> Top 10 Movies </i></h1></a>
             <ul class="list-group  movies">
-
-                @foreach (var movie in @Model.Movies)
+                @if (@Model.Movies.Any() && @Model.Movies != null)
                 {
-                    <partial name="../Movies/_HomeView.cshtml" model="movie" />
+                    @foreach (var movie in @Model.Movies)
+                    {
+                        <partial name="../Movies/_HomeView.cshtml" model="movie" />
+                    }
                 }
+
 
             </ul>
         </div>
         <div class="col-6">
             <a asp-action="Index" asp-controller="Songs" class="text-dark"><h1> <i class="fas fa-music"> Top 10 Music</i>  </h1></a>
             <ul class="list-group music">
-                @foreach (var music in @Model.Musics)
+                @if (@Model.Musics.Any() && @Model.Musics != null)
                 {
-                    <partial name="../Songs/_HomeView.cshtml" model="music" />
+                    @foreach (var music in @Model.Musics)
+                    {
+                        <partial name="../Songs/_HomeView.cshtml" model="music" />
+                    }
                 }
+
             </ul>
         </div>
     </div>
@@ -27,19 +34,28 @@
         <div class="col-6 mb-1">
             <a asp-action="Index" asp-controller="Series" class="text-dark"><h1><i class="fas fa-video"> Top 10 Series</i>  </h1></a>
             <ul class="list-group series">
-                @foreach (var serie in @Model.Series)
+                @if (@Model.Series.Any() && @Model.Series != null)
                 {
-                    <partial name="../Series/_HomeView.cshtml" model="serie" />
+                    @foreach (var serie in @Model.Series)
+                    {
+                        <partial name="../Series/_HomeView.cshtml" model="serie" />
+                    }
                 }
+
+
             </ul>
         </div>
         <div class="col-6 mb-1">
             <a asp-action="Index" asp-controller="Podcasts" class="text-dark"><h1><i class="fas fa-podcast"> Top 10 Podcasts</i> </h1></a>
             <ul class="list-group podcasts">
-                @foreach (var podcast in @Model.Podcasts)
+                @if (@Model.Podcasts.Any() && @Model.Podcasts != null)
                 {
-                    <partial name="../Podcasts/_HomeView.cshtml" model="podcast" />
+                    @foreach (var podcast in @Model.Podcasts)
+                    {
+                        <partial name="../Podcasts/_HomeView.cshtml" model="podcast" />
+                    }
                 }
+
             </ul>
         </div>
     </div>

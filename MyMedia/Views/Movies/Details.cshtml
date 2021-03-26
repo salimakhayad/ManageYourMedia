@@ -23,10 +23,10 @@
         <div class="col-9">
             <div class="card mt-5" style="width: 70vh;">
                 Score : @Math.Round(@Model.AveragePoints, 2,
-            MidpointRounding.ToEven) / 10
+    MidpointRounding.ToEven) / 10
                 <div class="card-body">
                     @for (var point = 2; point <= (Math.Round(@Model.AveragePoints, 2,
-                      MidpointRounding.ToEven)); point += 2)
+                    MidpointRounding.ToEven)); point += 2)
                     {
                         <i class="fas fa-star"></i>
                     }
@@ -46,6 +46,7 @@
                     <div class="row">
                         <span class="badge badge-secondary" asp-for="@Model.Status">@Model.Status</span>
                     </div>
+                    <small>Movie is added by: @Model.AddedByUserName</small>
 
 
                 </div>
@@ -54,13 +55,12 @@
             {
                 <div class="card-body">
                     <h5 class="card-title">@rating.MediaUser.UserName</h5>
-                    <small>Rated this Movie: @rating.Points/10 <br /> @rating.CreationDate</small>
-                    <small>Says:</small>
+                    <small>Rated: @rating.Points/10 <br /></small>
                     <p class="card-text">@rating.Review</p>
-                    <small>@rating.CreationDate</small>
-
+                    <small>Date:@rating.CreationDate</small>
                 </div>
             }
+            
             <form enctype="multipart/form-data" asp-controller="Movies" asp-action="RateMovie" method="post">
                 @Html.HiddenFor(x => x.MediaId)
 
@@ -75,7 +75,7 @@
                 }
 
             </form>
-            <small>Added by: @Model.AddedByUserName</small>
+
         </div>
         <div class="col-3 mt-5">
 
